@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cuida a tu Gato</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="game">
+      <header class="game__header">
+        <div>
+          <h1>Cuida a tu Gato</h1>
+          <p class="subtitle">Mantén feliz, saciado y descansado a tu nuevo amigo felino. Cada 15 segundos pasa un día.</p>
+        </div>
+        <div class="time">
+          <span>Día</span>
+          <strong id="day">1</strong>
+        </div>
+      </header>
+
+      <section class="cat">
+        <div class="cat__avatar" id="catAvatar" aria-hidden="true">🐱</div>
+        <div class="cat__status">
+          <h2 id="catName">Mochi</h2>
+          <p id="catMood">¡Listo para jugar!</p>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div class="stat">
+          <div class="stat__label">Hambre</div>
+          <div class="stat__bar">
+            <div class="stat__fill" id="hungerFill"></div>
+          </div>
+          <span id="hungerValue">80</span>
+        </div>
+        <div class="stat">
+          <div class="stat__label">Energía</div>
+          <div class="stat__bar">
+            <div class="stat__fill" id="energyFill"></div>
+          </div>
+          <span id="energyValue">70</span>
+        </div>
+        <div class="stat">
+          <div class="stat__label">Felicidad</div>
+          <div class="stat__bar">
+            <div class="stat__fill" id="happinessFill"></div>
+          </div>
+          <span id="happinessValue">75</span>
+        </div>
+      </section>
+
+      <section class="actions">
+        <button type="button" data-action="feed">Dar comida</button>
+        <button type="button" data-action="play">Jugar</button>
+        <button type="button" data-action="rest">Dormir</button>
+        <button type="button" data-action="clean">Acariciar</button>
+      </section>
+
+      <section class="log" aria-live="polite">
+        <h3>Bitácora</h3>
+        <ul id="logList"></ul>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
