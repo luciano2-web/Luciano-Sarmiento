@@ -1,11 +1,19 @@
-<div align="center">
+# Cuida a tu Gato
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Juego web sencillo para cuidar a un gato virtual. Mantén su hambre, energía y felicidad mientras pasan los días.
 
-  <h1>Built with AI Studio</h2>
+## Cómo ejecutarlo
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+1. Inicia un servidor local en la carpeta del proyecto:
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+```bash
+python -m http.server 8000
+```
 
-</div>
+2. Abre el navegador en:
+
+```text
+http://127.0.0.1:8000
+```
+
+> Nota: Al ser HTML/JS plano, basta con servir los archivos para que el juego funcione correctamente.
