@@ -1,33 +1,30 @@
-# Dependencias para GatoGPT Félix en Snapdragon 8 Gen 2
-# Instalar: pip install -r requirements_mobile.txt
+# ========================================
+# GatoGPT Félix - Dependencias Móvil
+# Para Snapdragon 8 Gen2 (Android/iOS)
+# ========================================
 
-# Core
+# Core ML
+transformers==4.41.0
 torch==2.1.0
-torchvision==0.16.0
-torchaudio==0.16.0
+accelerate==0.27.0
+bitsandbytes==0.42.0
 
-# Transformers y modelos
-transformers==4.35.2
-diffusers==0.21.4
-safetensors==0.4.0
-acccelerate==0.24.0
-bitsandbytes==0.41.2.post2
+# Diffusers para generación de imágenes ligera
+diffusers==0.27.0
+safetensors==0.4.1
 
-# Visión
+# Procesamiento de imágenes
 Pillow==10.1.0
-opencv-python==4.8.1.78
-numpy==1.24.3
-scipy==1.11.4
 
-# UI Móvil
+# Interfaz móvil (Kivy)
 Kivy==2.2.1
 kivy-garden==0.1.5
 
-# Utilitarios
-tqdm==4.66.1
-click==8.1.7
-psutil==5.9.6
+# Utilidades
+numpy==1.24.3
 
-# Opcional (para CPU-only)
-# onnx==1.15.0
-# onnxruntime==1.17.0
+# ========================================
+# NOTA IMPORTANTE:
+# En Android, usar "python-for-android" para compilar:
+# p4a apk --requirements=python3,kivy,numpy,pillow,torch,transformers
+# ========================================

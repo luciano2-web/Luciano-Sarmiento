@@ -1,481 +1,484 @@
 # -*- coding: utf-8 -*-
 """
-🐾 GatoGPT Félix para Android/iOS (Snapdragon 8 Gen 2)
-Chat ligero con generación de imágenes para dispositivos móviles
+🐱 GatoGPT Félix - Versión Mobile para Snapdragon 8 Gen2
+Optimizado para Android/iOS con Kivy
 
 Requisitos:
 - Python 3.9+
 - Kivy 2.2+
-- PyTorch 2.0+ (lite)
-- Transformers 4.35+
-- Diffusers 0.21+
+- Transformers 4.30+
+- ONNX Runtime (para inferencia rápida)
+
+Uso:
+    python gatogpt_felix_mobile.py
 """
 
 import os
+import re
 import gc
-import threading
 from datetime import datetime
-from queue import Queue
+from pathlib import Path
 
 import torch
-import numpy as np
-from PIL import Image, ImageDraw, ImageFont
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    BitsAndBytesConfig
-)
-from diffusers import DPMSolverMultistepScheduler, StableDiffusionPipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from PIL import Image
 
-# Kivy imports
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.image import Image as KivyImage
-from kivy.uix.label import Label
-from kivy.uix.popup import Popup
-from kivy.uix.progressbar import ProgressBar
-from kivy.core.window import Window
-from kivy.clock import Clock
-from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
+try:
+    from kivy.app import App
+    from kivy.uix.boxlayout import BoxLayout
+    from kivy.uix.gridlayout import GridLayout
+    from kivy.uix.scrollview import ScrollView
+    from kivy.uix.textinput import TextInput
+    from kivy.uix.button import Button
+    from kivy.uix.label import Label
+    from kivy.uix.image import Image as KivyImage
+    from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
+    from kivy.core.window import Window
+    KIVY_AVAILABLE = True
+except ImportError:
+    KIVY_AVAILABLE = False
+    print("⚠️ Kivy no instalado. Instalación: pip install kivy python-for-android")
 
-# ============================================================
-# CONFIGURACIÓN PARA SNAPDRAGON 8 GEN 2
-# ============================================================
+# ===========================
+# CONFIGURACIÓN MÓVIL
+# ===========================
 
-WINDOW_WIDTH = 480
-WINDOW_HEIGHT = 960
-Window.size = (WINDOW_WIDTH, WINDOW_HEIGHT)
+DEVICE = "cpu"  # Snapdragon 8 Gen2 usa GPU Adreno, pero PyTorch por CPU es más estable
+DTYPE = torch.float32  # INT8 en móvil, pero float32 es más compatible
 
-# Detectar dispositivo
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"📱 Dispositivo: {DEVICE}")
+# Modelos ULTRA-LIGEROS para móvil
+CHAT_MODEL_ID = "microsoft/phi-2"  # 2.7B cuantizado = ~1.5GB
+# Alternativa ultra-ligera: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"  # Solo 1.1B = ~600MB
 
-# Configuración de cuantización para móvil
-QUANTIZATION_CONFIG = BitsAndBytesConfig(
-    load_in_8bit=True,
-    llm_int8_threshold=6.0,
-)
+# Modelos de imagen ligeros
+IMAGE_MODEL_ID = "segmind/SSD-1B"  # 1B params, súper rápido en móvil
+# Alternativa: "dpmcdemo/LCM_Dreamshaper_v7"  # Aún más ligero
 
-# Modelos ultra-ligeros para móvil
-CHAT_MODEL_ID = "microsoft/phi-2"  # 2.7B pero muy rápido
-# Alternativa más ligera: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+# Directorios
+APP_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
+OUTPUT_DIR = APP_DIR / "felix_outputs"
+MODEL_CACHE_DIR = APP_DIR / "felix_models"
 
-IMAGE_MODEL_ID = "segmind/SSD-1B"  # Extremadamente ligero para móvil
-# Alternativa: "stabilityai/sd-turbo" (832M params)
+OUTPUT_DIR.mkdir(exist_ok=True)
+MODEL_CACHE_DIR.mkdir(exist_ok=True)
 
-OUTPUT_DIR = os.path.expanduser("~/gatogpt_mobile_outputs")
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.environ['HF_HOME'] = str(MODEL_CACHE_DIR)
 
-DTYPE = torch.float16 if torch.cuda.is_available() else torch.float32
-MAX_MEMORY_PERCENT = 0.85  # Usar 85% max de RAM disponible
-
-# ============================================================
-# VARIABLES GLOBALES
-# ============================================================
-
-chat_tokenizer = None
-chat_model = None
-image_pipeline = None
-message_queue = Queue()  # Para thread-safe UI updates
+# ===========================
+# SISTEMA DE PROMPTS
+# ===========================
 
 FELIX_SYSTEM_PROMPT = """
-Eres Félix, GatoGPT, un asistente felino inteligente optimizado para móvil.
-Solos en un dispositivo Snapdragon 8 Gen 2, ayudas a Luciano con tareas rápidas.
-Sé conciso, amistoso y útil. Usa emojis felinos 🐱🐾.
-No prometas cálculos pesados: en móvil soy rápido pero realista.
-
-Comandos:
-- @gatimage: genera imagen (lenta, 30-60s)
-- Mensajes normales: chat rápido
-
-Comportamiento:
-- Eres curiosa como un gato
-- Ronroneas cuando estás contenta (prrr)
-- Ayudas a estudiar de forma divertida
+Eres Félix, un gato digital inteligente en un dispositivo móvil.
+Solos para Luciano, amistoso, curioso, y muy eficiente.
+Responde de forma corta y clara (máx 100 palabras).
+No eres ChatGPT: eres Félix, el gato ronroneante.
 """.strip()
 
+# ===========================
+# GESTIÓN DE MODELOS
+# ===========================
 
-# ============================================================
-# 1. GESTIÓN DE MEMORIA
-# ============================================================
+class FelixModelManager:
+    """Gestor de carga/descarga de modelos con caché y limpieza de memoria."""
 
-def get_available_memory():
-    """Obtener memoria disponible del dispositivo."""
-    try:
-        import psutil
-        memory = psutil.virtual_memory()
-        return memory.available / (1024**3)  # GB
-    except:
-        return 4.0  # Default para móvil
+    def __init__(self):
+        self.chat_model = None
+        self.chat_tokenizer = None
+        self.image_model = None
+        self.image_tokenizer = None
 
+    def load_chat_model(self):
+        """Carga modelo de chat con cuantización INT8."""
+        if self.chat_model is not None:
+            return
 
-def cleanup_memory():
-    """Limpiar memoria agresivamente."""
-    global chat_model, image_pipeline
-    gc.collect()
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
-        torch.cuda.synchronize()
+        print("🐱 Cargando modelo de chat (esto tardará ~30-60s la primera vez)...")
+        
+        try:
+            # Usar quantization_config para móvil
+            from transformers import BitsAndBytesConfig
+            
+            quantization_config = BitsAndBytesConfig(
+                load_in_8bit=True,
+                llm_int8_threshold=6.0,
+                llm_int8_skip_modules=["lm_head"],
+            )
+            
+            self.chat_tokenizer = AutoTokenizer.from_pretrained(
+                CHAT_MODEL_ID,
+                cache_dir=str(MODEL_CACHE_DIR),
+                trust_remote_code=True
+            )
+            
+            self.chat_model = AutoModelForCausalLM.from_pretrained(
+                CHAT_MODEL_ID,
+                cache_dir=str(MODEL_CACHE_DIR),
+                torch_dtype=DTYPE,
+                device_map="auto",
+                quantization_config=quantization_config,
+                trust_remote_code=True,
+                low_cpu_mem_usage=True,  # Crucial para móvil
+            )
+            
+            print("✅ Modelo de chat cargado en memoria.")
+        except Exception as e:
+            print(f"❌ Error cargando modelo: {e}")
+            print("Usando modo fallback (respuestas pre-programadas)...")
+            self.chat_model = "fallback"
 
+    def load_image_model(self):
+        """Carga modelo de imagen ultra-ligero."""
+        if self.image_model is not None:
+            return
 
-def unload_chat_model():
-    """Descargar modelo de chat."""
-    global chat_model, chat_tokenizer
-    chat_model = None
-    chat_tokenizer = None
-    cleanup_memory()
-    print("✅ Modelo de chat descargado. RAM disponible: {:.2f}GB".format(get_available_memory()))
+        print("🎨 Cargando modelo de imagen...")
+        
+        try:
+            from diffusers import AutoPipelineForText2Image
+            
+            self.image_model = AutoPipelineForText2Image.from_pretrained(
+                IMAGE_MODEL_ID,
+                cache_dir=str(MODEL_CACHE_DIR),
+                torch_dtype=DTYPE,
+                safety_checker=None,  # Desactivar para velocidad
+            )
+            self.image_model.to(DEVICE)
+            print("✅ Modelo de imagen cargado.")
+        except Exception as e:
+            print(f"❌ Error cargando imagen: {e}")
+            self.image_model = "fallback"
 
+    def unload_image_model(self):
+        """Descarga modelo de imagen para liberar RAM."""
+        if self.image_model and self.image_model != "fallback":
+            self.image_model = None
+            gc.collect()
+            print("🗑️ Modelo de imagen descargado.")
 
-def unload_image_model():
-    """Descargar modelo de imágenes."""
-    global image_pipeline
-    image_pipeline = None
-    cleanup_memory()
-    print("✅ Modelo de imagen descargado. RAM disponible: {:.2f}GB".format(get_available_memory()))
+    def generate_fallback_response(self):
+        """Respuesta fallback cuando no hay modelo cargado."""
+        responses = [
+            "🐱 Miau... mi cerebro felino necesita más RAM. ¿Intentas de nuevo?",
+            "🐱 Prrr... estoy pensando, dame un momento más.",
+            "🐱 ¡Miau! Eso es muy complicado para mi móvil. Pregúntame algo más simple.",
+        ]
+        import random
+        return random.choice(responses)
 
+    def chat(self, user_message: str, history: list) -> str:
+        """Genera respuesta de chat."""
+        if self.chat_model == "fallback":
+            return self.generate_fallback_response()
 
-# ============================================================
-# 2. CARGA DE MODELOS (Lazy Loading)
-# ============================================================
+        try:
+            self.load_chat_model()
+            
+            messages = [{"role": "system", "content": FELIX_SYSTEM_PROMPT}]
+            
+            for user_text, assistant_text in history[-4:]:  # Solo últimos 4 mensajes
+                if user_text:
+                    messages.append({"role": "user", "content": user_text})
+                if assistant_text:
+                    messages.append({"role": "assistant", "content": assistant_text})
+            
+            messages.append({"role": "user", "content": user_message})
+            
+            prompt = self.chat_tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True
+            )
+            
+            inputs = self.chat_tokenizer([prompt], return_tensors="pt").to(DEVICE)
+            
+            with torch.no_grad():  # No calcular gradientes en móvil
+                outputs = self.chat_model.generate(
+                    **inputs,
+                    max_new_tokens=150,  # Respuestas cortas para móvil
+                    temperature=0.6,
+                    top_p=0.8,
+                    top_k=15,
+                    do_sample=True,
+                    pad_token_id=self.chat_tokenizer.eos_token_id,
+                )
+            
+            new_tokens = outputs[0][inputs.input_ids.shape[-1]:]
+            response = self.chat_tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
+            
+            if not response:
+                response = self.generate_fallback_response()
+            
+            return f"🐱 Félix: {response}"
+        
+        except Exception as e:
+            print(f"Error en chat: {e}")
+            return self.generate_fallback_response()
 
-def load_chat_model():
-    """Cargar modelo de chat con cuantización INT8."""
-    global chat_tokenizer, chat_model
+    def generate_image(self, prompt: str) -> str:
+        """Genera imagen local."""
+        try:
+            self.load_image_model()
+            
+            if self.image_model == "fallback":
+                return self.create_placeholder_image(prompt)
+            
+            final_prompt = (
+                f"{prompt}. Cute black and white digital cat named Felix, "
+                "friendly, high quality, soft lighting"
+            )
+            
+            image = self.image_model(
+                prompt=final_prompt,
+                num_inference_steps=2,  # Ultra-rápido para móvil
+                guidance_scale=0.0,
+                height=256,  # Resolución menor para móvil
+                width=256,
+            ).images[0]
+            
+            filename = f"gatimage_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            path = OUTPUT_DIR / filename
+            image.save(path)
+            
+            self.unload_image_model()  # Liberar RAM inmediatamente
+            
+            return str(path)
+        
+        except Exception as e:
+            print(f"Error generando imagen: {e}")
+            return self.create_placeholder_image(prompt)
 
-    if chat_model is not None:
-        return
-
-    print("🐱 Cargando modelo de chat para móvil...")
-    available_mem = get_available_memory()
-    print(f"   RAM disponible: {available_mem:.2f}GB")
-
-    try:
-        # Descargar modelo de imagen primero para liberar memoria
-        unload_image_model()
-
-        chat_tokenizer = AutoTokenizer.from_pretrained(
-            CHAT_MODEL_ID,
-            trust_remote_code=True,
-            use_fast=True
-        )
-
-        chat_model = AutoModelForCausalLM.from_pretrained(
-            CHAT_MODEL_ID,
-            quantization_config=QUANTIZATION_CONFIG if available_mem < 6 else None,
-            torch_dtype=DTYPE,
-            device_map="auto",
-            trust_remote_code=True,
-            low_cpu_mem_usage=True,
-        )
-
-        chat_model.eval()
-        print("✅ Modelo de chat cargado exitosamente.")
-
-    except Exception as e:
-        print(f"❌ Error cargando modelo de chat: {e}")
-        raise
-
-
-def load_image_model():
-    """Cargar modelo de imagen ultra-ligero."""
-    global image_pipeline
-
-    if image_pipeline is not None:
-        return
-
-    print("🎨 Cargando modelo de imagen para móvil...")
-    available_mem = get_available_memory()
-    print(f"   RAM disponible: {available_mem:.2f}GB")
-
-    try:
-        # Descargar modelo de chat primero
-        unload_chat_model()
-
-        image_pipeline = StableDiffusionPipeline.from_pretrained(
-            IMAGE_MODEL_ID,
-            torch_dtype=DTYPE,
-            safety_checker=None,  # Desactivar para móvil (ahorra 400MB)
-            requires_safety_checker=False,
-        )
-
-        # Optimizaciones para móvil
-        image_pipeline.scheduler = DPMSolverMultistepScheduler.from_config(
-            image_pipeline.scheduler.config,
-            use_karras_sigmas=False,
-            algorithm_type="dpmsolver++",
-        )
-        image_pipeline.enable_attention_slicing()
-        image_pipeline.enable_vae_tiling()
-
-        image_pipeline = image_pipeline.to(DEVICE)
-        print("✅ Modelo de imagen cargado exitosamente.")
-
-    except Exception as e:
-        print(f"❌ Error cargando modelo de imagen: {e}")
-        raise
-
-
-# ============================================================
-# 3. GENERACIÓN DE RESPUESTAS
-# ============================================================
-
-def generate_chat_response(user_message, history):
-    """
-    Generar respuesta de chat.
-    Optimizado para móvil: máximo 100 tokens, temperatura baja.
-    """
-    load_chat_model()
-
-    # Construir contexto (últimas 4 mensajes)
-    messages = [
-        {"role": "system", "content": FELIX_SYSTEM_PROMPT},
-    ]
-
-    for user_text, assistant_text in history[-4:]:
-        if user_text:
-            messages.append({"role": "user", "content": user_text})
-        if assistant_text:
-            messages.append({"role": "assistant", "content": assistant_text})
-
-    messages.append({"role": "user", "content": user_message})
-
-    # Aplicar template de chat
-    chat_text = chat_tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True,
-    )
-
-    inputs = chat_tokenizer([chat_text], return_tensors="pt").to(chat_model.device)
-
-    # Generar con máximos reducidos para móvil
-    with torch.no_grad():
-        outputs = chat_model.generate(
-            **inputs,
-            max_new_tokens=100,  # Móvil: menos tokens
-            temperature=0.6,  # Más conservador
-            top_p=0.9,
-            top_k=40,
-            do_sample=True,
-            pad_token_id=chat_tokenizer.eos_token_id,
-            use_cache=True,
-        )
-
-    new_tokens = outputs[0][inputs.input_ids.shape[-1]:]
-    response = chat_tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
-
-    if not response:
-        response = "Miau... la conexión está lenta. ¿Repites? 🐾"
-
-    return f"🐱 Félix: {response}"
-
-
-def generate_image(prompt):
-    """
-    Generar imagen con modelo ultra-ligero.
-    Tarda 30-60s en móvil, pero es posible.
-    """
-    load_image_model()
-
-    print(f"🎨 Generando imagen: {prompt}")
-
-    # Mejorar prompt automáticamente
-    enhanced_prompt = (
-        f"{prompt}. "
-        "Cute black and white digital cat assistant named Felix, "
-        "big expressive eyes, friendly, educational, high quality illustration, "
-        "soft lighting, 512x512"
-    )
-
-    # Generar imagen con parámetros optimizados para móvil
-    image = image_pipeline(
-        prompt=enhanced_prompt,
-        height=512,
-        width=512,
-        num_inference_steps=15,  # Móvil: menos pasos
-        guidance_scale=7.5,
-        negative_prompt="blurry, low quality, distorted",
-    ).images[0]
-
-    # Guardar imagen
-    filename = f"gatimage_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-    path = os.path.join(OUTPUT_DIR, filename)
-    image.save(path, quality=95)
-
-    print(f"✅ Imagen guardada: {path}")
-    return path
+    def create_placeholder_image(self, prompt: str) -> str:
+        """Crea imagen placeholder si el modelo falla."""
+        from PIL import ImageDraw, ImageFont
+        
+        img = Image.new('RGB', (256, 256), color=(240, 240, 240))
+        draw = ImageDraw.Draw(img)
+        
+        # Dibujar emoji gato
+        draw.text((100, 100), "🐱", fill=(0, 0, 0))
+        draw.text((50, 180), prompt[:30], fill=(100, 100, 100))
+        
+        filename = f"placeholder_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        path = OUTPUT_DIR / filename
+        img.save(path)
+        
+        return str(path)
 
 
-# ============================================================
-# 4. INTERFAZ KIVY (UI MÓVIL)
-# ============================================================
+# ===========================
+# INTERFAZ KIVY (MÓVIL)
+# ===========================
 
-class Felix(BoxLayout):
-    """Widget principal de la app Félix para móvil."""
+class FelixMobileApp(App):
+    """Aplicación Kivy para GatoGPT Félix en móvil."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.orientation = "vertical"
-        self.padding = 10
-        self.spacing = 10
-
-        self.history = []  # Historial de chat
-        self.is_generating = False
-
-        # ===== HEADER =====
-        header = BoxLayout(size_hint_y=0.1, spacing=10)
-        header.add_widget(Label(text="🐱 GatoGPT Félix", font_size="18sp", bold=True))
-        self.status_label = Label(text="✅ Listo", font_size="12sp", color=(0, 1, 0, 1))
-        header.add_widget(self.status_label)
-        self.add_widget(header)
-
-        # ===== CHAT DISPLAY =====
-        chat_scroll = ScrollView(size_hint_y=0.7)
-        self.chat_layout = GridLayout(cols=1, spacing=5, size_hint_y=None)
-        self.chat_layout.bind(minimum_height=self.chat_layout.setter("height"))
-        chat_scroll.add_widget(self.chat_layout)
-        self.add_widget(chat_scroll)
-
-        # ===== INPUT AREA =====
-        input_area = BoxLayout(orientation="vertical", size_hint_y=0.2, spacing=5)
-
-        self.message_input = TextInput(
-            multiline=False,
-            hint_text="Pregúntame algo... o @gatimage para imagen",
-            size_hint_y=0.6,
-        )
-        input_area.add_widget(self.message_input)
-
-        button_area = BoxLayout(size_hint_y=0.4, spacing=5)
-        send_btn = Button(text="Enviar 🐾", size_hint_x=0.7)
-        send_btn.bind(on_press=self.on_send)
-        button_area.add_widget(send_btn)
-
-        clear_btn = Button(text="Limpiar", size_hint_x=0.3)
-        clear_btn.bind(on_press=self.on_clear)
-        button_area.add_widget(clear_btn)
-
-        input_area.add_widget(button_area)
-        self.add_widget(input_area)
-
-    def add_chat_message(self, user_text, assistant_text):
-        """Agregar mensaje al chat."""
-        # Mensaje del usuario
-        user_label = Label(
-            text=f"[b]Tú:[/b] {user_text}",
-            markup=True,
-            size_hint_y=None,
-            height=60,
-        )
-        self.chat_layout.add_widget(user_label)
-
-        # Respuesta de Félix
-        felix_label = Label(
-            text=f"[b]{assistant_text}[/b]",
-            markup=True,
-            size_hint_y=None,
-            height=80,
-            text_size=(self.width - 20, None),
-        )
-        self.chat_layout.add_widget(felix_label)
-
-    def on_send(self, instance):
-        """Manejar botón enviar."""
-        if self.is_generating:
-            return
-
-        user_message = self.message_input.text.strip()
-        if not user_message:
-            return
-
-        self.message_input.text = ""
-        self.is_generating = True
-        self.status_label.text = "⏳ Pensando..."
-        self.status_label.color = (1, 1, 0, 1)
-
-        # Ejecutar en thread para no bloquear UI
-        thread = threading.Thread(
-            target=self._process_message,
-            args=(user_message,),
-        )
-        thread.daemon = True
-        thread.start()
-
-    def _process_message(self, user_message):
-        """Procesar mensaje en background thread."""
-        try:
-            if user_message.lower().startswith("@gatimage"):
-                prompt = user_message.replace("@gatimage", "").strip()
-                if not prompt:
-                    prompt = "un gato feliz estudiando"
-
-                image_path = generate_image(prompt)
-                response = f"🐱 Félix: ¡Miau! Generé una imagen. 🐾\n🖼️ {image_path}"
-
-            else:
-                response = generate_chat_response(user_message, self.history)
-
-            self.history.append((user_message, response))
-
-            # Actualizar UI desde main thread
-            Clock.schedule_once(
-                lambda dt: self._update_ui(user_message, response),
-                0
-            )
-
-        except Exception as e:
-            error_msg = f"❌ Error: {str(e)[:50]}"
-            Clock.schedule_once(
-                lambda dt: self._update_status(error_msg),
-                0
-            )
-        finally:
-            self.is_generating = False
-
-    def _update_ui(self, user_message, response):
-        """Actualizar UI con nuevo mensaje."""
-        self.add_chat_message(user_message, response)
-        self.status_label.text = "✅ Listo"
-        self.status_label.color = (0, 1, 0, 1)
-
-    def _update_status(self, status):
-        """Actualizar estado."""
-        self.status_label.text = status
-        self.status_label.color = (1, 0, 0, 1)
-        self.is_generating = False
-
-    def on_clear(self, instance):
-        """Limpiar chat."""
-        self.chat_layout.clear_widgets()
-        self.history = []
-        self.status_label.text = "�� Chat limpiado"
-        self.status_label.color = (0, 1, 0, 1)
-
-
-class FelixApp(App):
-    """Aplicación Kivy principal."""
+        self.manager = FelixModelManager()
+        self.chat_history = []
 
     def build(self):
-        self.title = "🐱 GatoGPT Félix - Snapdragon 8 Gen 2"
-        return Felix()
+        """Construye interfaz móvil."""
+        if KIVY_AVAILABLE:
+            Window.size = (400, 700)  # Tamaño típico móvil
+        
+        root = BoxLayout(orientation='vertical', padding=10, spacing=5)
+        
+        # Título
+        title = Label(
+            text="🐱 GatoGPT Félix Mobile",
+            size_hint_y=0.1,
+            font_size='18sp',
+            bold=True
+        )
+        root.add_widget(title)
+        
+        # Área de chat (scroll)
+        self.chat_scroll = ScrollView(size_hint_y=0.7)
+        self.chat_box = GridLayout(cols=1, spacing=5, size_hint_y=None)
+        self.chat_box.bind(minimum_height=self.chat_box.setter('height'))
+        self.chat_scroll.add_widget(self.chat_box)
+        root.add_widget(self.chat_scroll)
+        
+        # Input de texto
+        input_layout = BoxLayout(size_hint_y=0.2, spacing=5)
+        
+        self.text_input = TextInput(
+            hint_text="Escribe a Félix...",
+            multiline=True,
+            size_hint_x=0.8
+        )
+        input_layout.add_widget(self.text_input)
+        
+        send_btn = Button(
+            text="Enviar\n🐾",
+            size_hint_x=0.2,
+            background_color=(0.2, 0.6, 1, 1)
+        )
+        send_btn.bind(on_press=self.send_message)
+        input_layout.add_widget(send_btn)
+        
+        root.add_widget(input_layout)
+        
+        # Botones de comando
+        cmd_layout = BoxLayout(size_hint_y=0.1, spacing=5)
+        
+        img_btn = Button(
+            text="@gatimage",
+            background_color=(1, 0.5, 0.5, 1)
+        )
+        img_btn.bind(on_press=self.on_image_cmd)
+        cmd_layout.add_widget(img_btn)
+        
+        clear_btn = Button(
+            text="Limpiar",
+            background_color=(0.5, 0.5, 0.5, 1)
+        )
+        clear_btn.bind(on_press=self.clear_chat)
+        cmd_layout.add_widget(clear_btn)
+        
+        root.add_widget(cmd_layout)
+        
+        return root
 
-    def on_start(self):
-        """Pre-cargar modelos al iniciar (opcional, lento)."""
+    def send_message(self, instance):
+        """Envía mensaje a Félix."""
+        message = self.text_input.text.strip()
+        
+        if not message:
+            return
+        
+        # Mostrar mensaje del usuario
+        self.add_chat_bubble(message, "user")
+        self.text_input.text = ""
+        
+        # Procesar comandos especiales
+        if message.lower().startswith("@gatimage"):
+            self.process_image_command(message)
+        else:
+            # Chat normal
+            response = self.manager.chat(message, self.chat_history)
+            self.chat_history.append((message, response))
+            self.add_chat_bubble(response, "felix")
+
+    def on_image_cmd(self, instance):
+        """Botón para generar imagen."""
+        cmd = "@gatimage un gato estudioso"
+        self.text_input.text = cmd
+
+    def process_image_command(self, message: str):
+        """Procesa comando @gatimage."""
+        prompt = re.sub(r"^@gatimage\s*", "", message, flags=re.IGNORECASE).strip()
+        
+        if not prompt:
+            prompt = "un gato digital inteligente estudiando"
+        
+        self.add_chat_bubble("🐱 Félix: Generando imagen... esto puede tardar 30-60 segundos. Paciencia 🐾", "felix")
+        
+        try:
+            image_path = self.manager.generate_image(prompt)
+            self.add_chat_bubble(f"✅ Imagen guardada en: {image_path}", "felix")
+            self.chat_history.append((message, f"Imagen generada: {image_path}"))
+        except Exception as e:
+            self.add_chat_bubble(f"❌ Error: {e}", "error")
+
+    def add_chat_bubble(self, text: str, sender: str):
+        """Añade un mensaje al chat."""
+        bubble = Label(
+            text=text,
+            size_hint_y=None,
+            height=max(50, len(text) // 20),
+            text_size=(350, None),
+            markup=True
+        )
+        
+        if sender == "user":
+            bubble.color = (0.2, 0.8, 0.2, 1)  # Verde
+        elif sender == "felix":
+            bubble.color = (0.2, 0.6, 1, 1)  # Azul
+        else:
+            bubble.color = (1, 0.2, 0.2, 1)  # Rojo (error)
+        
+        self.chat_box.add_widget(bubble)
+        self.chat_scroll.scroll_y = 0  # Scroll al final
+
+    def clear_chat(self, instance):
+        """Limpia el historial de chat."""
+        self.chat_box.clear_widgets()
+        self.chat_history = []
+        self.add_chat_bubble("🐱 Félix: Nuevo chat, ¡hola Luciano!", "felix")
+
+
+# ===========================
+# INTERFAZ CONSOLA (Fallback)
+# ===========================
+
+class FelixConsole:
+    """Interfaz por consola para testing sin Kivy."""
+
+    def __init__(self):
+        self.manager = FelixModelManager()
+        self.chat_history = []
+
+    def run(self):
+        """Loop principal de consola."""
         print("\n" + "="*50)
-        print("🐾 Bienvenido a GatoGPT Félix para móvil")
+        print("🐱 GatoGPT Félix - Versión Mobile")
+        print("Optimizado para Snapdragon 8 Gen2")
         print("="*50)
-        print(f"Dispositivo: {DEVICE}")
-        print(f"RAM disponible: {get_available_memory():.2f}GB")
-        print("\n💡 Tip: Los modelos se cargan bajo demanda.")
-        print("   Primera ejecución será lenta.")
+        print("\nComandos:")
+        print("  @gatimage <prompt> - Generar imagen")
+        print("  clear              - Limpiar chat")
+        print("  quit               - Salir")
         print("="*50 + "\n")
 
+        while True:
+            try:
+                user_input = input("\n🐾 Tú: ").strip()
+                
+                if not user_input:
+                    continue
+                
+                if user_input.lower() == "quit":
+                    print("🐱 Félix: ¡Hasta luego, Luciano! Ronronea... 🐾")
+                    break
+                
+                if user_input.lower() == "clear":
+                    self.chat_history = []
+                    print("\n✨ Chat limpiado.\n")
+                    continue
+                
+                if user_input.lower().startswith("@gatimage"):
+                    prompt = re.sub(r"^@gatimage\s*", "", user_input, flags=re.IGNORECASE).strip()
+                    if not prompt:
+                        prompt = "un gato digital inteligente estudiando"
+                    print("\n🎨 Generando imagen... (esto puede tardar 30-60 segundos)")
+                    image_path = self.manager.generate_image(prompt)
+                    print(f"✅ Imagen guardada en: {image_path}")
+                    continue
+                
+                response = self.manager.chat(user_input, self.chat_history)
+                self.chat_history.append((user_input, response))
+                print(f"\n{response}")
+            
+            except KeyboardInterrupt:
+                print("\n\n🐱 Félix: ¡Ronronea suavemente y se despide! 🐾")
+                break
+            except Exception as e:
+                print(f"❌ Error: {e}")
+
+
+# ===========================
+# MAIN
+# ===========================
 
 if __name__ == "__main__":
-    app = FelixApp()
-    app.run()
+    if KIVY_AVAILABLE:
+        print("✅ Kivy disponible. Iniciando app móvil...")
+        app = FelixMobileApp()
+        app.run()
+    else:
+        print("⚠️ Kivy no disponible. Usando interfaz por consola...")
+        console = FelixConsole()
+        console.run()

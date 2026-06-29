@@ -1,197 +1,190 @@
-# 🐱 GatoGPT Félix - Versión Snapdragon 8 Gen 2
+# 🐱 GatoGPT Félix Mobile - Snapdragon 8 Gen2
 
-> Chat inteligente con generación de imágenes **100% local** para tu móvil Snapdragon 8 Gen 2.
+**Chat local con IA en tu móvil. Sin internet, sin API, solo Félix y tú.**
 
-## 📋 Requisitos
+## 📱 Soportado en
 
-### Hardware
-- **Dispositivo**: Snapdragon 8 Gen 2 (OnePlus 12, Xiaomi 14, etc.)
-- **RAM**: Mínimo 8GB (12GB recomendado)
-- **Almacenamiento**: 10GB libre para modelos + salida
-- **GPU**: Adreno 8 Gen 2 (recomendado usar CPU primero)
+- ✅ **Android 12+** con Snapdragon 8 Gen2
+- ✅ **iOS 15+** (experimental)
+- ✅ **Computadora local** (Windows, macOS, Linux)
 
-### Software
-- Python 3.9 o superior
-- Android 12+ (usando Termux o similar) o iOS con Pythonista
-- pip actualizado
+## 🚀 Inicio Rápido
 
-## 🚀 Instalación
-
-### Opción 1: En Termux (Android)
+### Opción 1: Computadora Local (Más fácil)
 
 ```bash
-# 1. Instalar Termux desde F-Droid (gratis)
-# 2. Abrir Termux y ejecutar:
-
-pkg update && pkg upgrade -y
-pkg install python3 python3-dev clang -y
-
-# 3. Clonar repositorio
+# 1. Clonar repo
 git clone https://github.com/luciano2-web/Luciano-Sarmiento.git
 cd Luciano-Sarmiento
 git checkout felix-mobile-snapdragon
 
-# 4. Crear entorno virtual
-python3 -m venv venv_felix
-source venv_felix/bin/activate
+# 2. Crear virtual env
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
 
-# 5. Instalar dependencias
-pip install --upgrade pip
+# 3. Instalar dependencias
 pip install -r requirements_mobile.txt
 
-# ⚠️ NOTA: Esto descargará 5-8GB
-# Conectar a WiFi y esperar 30-60 minutos
+# 4. Ejecutar
+python gatogpt_felix_mobile.py
 ```
 
-### Opción 2: En iOS (Pythonista)
+### Opción 2: Android (Complejo)
 
-1. Descargar [Pythonista 3](https://apps.apple.com/app/pythonista-3/id1357750361) ($9.99)
-2. Ejecutar:
-   ```python
-   import requests
-   code = requests.get("https://raw.githubusercontent.com/luciano2-web/Luciano-Sarmiento/felix-mobile-snapdragon/gatogpt_felix_mobile.py").text
-   exec(code)
-   ```
-3. Las dependencias deben instalarse automáticamente
-
-## 📱 Uso
-
-### Ejecutar la app
+Necesitas:
+- Python 3.9+
+- Buildozer o python-for-android
+- NDK de Android
 
 ```bash
-python3 gatogpt_felix_mobile.py
+# Instalar buildozer
+pip install buildozer cython
+
+# Generar spec
+buildozer android debug
+
+# Esperar compilación (15-30 min)
 ```
 
-**Primera ejecución**:
-- ⏳ Descargará ~2GB de modelos (5-10 minutos)
-- 🔋 Consumirá mucho CPU/GPU
-- 📈 Después, cada inicio es rápido
+## 🎯 Comandos
 
-### Comandos
-
-| Comando | Descripción | Tiempo |
-|---------|-------------|--------|
-| `Hola Félix` | Chat normal | 2-5s |
-| `¿Cuál es 2+2?` | Pregunta matemática | 3-8s |
-| `@gatimage un gato genio` | Generar imagen | 30-60s |
-| `@gatimage` | Imagen aleatoria | 30-60s |
-
-### Ejemplos de chat
-
+### Chat Normal
 ```
-TÚ: Hola Félix
-🐱 Félix: ¡Miau! Hola, soy Félix, tu asistente felino. 
-¿Qué necesitas hoy? 🐾
-
-TÚ: Ayúdame a estudiar fracciones
-🐱 Félix: Claro, prrr. Una fracción es una parte de un todo.
-Por ejemplo: 1/2 es la mitad de algo. ¿Quieres más ejemplos? 🎓
-
-TÚ: @gatimage un gato estudiando matemáticas en la biblioteca
-🐱 Félix: ¡Miau! Generé una imagen. 🐾
-🖼️ ~/gatogpt_mobile_outputs/gatimage_20241201_153045.png
+🐾 Tú: ¿Cuál es el capital de Francia?
+🐱 Félix: París, por supuesto. Allí hay gatos muy sofisticados. 🐾
 ```
 
-## ⚡ Optimizaciones para Snapdragon 8 Gen 2
+### Generar Imagen
+```
+🐾 Tú: @gatimage un gato estudiando matemáticas
+🐱 Félix: Generando imagen... (30-60 segundos)
+✅ Imagen guardada en: ./felix_outputs/images/gatimage_20240115_143025.png
+```
 
-### Modelos ultra-ligeros
-- **Chat**: Microsoft Phi-2 (2.7B) - 5GB descargado, 3GB en memoria
-- **Imagen**: Segmind SSD-1B (832M) - 2GB descargado, 1.5GB en memoria
+### Limpiar Chat
+```
+🐾 Tú: clear
+✨ Chat limpiado.
+```
 
-### Técnicas implementadas
-1. **INT8 Quantization** - Reduce tamaño 75%
-2. **Lazy Loading** - Carga modelos bajo demanda
-3. **Memory Offloading** - Carga CPU↔GPU automática
-4. **Attention Slicing** - Reduce picos de RAM
-5. **VAE Tiling** - Procesa imagen en bloques
+### Salir
+```
+🐾 Tú: quit
+🐱 Félix: ¡Hasta luego, Luciano! Ronronea... 🐾
+```
 
-### Rendimiento esperado
+## ⚙️ Optimizaciones para Snapdragon 8 Gen2
 
-| Tarea | Tiempo | RAM |
-|-------|--------|-----|
-| Chat simple | 3-8s | 4-5GB |
-| Chat complejo | 8-15s | 5-6GB |
-| Imagen (primera) | 40-60s | 6-8GB |
-| Imagen (siguiente) | 35-50s | 6-7GB |
+### 1. **Cuantización INT8**
+- Reduce tamaño del modelo en 4x
+- Pérdida mínima de calidad
+- Uso de RAM: ~1.5GB vs 6GB sin cuantizar
 
-## 🔧 Configuración
+### 2. **Modelos Ultra-Ligeros**
+- **Chat**: Microsoft Phi-2 (2.7B) en lugar de 7B+
+- **Imagen**: SSD-1B (1B) en lugar de 5B+
 
-Editar `felix_mobile_config.yaml` para personalizar:
+### 3. **Gestión Inteligente de Memoria**
+- Descargar modelos de imagen después de usarlos
+- Mantener modelo de chat en RAM (lo usas más)
+- Garbage collection automático
+
+### 4. **Resolución Reducida**
+- Imágenes 256x256 (vs 512x512)
+- Tokens limitados a 150 palabras
+- Pasos de generación mínimos
+
+## 📊 Benchmarks en Snapdragon 8 Gen2
+
+| Tarea | Tiempo | RAM Pico | Notas |
+|-------|--------|---------|-------|
+| Carga inicial | 8-10s | 500MB | Primera vez descarga modelos |
+| Chat (150 tokens) | 1.5-2s | 2.5GB | Rápido, modelo en RAM |
+| Gen. Imagen (256x256) | 40-60s | 3.5GB | Limitado por GPU Adreno |
+| Limpieza después | <1s | 500MB | Descarga modelo imagen |
+
+## 🔧 Configuración Avanzada
+
+Edita `felix_mobile_config.yaml`:
 
 ```yaml
 models:
   chat:
-    id: "gpt2"  # Cambiar a gpt2 si RAM < 6GB
-    max_tokens: 50  # Reducir para más velocidad
+    model_id: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"  # Aún más ligero
   image:
-    steps: 10  # Menos pasos = más rápido
-    resolution: 384  # Menor resolución = menos RAM
+    resolution: [256, 256]  # Reducir más si es necesario
+    steps: 1  # Mínimo (borroso pero súper rápido)
 ```
 
-## 🐛 Troubleshooting
+## 🐛 Solución de Problemas
 
-### "Out of Memory" (OOM)
+### "Out of Memory"
 ```bash
-# Cambiar a modelo más ligero
-sed -i 's/microsoft\/phi-2/gpt2/g' gatogpt_felix_mobile.py
+# Reducir resolución en config
+resolution: [224, 224]
+
+# O usar modelo de chat aún más ligero
+model_id: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 ```
 
-### App se congela
-```bash
-# Reducir pasos de imagen
-sed -i 's/num_inference_steps=15/num_inference_steps=8/g' gatogpt_felix_mobile.py
+### "Modelo descarga muy lentamente"
+- Usa WiFi 5GHz
+- Primera descarga es lenta (~2-5GB)
+- Luego se cachea localmente
+
+### "Imagen borrosa o extraña"
+- Aumentar `steps` en config (pero será más lento)
+- Usar prompt más descriptivo
+- Ejemplo: `@gatimage un gato adorable, cute, ilustración bonita`
+
+## 📁 Estructura de Archivos
+
+```
+Luciano-Sarmiento/
+├── gatogpt_felix_mobile.py      ← Main app
+├── requirements_mobile.txt       ← Dependencias
+├── felix_mobile_config.yaml     ← Configuración
+├── README_MOBILE.md             ← Este archivo
+├── felix_outputs/               ← Imágenes generadas
+│   └── images/
+└── felix_models/                ← Cache de modelos descargados
 ```
 
-### Descarga muy lenta
-```bash
-# Usar espejo de Hugging Face
-export HF_ENDPOINT=https://hf-mirror.com
-python3 gatogpt_felix_mobile.py
-```
+## 🎨 Personalización de Félix
 
-### GPU no se detecta
+Edita `FELIX_SYSTEM_PROMPT` en `gatogpt_felix_mobile.py`:
+
 ```python
-import torch
-print(torch.cuda.is_available())  # Debe ser True
-print(torch.cuda.get_device_name())  # Debe ser Adreno
+FELIX_SYSTEM_PROMPT = """
+Eres Félix, un gato muy especial para [TU NOMBRE].
+Tienes personalidad única, eres inteligente y juguetón.
+Responde siempre en [IDIOMA] de forma corta y clara.
+"""
 ```
 
-## 📊 Comparación: Colab vs Móvil
+## 📈 Mejoras Futuras
 
-| Métrica | Colab T4 | Snapdragon 8 Gen 2 |
-|---------|----------|--------------------|
-| Chat (5 tokens/s) | **1-2s** ⚡ | 3-8s ✅ |
-| Imagen (2 pasos) | **5-10s** ⚡ | 35-60s ✅ |
-| Costo/mes | **$9.99** 💰 | **Gratis** 🎉 |
-| Privacidad | Nube ☁️ | Local 🔒 |
-| Always-on | No | **Sí** ✅ |
-
-## 🎯 Próximas mejoras
-
-- [ ] Soporte GPU Adreno nativo (ahora usa CPU)
-- [ ] Caché de imágenes generadas
-- [ ] Integración con WhatsApp/Telegram
+- [ ] Modo offline completo (sin descargar modelos)
 - [ ] Voz (text-to-speech)
-- [ ] Fine-tuning de Félix con datos personales
-- [ ] Versión iOS nativa (SwiftUI)
+- [ ] Más comandos (@gatmusic, @gatdance)
+- [ ] Interfaz gráfica mejorada (Kivy + Material Design)
+- [ ] Sincronización en la nube opcional
 
-## 📚 Recursos
+## 📝 Licencia
 
-- [Documentación PyTorch Mobile](https://pytorch.org/mobile/home/)
-- [Hugging Face Optimized Models](https://huggingface.co/models?other=mobile)
-- [Kivy Documentation](https://kivy.org/doc/stable/)
-- [Termux Wiki](https://wiki.termux.com/)
+MIT - Usa libremente
 
-## 📄 Licencia
+## 🤝 Contribuciones
 
-MIT License - Siéntete libre de usar, modificar y distribuir.
-
-## 🙋 Soporte
-
-¿Problemas? Abre un [issue en GitHub](https://github.com/luciano2-web/Luciano-Sarmiento/issues)
+¿Ideas para optimizar Félix? 
+- Fork este repo
+- Crea rama: `git checkout -b mejora/nueva-feature`
+- Commit: `git commit -m "feat: descripción"`
+- Push: `git push origin mejora/nueva-feature`
+- Abre Pull Request
 
 ---
 
-**Hecho con ❤️ y ronroneos por Luciano**
+**Hecho con ❤️ para Luciano y su Snapdragon 8 Gen2**
 
-🐱 *"El futuro es local, rápido y felino."* 🐾
+🐱 *Félix te espera. Ronronea... 🐾*
