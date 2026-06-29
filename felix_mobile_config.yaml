@@ -1,0 +1,72 @@
+# ============================================================
+# Configuración de GatoGPT Félix para Snapdragon 8 Gen 2
+# ============================================================
+
+device:
+  type: snapdragon_8_gen2
+  cores: 8
+  cpu_max_freq_ghz: 2.4
+  ram_gb: 12
+  storage_gb: 256
+
+models:
+  chat:
+    id: "microsoft/phi-2"  # 2.7B, ultra-rápido
+    alternatives:
+      - "TinyLlama/TinyLlama-1.1B-Chat-v1.0"  # 1.1B, más ligero
+      - "gpt2"  # 125M, mínimo
+    quantization: "int8"
+    max_tokens: 100  # Móvil: límite bajo
+    temperature: 0.6
+    top_p: 0.9
+
+  image:
+    id: "segmind/SSD-1B"  # 832M params, super ligero
+    alternatives:
+      - "stabilityai/sd-turbo"  # 832M, alternativa rápida
+    steps: 15  # Móvil: menos pasos
+    guidance_scale: 7.5
+    resolution: 512  # No aumentar (OOM risk)
+    safety_checker: false  # Desactivar (ahorra RAM)
+
+memory:
+  aggressive_cleanup: true
+  max_memory_percent: 0.85
+  enable_attention_slicing: true
+  enable_vae_tiling: true
+  offload_to_cpu: true
+
+ui:
+  framework: "kivy"
+  window_width: 480
+  window_height: 960
+  theme: "dark"
+  font_size: 14
+
+performance:
+  lazy_loading: true  # Cargar modelos bajo demanda
+  cache_size: 2  # GB de caché máximo
+  thread_workers: 2
+  timeout_chat: 30  # segundos
+  timeout_image: 90  # segundos (muy lento en móvil)
+
+features:
+  chat_enabled: true
+  image_generation_enabled: true
+  video_generation_enabled: false  # NO en móvil
+  translation_enabled: false  # Requiere modelo adicional
+  history_limit: 50  # Conversaciones recientes
+
+output:
+  directory: "~/gatogpt_mobile_outputs"
+  image_format: "png"
+  image_quality: 95
+  max_files: 100  # Limpiar automáticamente si excede
+
+# ============================================================
+# TIPS DE OPTIMIZACIÓN
+# ============================================================
+# 1. Reducir resolución de imagen a 384x384 si RAM < 6GB
+# 2. Usar "gpt2" para chat si RAM < 4GB
+# 3. Desactivar "enable_vae_tiling" si tienes GPU potente
+# 4. Aumentar "top_k" para respuestas menos creativas/más rápidas
