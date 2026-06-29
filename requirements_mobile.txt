@@ -1,0 +1,30 @@
+# ========================================
+# GatoGPT Félix - Dependencias Móvil
+# Para Snapdragon 8 Gen2 (Android/iOS)
+# ========================================
+
+# Core ML
+transformers==4.41.0
+torch==2.1.0
+accelerate==0.27.0
+bitsandbytes==0.42.0
+
+# Diffusers para generación de imágenes ligera
+diffusers==0.27.0
+safetensors==0.4.1
+
+# Procesamiento de imágenes
+Pillow==10.1.0
+
+# Interfaz móvil (Kivy)
+Kivy==2.2.1
+kivy-garden==0.1.5
+
+# Utilidades
+numpy==1.24.3
+
+# ========================================
+# NOTA IMPORTANTE:
+# En Android, usar "python-for-android" para compilar:
+# p4a apk --requirements=python3,kivy,numpy,pillow,torch,transformers
+# ========================================
