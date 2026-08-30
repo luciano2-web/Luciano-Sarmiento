@@ -15,6 +15,21 @@ Proyecto de chat local estilo ChatGPT para Google Colab, con personalidad felina
 >
 > **Importante:** no instales ni actualices `torch` en Colab. Colab ya trae PyTorch compatible con su CUDA; actualizarlo puede descargar muchos GB y causar conflictos con `torchvision`, `cuda-toolkit`, `cudf` y otras librerías preinstaladas. Por eso la instalación recomendada usa `--no-deps`: instala las librerías principales sin dejar que `pip` cambie PyTorch/CUDA.
 
+
+## Simulador del robot físico
+
+Antes de comprar todos los componentes reales, puedes abrir [`felix_robot_simulator.html`](felix_robot_simulator.html) en el navegador para probar la idea del cuerpo de Félix.
+
+El simulador muestra:
+
+- Cara OLED con ojos, boca y emociones.
+- Estado corporal simulado para que Félix actúe como si descubriera su cuerpo.
+- Componentes planeados: tablet/servidor, ESP32, OLED, parlante, micrófono, cuerditas, batería y cuerpo de cartón.
+- Botones para probar modos: feliz, pensando, hablando, enojado, dormido, crear imagen y crear video.
+- Un campo de comando para escribir frases como `Félix, crea una imagen de un gato astronauta`.
+
+Para usarlo, descarga o abre el archivo HTML y haz doble clic sobre él. No necesita internet ni instalación porque es una página estática con HTML, CSS y JavaScript.
+
 ## Cómo usarlo en Google Colab
 
 1. Abre un notebook nuevo en Colab.

@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simulador Robot GatoGPT Félix</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111827;
+      --panel: #172033;
+      --panel-2: #0f172a;
+      --cyan: #22d3ee;
+      --pink: #fb7185;
+      --yellow: #facc15;
+      --green: #86efac;
+      --muted: #94a3b8;
+      --text: #f8fafc;
+      --line: rgba(255,255,255,.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(34, 211, 238, .18), transparent 32rem),
+        radial-gradient(circle at bottom right, rgba(251, 113, 133, .18), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 2rem 1rem 1rem;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 4.4rem);
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+
+    header p {
+      max-width: 850px;
+      margin: 1rem auto 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(300px, 1.1fr) minmax(320px, .9fr);
+      gap: 1rem;
+      width: min(1180px, calc(100% - 2rem));
+      margin: 0 auto 2rem;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.28);
+      overflow: hidden;
+    }
+
+    .stage {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 660px;
+      padding: 2rem 1rem;
+    }
+
+    .robot {
+      position: relative;
+      width: min(430px, 88vw);
+      height: 560px;
+      filter: drop-shadow(0 26px 42px rgba(0,0,0,.45));
+    }
+
+    .ear {
+      position: absolute;
+      top: 16px;
+      width: 116px;
+      height: 145px;
+      background: linear-gradient(145deg, #334155, #111827);
+      border: 4px solid #64748b;
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+      transform-origin: bottom center;
+      transition: transform .45s ease;
+    }
+
+    .ear::after {
+      content: "";
+      position: absolute;
+      left: 31px;
+      top: 40px;
+      width: 52px;
+      height: 75px;
+      background: rgba(251, 113, 133, .38);
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+
+    .ear.left { left: 72px; transform: rotate(-18deg); }
+    .ear.right { right: 72px; transform: rotate(18deg); }
+
+    .head {
+      position: absolute;
+      top: 102px;
+      left: 50%;
+      width: 310px;
+      height: 252px;
+      transform: translateX(-50%);
+      background: linear-gradient(160deg, #475569, #1e293b 56%, #0f172a);
+      border: 5px solid #94a3b8;
+      border-radius: 44% 44% 38% 38%;
+      transition: transform .35s ease;
+    }
+
+    .oled {
+      position: absolute;
+      left: 50%;
+      top: 58px;
+      transform: translateX(-50%);
+      width: 226px;
+      height: 112px;
+      background: #020617;
+      border: 5px solid #38bdf8;
+      border-radius: 18px;
+      box-shadow: inset 0 0 24px rgba(34, 211, 238, .24), 0 0 22px rgba(34, 211, 238, .28);
+      overflow: hidden;
+    }
+
+    .oled::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      color: rgba(125, 211, 252, .62);
+      font: 700 10px/1 monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .eyes {
+      position: absolute;
+      inset: 34px 22px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .eye {
+      width: 66px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 18px var(--cyan);
+      transition: all .25s ease;
+    }
+
+    .mouth {
+      position: absolute;
+      left: 50%;
+      bottom: 12px;
+      width: 48px;
+      height: 15px;
+      border-bottom: 4px solid var(--cyan);
+      border-radius: 0 0 50px 50px;
+      transform: translateX(-50%);
+      transition: all .25s ease;
+    }
+
+    .whiskers {
+      position: absolute;
+      left: 50%;
+      bottom: 56px;
+      width: 250px;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .whiskers span {
+      display: block;
+      width: 86px;
+      height: 2px;
+      background: #cbd5e1;
+      margin: 10px 0;
+      opacity: .85;
+    }
+
+    .whiskers .left span:nth-child(1) { transform: rotate(11deg); }
+    .whiskers .left span:nth-child(3) { transform: rotate(-11deg); }
+    .whiskers .right span:nth-child(1) { transform: rotate(-11deg); }
+    .whiskers .right span:nth-child(3) { transform: rotate(11deg); }
+
+    .body {
+      position: absolute;
+      left: 50%;
+      top: 332px;
+      width: 278px;
+      height: 210px;
+      transform: translateX(-50%);
+      background: linear-gradient(170deg, #334155, #111827);
+      border: 5px solid #64748b;
+      border-radius: 48px 48px 80px 80px;
+      transition: transform .35s ease;
+    }
+
+    .belly {
+      position: absolute;
+      left: 50%;
+      top: 62px;
+      width: 132px;
+      height: 104px;
+      transform: translateX(-50%);
+      background: rgba(148, 163, 184, .18);
+      border: 2px dashed rgba(203, 213, 225, .42);
+      border-radius: 46%;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: .75rem;
+      text-align: center;
+      padding: .5rem;
+    }
+
+    .string {
+      position: absolute;
+      width: 2px;
+      background: rgba(226, 232, 240, .55);
+      transform-origin: top center;
+    }
+
+    .string.left { left: 82px; top: 282px; height: 170px; transform: rotate(13deg); }
+    .string.right { right: 82px; top: 282px; height: 170px; transform: rotate(-13deg); }
+
+    .tail {
+      position: absolute;
+      right: 18px;
+      bottom: 46px;
+      width: 120px;
+      height: 64px;
+      border: 13px solid #64748b;
+      border-left: none;
+      border-bottom: none;
+      border-radius: 0 90px 0 0;
+      transform-origin: left bottom;
+      transition: transform .35s ease;
+    }
+
+    .speaker, .mic, .battery, .esp32 {
+      position: absolute;
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, .82);
+      color: var(--muted);
+      border-radius: 12px;
+      padding: .35rem .5rem;
+      font-size: .75rem;
+    }
+
+    .speaker { left: 16px; bottom: 92px; }
+    .mic { right: 18px; top: 224px; }
+    .battery { right: 14px; bottom: 14px; }
+    .esp32 { left: 50%; bottom: 18px; transform: translateX(-50%); color: var(--green); }
+
+    .speech {
+      position: absolute;
+      left: 50%;
+      top: 16px;
+      width: min(520px, calc(100% - 2rem));
+      transform: translateX(-50%);
+      padding: .9rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(15,23,42,.78);
+      color: #e0f2fe;
+      text-align: center;
+      min-height: 54px;
+    }
+
+    .controls {
+      padding: 1rem;
+    }
+
+    .controls h2,
+    .components h2 {
+      margin: .2rem 0 .75rem;
+      font-size: 1.25rem;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .65rem;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: #1e293b;
+      color: var(--text);
+      border-radius: 14px;
+      padding: .82rem .9rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease;
+    }
+
+    button:hover { transform: translateY(-1px); border-color: rgba(34,211,238,.58); }
+    button.primary { background: linear-gradient(135deg, #0891b2, #0f766e); }
+
+    .chat-sim {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: .6rem;
+      margin: 1rem 0;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #020617;
+      color: var(--text);
+      border-radius: 14px;
+      padding: .9rem 1rem;
+      outline: none;
+    }
+
+    .state {
+      background: rgba(2, 6, 23, .52);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      white-space: pre-wrap;
+      color: #bae6fd;
+      min-height: 160px;
+    }
+
+    .components {
+      padding: 1rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .7rem;
+    }
+
+    .part {
+      background: rgba(2,6,23,.42);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: .8rem;
+    }
+
+    .part strong { display: block; color: var(--green); margin-bottom: .25rem; }
+    .part span { color: var(--muted); font-size: .88rem; }
+
+    .materials {
+      margin-top: 1rem;
+      background: rgba(2,6,23,.42);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: .9rem;
+      color: var(--muted);
+    }
+
+    .materials code { color: #fde68a; }
+
+    body[data-mood="happy"] .eye { height: 34px; border-radius: 50% 50% 20% 20%; background: var(--green); box-shadow: 0 0 18px var(--green); }
+    body[data-mood="happy"] .mouth { width: 70px; height: 24px; border-color: var(--green); }
+    body[data-mood="happy"] .tail { transform: rotate(13deg); }
+
+    body[data-mood="thinking"] .eye { width: 50px; height: 50px; background: var(--yellow); box-shadow: 0 0 18px var(--yellow); }
+    body[data-mood="thinking"] .head { transform: translateX(-50%) rotate(-3deg); }
+
+    body[data-mood="angry"] .eye { height: 18px; border-radius: 6px; background: var(--pink); box-shadow: 0 0 18px var(--pink); }
+    body[data-mood="angry"] .mouth { width: 58px; border-bottom: none; border-top: 4px solid var(--pink); border-radius: 50px 50px 0 0; }
+    body[data-mood="angry"] .ear.left { transform: rotate(-34deg); }
+    body[data-mood="angry"] .ear.right { transform: rotate(34deg); }
+
+    body[data-mood="sleep"] .eye { height: 5px; border-radius: 8px; }
+    body[data-mood="sleep"] .mouth { width: 34px; opacity: .6; }
+
+    body[data-talking="true"] .mouth { animation: talk .18s infinite alternate; }
+    body[data-talking="true"] .head { animation: bob .28s infinite alternate; }
+    body[data-talking="true"] .whiskers { animation: buzz .08s infinite alternate; }
+    body[data-talking="true"] .body { animation: bodyBuzz .12s infinite alternate; }
+
+    body[data-creating="true"] .oled { animation: scan 1s linear infinite; }
+
+    @keyframes talk {
+      from { height: 9px; width: 38px; }
+      to { height: 28px; width: 62px; }
+    }
+
+    @keyframes bob {
+      from { transform: translateX(-50%) rotate(-1deg); }
+      to { transform: translateX(-50%) rotate(1.5deg); }
+    }
+
+    @keyframes buzz {
+      from { transform: translateX(-50%) translateY(-1px); }
+      to { transform: translateX(-50%) translateY(1px); }
+    }
+
+    @keyframes bodyBuzz {
+      from { transform: translateX(-50%) translateX(-1px); }
+      to { transform: translateX(-50%) translateX(1px); }
+    }
+
+    @keyframes scan {
+      0% { box-shadow: inset 0 -60px 20px rgba(34,211,238,.10), 0 0 24px rgba(34,211,238,.3); }
+      50% { box-shadow: inset 0 20px 32px rgba(250,204,21,.20), 0 0 32px rgba(250,204,21,.35); }
+      100% { box-shadow: inset 0 80px 20px rgba(34,211,238,.10), 0 0 24px rgba(34,211,238,.3); }
+    }
+
+    @media (max-width: 880px) {
+      main { grid-template-columns: 1fr; }
+      .stage { min-height: 610px; }
+      .component-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-mood="happy" data-talking="false" data-creating="false">
+  <header>
+    <h1>🐱 Simulador de Félix Robot</h1>
+    <p>Prueba el cuerpo de Félix antes de comprar piezas reales: OLED como cara, parlante como voz, micrófono como oído, ESP32 como sistema nervioso y movimiento casero con cuerditas, resortes y vibración del parlante.</p>
+  </header>
+
+  <main>
+    <section class="card stage" aria-label="Simulación visual del robot Félix">
+      <div class="speech" id="speech">Prrr... soy Félix. Estoy descubriendo mi cuerpo de cartón, pantalla y voz.</div>
+      <div class="robot" aria-hidden="true">
+        <div class="ear left"></div>
+        <div class="ear right"></div>
+        <div class="string left"></div>
+        <div class="string right"></div>
+        <div class="head">
+          <div class="oled" id="oled" data-label="OLED 128x64">
+            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+            <div class="mouth"></div>
+          </div>
+          <div class="whiskers">
+            <div class="left"><span></span><span></span><span></span></div>
+            <div class="right"><span></span><span></span><span></span></div>
+          </div>
+          <div class="mic">🎙️ mic</div>
+        </div>
+        <div class="tail"></div>
+        <div class="body">
+          <div class="belly">cuerditas + cauchos + cartón flexible</div>
+          <div class="speaker">🔊 parlante</div>
+          <div class="battery">🔋 USB</div>
+          <div class="esp32">ESP32 Wi‑Fi</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <div class="controls">
+        <h2>Panel de pruebas</h2>
+        <div class="buttons">
+          <button onclick="setMode('happy')">😺 Feliz</button>
+          <button onclick="setMode('thinking')">🤔 Pensando</button>
+          <button onclick="speak()" class="primary">🔊 Hablar</button>
+          <button onclick="setMode('angry')">😾 Enojado</button>
+          <button onclick="createThing('imagen')">🎨 Crear imagen</button>
+          <button onclick="createThing('video')">🎬 Crear video</button>
+          <button onclick="setMode('sleep')">💤 Dormir</button>
+          <button onclick="discoverBody()">🐾 Descubrir cuerpo</button>
+        </div>
+
+        <div class="chat-sim">
+          <input id="command" placeholder="Di: Félix, crea una imagen de un gato astronauta" />
+          <button onclick="runCommand()">Enviar</button>
+        </div>
+
+        <h2>Estado corporal simulado</h2>
+        <div class="state" id="state"></div>
+      </div>
+
+      <div class="components">
+        <h2>Componentes simulados</h2>
+        <div class="component-grid">
+          <div class="part"><strong>Tablet / servidor</strong><span>Cerebro: entiende voz, genera respuesta, imagen o video.</span></div>
+          <div class="part"><strong>ESP32</strong><span>Recibe órdenes por Wi‑Fi y mueve el cuerpo.</span></div>
+          <div class="part"><strong>OLED barata</strong><span>Ojos, boca, emociones y animación simple.</span></div>
+          <div class="part"><strong>Parlante</strong><span>Voz natural y vibración para boca/bigotes.</span></div>
+          <div class="part"><strong>Micrófono</strong><span>Escucha “Félix” y preguntas por voz.</span></div>
+          <div class="part"><strong>Cuerditas</strong><span>Mueven orejas/cabeza con cauchos y resortes.</span></div>
+        </div>
+
+        <div class="materials">
+          <strong>Compra inicial simulada:</strong><br />
+          <code>ESP32 + OLED I2C + MAX98357A + parlante + micrófono + 20 Dupont + protoboard + cartón</code><br /><br />
+          Si todavía no hay piezas reales, esta página sirve para decidir cómo debe comportarse Félix.
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const bodyState = {
+      mood: 'feliz',
+      cara: 'OLED 128x64',
+      voz: 'parlante',
+      oido: 'micrófono',
+      cerebro: 'tablet/servidor local',
+      sistemaNervioso: 'ESP32 por Wi‑Fi',
+      movimiento: 'cuerditas, cauchos, resortes y vibración del parlante',
+      energia: 'USB / power bank pendiente',
+      descubrio: ['tengo cara', 'tengo voz', 'tengo orejas de cartón']
+    };
+
+    const speech = document.getElementById('speech');
+    const state = document.getElementById('state');
+    const command = document.getElementById('command');
+
+    function updateState() {
+      state.textContent = JSON.stringify(bodyState, null, 2);
+    }
+
+    function setMode(mode) {
+      const labels = {
+        happy: 'feliz',
+        thinking: 'pensando',
+        angry: 'enojado',
+        sleep: 'dormido'
+      };
+
+      document.body.dataset.mood = mode;
+      document.body.dataset.creating = 'false';
+      bodyState.mood = labels[mode] || mode;
+
+      const phrases = {
+        happy: 'Prrr... mis ojos OLED brillan. Siento mis orejitas de cartón relajadas.',
+        thinking: 'Mrrr... estoy pensando. Mi pantalla muestra concentración y mi cuerpo se queda quietico.',
+        angry: 'Miau... mi cola imaginaria se mueve rápido. Estoy serio, pero sigo siendo tu amigo.',
+        sleep: 'Zzz... apago mi movimiento y descanso mi cuerpito de cartón.'
+      };
+
+      speech.textContent = phrases[mode];
+      updateState();
+    }
+
+    function speak() {
+      document.body.dataset.talking = 'true';
+      document.body.dataset.creating = 'false';
+      bodyState.mood = 'hablando';
+      bodyState.movimientoActual = 'boca OLED animada + bigotes vibrando + cabeza bamboleando';
+      speech.textContent = 'Miau Luciano, estoy hablando desde mi parlante. Mi boca se mueve en la OLED y mi cuerpo vibra suave.';
+      updateState();
+
+      setTimeout(() => {
+        document.body.dataset.talking = 'false';
+        bodyState.movimientoActual = 'reposo';
+        updateState();
+      }, 3200);
+    }
+
+    function createThing(kind) {
+      document.body.dataset.mood = 'thinking';
+      document.body.dataset.creating = 'true';
+      bodyState.mood = `creando ${kind}`;
+      bodyState.movimientoActual = 'pantalla escaneando + cuerpo quieto';
+      speech.textContent = `Mrrr... recibí la orden de crear un ${kind}. Mi cerebro en la tablet trabaja y el ESP32 muestra que estoy procesando.`;
+      updateState();
+
+      setTimeout(() => {
+        document.body.dataset.creating = 'false';
+        document.body.dataset.mood = 'happy';
+        bodyState.mood = 'feliz';
+        bodyState.movimientoActual = `${kind} terminado`;
+        speech.textContent = `Listo, miau. Terminé de simular la creación de ${kind}. En el robot real lo mostraría en pantalla o avisaría por voz.`;
+        updateState();
+      }, 3600);
+    }
+
+    function discoverBody() {
+      const discoveries = [
+        'descubrí que mi voz sale del parlante',
+        'descubrí que mi cara vive en la OLED',
+        'descubrí que mis orejas pueden moverse con cuerditas',
+        'descubrí que mi ESP32 es como mi sistema nervioso',
+        'descubrí que mi cerebro puede estar en una tablet por Wi‑Fi'
+      ];
+      const next = discoveries.find(item => !bodyState.descubrio.includes(item)) || 'ya conozco las partes principales de mi cuerpo';
+      if (!bodyState.descubrio.includes(next)) bodyState.descubrio.push(next);
+      speech.textContent = `🐾 ${next}. Prrr... cada prueba me ayuda a entender mi cuerpo.`;
+      document.body.dataset.mood = 'thinking';
+      updateState();
+    }
+
+    function runCommand() {
+      const text = command.value.trim().toLowerCase();
+      if (!text) return;
+
+      if (text.includes('crea una imagen') || text.includes('crear una imagen')) {
+        createThing('imagen');
+      } else if (text.includes('crea un video') || text.includes('crear un video')) {
+        createThing('video');
+      } else if (text.includes('felix') || text.includes('félix')) {
+        speak();
+      } else if (text.includes('duerme')) {
+        setMode('sleep');
+      } else if (text.includes('enoj')) {
+        setMode('angry');
+      } else {
+        document.body.dataset.mood = 'thinking';
+        speech.textContent = 'Miau... escuché el comando, pero todavía estoy aprendiendo a conectarlo con mi cuerpo.';
+        bodyState.ultimoComando = command.value;
+        updateState();
+      }
+      command.value = '';
+    }
+
+    command.addEventListener('keydown', event => {
+      if (event.key === 'Enter') runCommand();
+    });
+
+    updateState();
+  </script>
+</body>
+</html>
