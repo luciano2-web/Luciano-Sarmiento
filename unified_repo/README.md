@@ -9,7 +9,7 @@ Asistente IA felino con personalidad. Funciona en Termux y Android.
 
 ### 🔗 ESP32-Android Bridge  
 Conexión entre ESP32 y dispositivos Android para control de sensores.
-- `esp32-android-bridge/` — Firmware y app móvil
+- [`esp32-android-bridge/`](https://github.com/luciano2-web/esp32-android-bridge) — Firmware y app móvil
 - Comunicación Bluetooth Serial
 
 ### 📱 Mobile Use Skill
