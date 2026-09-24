@@ -1,0 +1,75 @@
+# ================================================
+# Configuración GatoGPT Félix Mobile
+# Snapdragon 8 Gen2 Optimization
+# ================================================
+
+device:
+  type: "mobile_snapdragon"
+  processor: "Snapdragon 8 Gen2"
+  memory_limit_mb: 4096  # 4GB RAM disponible aprox.
+  device_type: "cpu"    # CPU más estable que GPU en móvil
+
+models:
+  chat:
+    model_id: "microsoft/phi-2"
+    quantization: "int8"  # Crucial para móvil
+    cache_strategy: "keep_in_memory"  # Reutilizar modelo
+    max_tokens: 150
+    parameters: 2.7  # Miliarios de parámetros
+
+  image:
+    model_id: "segmind/SSD-1B"
+    quantization: "fp16"
+    resolution: [256, 256]  # Baja resolución para móvil
+    steps: 2  # Mínimo para velocidad
+    cache_strategy: "unload_after_use"  # Liberar RAM después
+
+  alternatives:
+    chat_ultra_light: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"  # 1.1B
+    image_ultra_light: "dpmcdemo/LCM_Dreamshaper_v7"  # Todavía más ligero
+
+optimizations:
+  - name: "quantization"
+    enabled: true
+    precision: "int8"
+    
+  - name: "low_cpu_mem_usage"
+    enabled: true
+    
+  - name: "gc_collect"
+    enabled: true
+    frequency: "after_image_gen"
+    
+  - name: "batch_size"
+    value: 1  # Siempre 1 en móvil
+    
+  - name: "no_gradients"
+    enabled: true
+    reason: "Inference only, no training"
+
+ui:
+  theme: "light"
+  window_size: [400, 700]  # Típico móvil
+  chat_history_limit: 4  # Solo últimos 4 mensajes para context
+  image_cache_limit: 5  # Guardar últimas 5 imágenes
+
+output:
+  base_dir: "./felix_outputs"
+  images: "./felix_outputs/images"
+  models_cache: "./felix_models"
+  logs: "./felix_logs"
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "felix_mobile.log"
+  console: true
+
+performance_targets:
+  chat_response_time_ms: 2000  # 2 segundos máximo
+  image_generation_time_s: 60  # 60 segundos máximo
+  startup_time_s: 10  # 10 segundos startup
+  memory_peak_mb: 3500  # No exceder 3.5GB
+
+# ================================================
+# NOTA: Ajustar según disponibilidad de RAM real
+# ================================================
