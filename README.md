@@ -1,6 +1,6 @@
 # Luciano Sarmiento
 
-Proyectos de robótica e IA desarrollados en Termux (Android), sin PC.
+Proyectos de robótica e IA desarrollados en Android, sin PC.
 
 <div align="center">
   <img src="assets/felix_concept.jpg" alt="Félix / GatoGPT" width="360">
