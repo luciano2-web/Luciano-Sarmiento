@@ -47,7 +47,7 @@ DEVICE = "cpu"  # Snapdragon 8 Gen2 usa GPU Adreno, pero PyTorch por CPU es más
 DTYPE = torch.float32  # INT8 en móvil, pero float32 es más compatible
 
 # Modelos ULTRA-LIGEROS para móvil
-CHAT_MODEL_ID = "microsoft/phi-2"  # 2.7B cuantizado = ~1.5GB
+CHAT_MODEL_ID = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"  # 1.1B con chat template, viable en móvil
 # Alternativa ultra-ligera: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"  # Solo 1.1B = ~600MB
 
 # Modelos de imagen ligeros
@@ -96,15 +96,6 @@ class FelixModelManager:
         print("🐱 Cargando modelo de chat (esto tardará ~30-60s la primera vez)...")
         
         try:
-            # Usar quantization_config para móvil
-            from transformers import BitsAndBytesConfig
-            
-            quantization_config = BitsAndBytesConfig(
-                load_in_8bit=True,
-                llm_int8_threshold=6.0,
-                llm_int8_skip_modules=["lm_head"],
-            )
-            
             self.chat_tokenizer = AutoTokenizer.from_pretrained(
                 CHAT_MODEL_ID,
                 cache_dir=str(MODEL_CACHE_DIR),
@@ -116,15 +107,14 @@ class FelixModelManager:
                 cache_dir=str(MODEL_CACHE_DIR),
                 torch_dtype=DTYPE,
                 device_map="auto",
-                quantization_config=quantization_config,
-                trust_remote_code=True,
                 low_cpu_mem_usage=True,  # Crucial para móvil
             )
             
             print("✅ Modelo de chat cargado en memoria.")
         except Exception as e:
             print(f"❌ Error cargando modelo: {e}")
-            print("Usando modo fallback (respuestas pre-programadas)...")
+            print("Usando modo fallback (respue
+stas pre-programadas)...")
             self.chat_model = "fallback"
 
     def load_image_model(self):
@@ -357,10 +347,16 @@ class FelixMobileApp(App):
         if message.lower().startswith("@gatimage"):
             self.process_image_command(message)
         else:
-            # Chat normal
-            response = self.manager.chat(message, self.chat_history)
-            self.chat_history.append((message, response))
-            self.add_chat_bubble(response, "felix")
+            # Chat normal: correr en un hilo para no congelar la UI de Kivy
+            import threading
+            from kivy.clock import Clock
+
+            def worker():
+                response = self.manager.chat(message, self.chat_history)
+                self.chat_history.append((message, response))
+                Clock.schedule_once(lambda dt: self.add_chat_bubble(response, "felix"))
+
+            threading.Thread(target=worker, daemon=True).start()
 
     def on_image_cmd(self, instance):
         """Botón para generar imagen."""
