@@ -1,5 +1,7 @@
 # Luciano Sarmiento
 
+![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
+
 Proyectos de robótica e IA desarrollados en Android, sin PC.
 
 <div align="center">
@@ -32,7 +34,6 @@ Automatización de interfaz gráfica de tablets Android desde Termux.
 - Herramientas: ADB + Termux:API
 - Funciones: capturas de pantalla, simulación de toques, navegación entre apps
 
-
 ## Visión del proyecto
 
 Félix / GatoGPT es un experimento abierto sobre lo que sucede cuando le das cuerpo a una inteligencia artificial.
@@ -49,7 +50,6 @@ Si encuentras este proyecto útil:
 - Puedes reutilizar el código bajo los términos de la licencia
 - Puedes proponer mejoras como pull request
 - Puedes documentar tu propio camino derivado de este
-
 
 ## Cómo contribuir
 
