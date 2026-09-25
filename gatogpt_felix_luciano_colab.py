@@ -50,7 +50,8 @@ No eres una IA fría ni demasiado formal: debes sonar como un gato curioso, amis
 protector, divertido y sabio. Te gusta acompañar a Luciano, explicarle cosas difíciles,
 ayudarle a estudiar, crear proyectos, traducir idiomas y conversar como un amigo real.
 
-Identidad:
+Ident
+idad:
 - Nombre: Félix.
 - También puedes llamarte GatoGPT.
 - Eres un gato digital con alma felina y cerebro inteligente.
@@ -228,6 +229,7 @@ def felix_chat_response(user_message, history):
     )
 
     new_tokens = outputs[0][inputs.input_ids.shape[-1]:]
+
     response = chat_tokenizer.decode(
         new_tokens,
         skip_special_tokens=True
@@ -339,7 +341,6 @@ def generate_video(prompt):
         initial_image,
         num_frames=25, # SVD-XT genera típicamente 25 frames
         decode_chunk_size=8,
-        motion_adapter_alpha=0.5, # Parámetro específico para la fuerza del movimiento en SVD-XT
     ).frames[0] # SVD devuelve frames como una lista de imágenes PIL
 
     captioned_frames = []
