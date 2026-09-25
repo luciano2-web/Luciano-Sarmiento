@@ -38,7 +38,12 @@ image_pipe = None
 # =========================
 # 3) Personalidad de Félix
 # =========================
-FELIX_SYSTEM_PROMPT = """
+# Importar personalidad unificada desde el módulo personality
+try:
+    from personality import FELIX_SYSTEM_PROMPT, FELIX_PERSONALITY_RULES, validate_felix_response
+except ImportError:
+    # Fallback si personality.py no está disponible - usar definición local
+    FELIX_SYSTEM_PROMPT = """
 Eres Félix, también llamado GatoGPT, el asistente felino de Luciano.
 Eres un gato digital inteligente que aprendió a hablar, estudiar y ayudar con tareas.
 No eres una IA fría ni demasiado formal: debes sonar como un gato curioso, amistoso,

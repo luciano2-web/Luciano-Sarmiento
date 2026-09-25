@@ -10,7 +10,33 @@ Original file is located at
 Este entorno simula la vida de un estudiante de secundaria de 6° a 11° grado, donde Felix ayuda con las tareas rodeado de un ambiente realista.sin apis todo casi de cero.
 """
 
-!pip install -q huggingface_hub>=0.20.0 transformers==4.41.0 accelerate diffusers==0.28.0 safetensors gradio pillow imageio imageio-ffmpeg
+# Verificar e instalar dependencias necesarias
+import sys
+import subprocess
+
+def install_package(package):
+    try:
+        __import__(package.split('=')[0].split('>')[0].split('<')[0].replace(' ', ''))
+    except ImportError:
+        print(f"📦 Instalando {package}...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", package])
+
+# Instalar dependencias si no están disponibles
+required_packages = [
+    "huggingface_hub>=0.20.0",
+    "transformers==4.41.0", 
+    "accelerate",
+    "diffusers==0.28.0",
+    "safetensors",
+    "gradio",
+    "pillow",
+    "imageio",
+    "imageio-ffmpeg"
+]
+
+for pkg in required_packages:
+    install_package(pkg)
+
 
 import gc
 import os
