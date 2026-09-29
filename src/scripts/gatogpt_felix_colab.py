@@ -40,7 +40,7 @@ image_pipe = None
 # =========================
 # Importar personalidad unificada desde el módulo personality
 try:
-    from personality import FELIX_SYSTEM_PROMPT, FELIX_PERSONALITY_RULES, validate_felix_response
+    from src.core.personality import FELIX_SYSTEM_PROMPT, FELIX_PERSONALITY_RULES, validate_felix_response
 except ImportError:
     # Fallback si personality.py no está disponible - usar definición local
     FELIX_SYSTEM_PROMPT = """
