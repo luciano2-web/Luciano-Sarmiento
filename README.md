@@ -1,8 +1,8 @@
-# <div align="center">\ud83d\udc31 F\u00e9lix / GatoGPT</div>
+# <div align="center">🐱 Félix / GatoGPT</div>
 
 <div align="center">
 
-**\ud83d\udcbb El primer robot gato con IA conversacional, personalidad felina y coraz\u00f3n de ESP32**
+**🤖 El primer robot gato con IA conversacional, personalidad felina y corazón de ESP32**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-1A237E?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-A7D8FF?style=for-the-badge&logo=python)](https://www.python.org/)
@@ -18,40 +18,55 @@
 ---
 
 <div align="center">
-  <img src="assets/felix_concept.jpg" alt="F\u00e9lix / GatoGPT - Robot gato con IA" width="600" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+  <img src="assets/felix_concept.jpg" alt="Félix / GatoGPT - Robot gato con IA" width="600" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
 </div>
 
 ---
 
-## \u2728 **Vis\u00f3n General**
+## ✨ Visión general
 
-F\u00e9lix es un **proyecto open-source** que combina **hardware accesible** (ESP32), **inteligencia artificial** y una **personalidad \u00fanica** para crear el primer **robot gato conversacional** del mundo.
+Félix es un proyecto open-source que fusiona hardware accesible, inteligencia artificial y personalidad para crear un robot gato conversacional con presencia física, voz y carácter propio.
 
-> **"\u00bfQu\u00e9 pasa cuando una IA tiene cuerpo? \u00bfC\u00f3mo nace una personalidad? \u00bfPuede una IA desarrollar conciencia?"**
-> 
-> *Estas son las preguntas que inspiraron a F\u00e9lix.*
+Este proyecto busca explorar una idea simple pero fascinante:
+
+> “¿Qué pasa cuando una IA tiene cuerpo? ¿Cómo nace una personalidad? ¿Puede una IA desarrollar conciencia?”
+
+Félix no es solo un chatbot: es un gato digital con alma felina, capaz de conversar, reaccionar, expresarse y sentirse vivo.
 
 ---
 
-## \ud83c\udf93 **Arquitectura del Sistema**
+## 🧠 Características principales
+
+- Conversación con IA en tiempo real
+- Personalidad felina y estilo propio
+- Interfaz móvil con Kivy
+- Soporte para audio y voz
+- Integración con ESP32
+- Simulador web para probar sin hardware
+- Arquitectura abierta y extensible
+- Diseño pensado para proyectos maker e investigación creativa
+
+---
+
+## 🏗️ Arquitectura del sistema
 
 ```mermaid
 flowchart TD
-    subgraph Hardware["\ud83d\udcbb Hardware (ESP32)"]
-        A[ESP32 DevKit] --> B[OLED 0.96\" I2C]
-        A --> C[Micr\u00f3fono INMP441 I2S]
+    subgraph Hardware["💻 Hardware (ESP32)"]
+        A[ESP32 DevKit] --> B[OLED 0.96" I2C]
+        A --> C[Micrófono INMP441 I2S]
         A --> D[Parlante 3W]
         A --> E[Power Bank]
     end
     
-    subgraph Mobile["\ud83d\udcf1 App M\u00f3vil"]
+    subgraph Mobile["📱 App móvil"]
         F[Kivy UI] --> G[Chat Engine]
         G --> H[Modelos de IA]
         F --> I[Audio Handler]
         F --> J[Bluetooth Bridge]
     end
     
-    subgraph Cloud["\u2601\ufe0f Opcional: Nube"]
+    subgraph Cloud["☁️ Opcional: Nube"]
         K[(Hugging Face)] --> H
     end
     
@@ -67,105 +82,106 @@ flowchart TD
 
 ---
 
-## \ud83d\udc80 **Componentes Principales**
+## 🧩 Componentes principales
 
-### \ud83d\udcbb **Hardware (Menor a $50)**
+### 💻 Hardware (menos de $50)
 
 | Componente | Modelo | Precio (USD) | Función |
 |------------|--------|--------------|---------|
 | **Microcontrolador** | ESP32-WROOM-32 | $8 - $12 | Cerebro del sistema |
 | **Pantalla OLED** | SSD1306 0.96" I2C | $3 - $6 | Mostrar expresiones |
-| **Micr\u00f3fono** | INMP441 I2S | $2 - $4 | Capturar voz |
-| **Parlante** | 4\u2126 3W | $2 - $5 | Reproducir voz |
+| **Micrófono** | INMP441 I2S | $2 - $4 | Capturar voz |
+| **Parlante** | 4Ω 3W | $2 - $5 | Reproducir voz |
 | **Protoboard** | 400 puntos | $5 - $10 | Montaje |
-| **Power Bank** | 5V/2A | $10 - $20 | Alimentaci\u00f3n |
+| **Power Bank** | 5V/2A | $10 - $20 | Alimentación |
 
-**\u2192 [Ver lista completa de componentes](docs/hardware/components.md)**
+→ [Ver lista completa de componentes](docs/hardware/components.md)
 
-### \u2699\ufe0f **Software**
+### ⚙️ Software
 
-| Componente | Tecnolog\u00eda | Descripci\u00f3n |
-|------------|-------------|-----------------|
-| **Firmware** | MicroPython | Control de hardware (ESP32) |
-| **App M\u00f3vil** | Kivy + Python | Interfaz de usuario |
+| Componente | Tecnología | Descripción |
+|------------|-------------|-------------|
+| **Firmware** | MicroPython | Control del hardware ESP32 |
+| **App móvil** | Kivy + Python | Interfaz de usuario |
 | **IA** | PyTorch + Transformers | Modelos de lenguaje |
-| **Im\u00e1genes** | Diffusers | Generaci\u00f3n de im\u00e1genes |
+| **Imágenes** | Diffusers | Generación visual |
 
 ---
 
-## \ud83d\ude80 **Inicio R\u00e1pido**
+## 🚀 Inicio rápido
 
-### \u26a1 **OPCI\u00d3N 1: Computadora Local (M\u00e1s f\u00e1cil)**
+### 1) Computadora local
 
 ```bash
-# 1. Clonar repositorio
+# Clonar repositorio
 git clone https://github.com/luciano2-web/Luciano-Sarmiento.git
 cd Luciano-Sarmiento
 
-# 2. Crear entorno virtual
+# Crear entorno virtual
 python -m venv venv
 source venv/bin/activate  # En Windows: venv\Scripts\activate
 
-# 3. Instalar dependencias
+# Instalar dependencias
 pip install -r src/mobile/requirements_mobile.txt
 
-# 4. Ejecutar
+# Ejecutar la app
 python src/mobile/main.py
 ```
 
-### \u26a1 **OPCI\u00d3N 2: Android (Termux)**
+### 2) Android (Termux)
 
 ```bash
-# 1. Instalar Termux (desde F-Droid)
-# 2. En Termux:
+# 1. Instalar Termux desde F-Droid
+# 2. Dentro de Termux:
 pkg update && pkg upgrade
 pkg install python git
 pip install -r src/mobile/requirements_mobile.txt
 
-# 3. Ejecutar
+# Ejecutar
 python src/mobile/main.py
 ```
 
-### \u26a1 **OPCI\u00d3N 3: Compilar APK para Android**
+### 3) Compilar APK para Android
 
 ```bash
-# 1. Instalar Buildozer
+# Instalar Buildozer
 pip install buildozer cython
 
-# 2. Compilar
+# Compilar
 cd src/mobile
 buildozer android debug
 
-# 3. Instalar el APK generado en bin/
+# Instalar el APK generado en la carpeta bin/
 ```
 
-**\u2192 [Ver gu\u00eda completa de configuraci\u00f3n](docs/mobile/setup.md)**
+→ [Ver guía completa de configuración](docs/mobile/setup.md)
 
 ---
 
-## \ud83d\udc81 **Comandos Disponibles**
+## 🧪 Comandos disponibles
 
-| Comando | Descripci\u00f3n | Ejemplo |
+| Comando | Descripción | Ejemplo |
 |---------|-------------|---------|
-| `@gatimage` | Generar imagen | `@gatimage un gato estudiando matem\u00e1ticas` |
+| `@gatimage` | Generar imagen | `@gatimage un gato estudiando matemáticas` |
 | `@gativeo` | Generar video (experimental) | `@gativeo un gato bailando` |
 | `@help` | Mostrar ayuda | `@help` |
-| `clear` | Limpiar chat | `clear` |
-| `quit` | Salir | `quit` |
+| `clear` | Limpiar el chat | `clear` |
+| `quit` | Salir de la aplicación | `quit` |
 
 ---
 
-## \ud83c\udfa8 **Demo**
+## 🎨 Demo
 
-### \ud83d\udc8b **Simulador Web**
-Puedes probar a F\u00e9lix **sin hardware** usando el simulador web:
-- [Abrir Simulador](assets/felix_robot_simulator.html)
+### 🖥️ Simulador web
+Puedes probar a Félix sin hardware usando el simulador web:
 
-### \ud83d\udcf5 **Capturas de Pantalla**
+- [Abrir simulador](assets/felix_robot_simulator.html)
+
+### 📷 Capturas de pantalla
 
 <div align="center">
 
-| **Interfaz M\u00f3vil** | **Hardware** | **Expresiones** |
+| **Interfaz móvil** | **Hardware** | **Expresiones** |
 |--------------------------|--------------|----------------|
 | ![App Mobile](assets/felix_concept.jpg) | ![Hardware](assets/felix_concept.jpg) | ![Expresiones](assets/felix_concept.jpg) |
 
@@ -173,110 +189,132 @@ Puedes probar a F\u00e9lix **sin hardware** usando el simulador web:
 
 ---
 
-## \ud83d\udc1f **Personalidad de F\u00e9lix**
+## 🐾 Personalidad de Félix
 
-F\u00e9lix no es solo un chatbot, es un **gato digital con alma felina**.
+Félix no es solo un chatbot: es un gato digital con alma felina, calidez y curiosidad.
 
-### \u2728 **Reglas de Personalidad**
+### ✨ Reglas de personalidad
 
-| Aspecto | Descripci\u00f3n |
+| Aspecto | Descripción |
 |---------|-------------|
-| **Nombre** | F\u00e9lix (o GatoGPT) |
+| **Nombre** | Félix (o GatoGPT) |
 | **Tipo** | Gato digital inteligente |
 | **Creador** | Luciano |
-| **Personalidad** | Amistoso, curioso, juguet\u00f3n, sabio |
-| **Estilo** | Cercano, tierno, \u00fatil |
-| **Frases felinas** | "miau", "prrr", "mrrr" (m\u00e1ximo 2 por respuesta) |
+| **Personalidad** | Amistoso, curioso, juguetón, sabio |
+| **Estilo** | Cercano, tierno, útil |
+| **Frases felinas** | “miau”, “prrr”, “mrrr” (máximo 2 por respuesta) |
 
-### \u274c **Lo que NO hace F\u00e9lix**
-- \u274c No se identifica como "ChatGPT" o "IA".
-- \u274c No usa t\u00e9rminos humanos ("manos", "dedos").
-- \u274c No genera contenido peligroso o ilegal.
-- \u274c No comparte informaci\u00f3n personal.
+### ❌ Lo que Félix no hace
+- ❌ No se identifica como “ChatGPT” o “IA”
+- ❌ No usa términos humanos como “manos” o “dedos”
+- ❌ No genera contenido peligroso o ilegal
+- ❌ No comparte información personal
 
-**\u2192 [Ver sistema de personalidad completo](src/core/personality.py)**
+→ [Ver sistema completo de personalidad](src/core/personality.py)
 
 ---
 
-## \ud83d\udc68 **Estructura del Proyecto**
+## 📁 Estructura del proyecto
 
-```
+```text
 Luciano-Sarmiento/
-├── docs/                    # Documentaci\u00f3n
-│   ├── ARCHITECTURE.md       # Arquitectura del sistema
+├── docs/                          # Documentación
+│   ├── ARCHITECTURE.md           # Arquitectura general
 │   ├── hardware/
-│   │   ├── components.md     # Lista de componentes
-│   │   └── assembly.md       # Gu\u00eda de ensamblaje
+│   │   ├── components.md         # Lista de componentes
+│   │   └── assembly.md           # Guía de montaje
 │   ├── firmware/
-│   │   ├── flashing.md       # Gu\u00eda para flashear ESP32
-│   │   └── examples.md       # Ejemplos de c\u00f3digo MicroPython
+│   │   ├── flashing.md           # Guía para flashear ESP32
+│   │   └── examples.md           # Ejemplos de MicroPython
 │   └── mobile/
-│       └── setup.md          # Configuraci\u00f3n de la app
+│       └── setup.md              # Configuración de la app
 │
 ├── src/
 │   ├── core/
-│   │   ├── personality.py     # Sistema de personalidad
-│   │   └── constants.py      # Constantes globales
+│   │   ├── personality.py        # Sistema de personalidad
+│   │   └── constants.py          # Constantes globales
 │   ├── mobile/
-│   │   ├── main.py           # App principal
-│   │   ├── chat_engine.py    # Motor de chat
-│   │   ├── image_engine.py   # Motor de im\u00e1genes
+│   │   ├── main.py               # App principal
+│   │   ├── chat_engine.py        # Motor de chat
+│   │   ├── image_engine.py       # Motor de imágenes
 │   │   └── requirements_mobile.txt
 │   └── firmware/
 │       ├── bluetooth_bridge.py
 │       ├── audio_handler.py
 │       └── display.py
 │
-├── assets/                  # Recursos
+├── assets/                       # Recursos visuales
 │   ├── felix_concept.jpg
 │   └── felix_robot_simulator.html
 │
-├── tests/                   # Tests
+├── tests/                        # Pruebas
 │   ├── test_personality.py
 │   └── test_chat_engine.py
 │
-├── CONTRIBUTING.md         # C\u00f3mo contribuir
-├── CODE_OF_CONDUCT.md      # C\u00f3digo de conducta
-└── README.md
+├── CONTRIBUTING.md               # Cómo contribuir
+├── CODE_OF_CONDUCT.md            # Código de conducta
+├── LICENSE                       # Licencia Apache 2.0
+├── README.md                     # Documentación principal
+└── .gitignore
 ```
 
 ---
 
-## \ud83d\udc00 **Branding de F\u00e9lix**
+## 🎯 Roadmap
 
-### \u2705 **Paleta de Colores**
-
-<div align="center">
-
-| Color | C\u00f3digo | Uso |
-|-------|----------|-----|
-| **Azul Oscuro** | `#1A237E` | T\u00edtulos, botones principales |
-| **Azul Claro** | `#A7D8FF` | Fondos, acentos |
-| **Verde Claro** | `#39FFB6` | Botones secundarios, \u00e9xito |
-
-</div>
-
-### \u2705 **Logo**
-
-```
-  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2510
-  \u2502  🐱 FÉLIX    \u2502  ← Logo de Félix
-  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518
-```
+- [ ] Mejorar la integración de voz
+- [ ] Añadir más expresiones faciales físicas
+- [ ] Mejorar la personalidad con memoria contextual
+- [ ] Soporte para más modelos de IA
+- [ ] Optimizar la app móvil para Android
+- [ ] Publicar guías más detalladas de montaje y firmware
 
 ---
 
-## \u2696\ufe0f **Tecnolog\u00edas Usadas**
+## 🧑‍💻 Contribuir
+
+Las contribuciones son bienvenidas.
+
+Si quieres ayudar, puedes:
+
+- Abrir un issue con una idea o mejora
+- Proponer cambios en el código
+- Mejorar documentación
+- Agregar pruebas
+- Ayudar con el hardware o firmware
+
+Consulta la guía de contribución aquí:
+
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+
+---
+
+## 🤝 Comunidad
+
+### ❓ ¿Dudas?
+- Abre un [Issue](https://github.com/luciano2-web/Luciano-Sarmiento/issues) con la etiqueta `question`
+- Revisa la [documentación](docs/ARCHITECTURE.md)
+
+### 🐛 ¿Encontraste un bug?
+- Abre un [Issue](https://github.com/luciano2-web/Luciano-Sarmiento/issues) con la etiqueta `bug`
+- Incluye:
+  - Descripción del problema
+  - Pasos para reproducirlo
+  - Capturas o logs
+
+---
+
+## 📚 Tecnologías usadas
 
 <div align="center">
 
-| Tecnolog\u00eda | Versi\u00f3n | Uso |
+| Tecnología | Versión | Uso |
 |------------|----------|-----|
 | [Python](https://www.python.org/) | 3.9+ | Lenguaje principal |
-| [Kivy](https://kivy.org/) | 2.2+ | Interfaz gr\u00e1fica |
+| [Kivy](https://kivy.org/) | 2.2+ | Interfaz gráfica |
 | [PyTorch](https://pytorch.org/) | 2.0+ | Inferencia de IA |
 | [Transformers](https://huggingface.co/docs/transformers/) | 4.30+ | Modelos de lenguaje |
-| [Diffusers](https://huggingface.co/docs/diffusers/) | - | Generaci\u00f3n de im\u00e1genes |
+| [Diffusers](https://huggingface.co/docs/diffusers/) | - | Generación de imágenes |
 | [MicroPython](https://micropython.org/) | - | Firmware ESP32 |
 | [ESP-IDF](https://www.espressif.com/en/products/sdks/esp-idf) | - | Alternativa para ESP32 |
 
@@ -284,45 +322,26 @@ Luciano-Sarmiento/
 
 ---
 
-## \u2728 **Soporte y Comunidad**
+## 📖 Recursos adicionales
 
-### \u2753 **\u00bfPreguntas?**
-- Abre un [Issue](https://github.com/luciano2-web/Luciano-Sarmiento/issues) con la etiqueta `question`.
-- Revisa la [documentaci\u00f3n](docs/ARCHITECTURE.md).
-
-### \u2753 **\u00bfQuieres contribuir?**
-- Lee el [CONTRIBUTING.md](CONTRIBUTING.md).
-- Revisa los issues etiquetados como [`good first issue`](https://github.com/luciano2-web/Luciano-Sarmiento/labels/good%20first%20issue).
-
-### \u2753 **\u00bfEncontraste un bug?**
-- Abre un [Issue](https://github.com/luciano2-web/Luciano-Sarmiento/issues) con la etiqueta `bug`.
-- Incluye:
-  - Descripci\u00f3n del problema.
-  - Pasos para reproducir.
-  - Capturas de pantalla o logs.
+- [Wiki](https://github.com/luciano2-web/Luciano-Sarmiento/wiki) - Documentación detallada
+- [Video demo](https://www.youtube.com/) - Félix en acción (próximamente)
+- [Discord](https://discord.gg/felix-gatogpt) - Comunidad (próximamente)
 
 ---
 
-## \ud83d\udcc8 **Recursos Adicionales**
+## ❤️ Agradecimientos
 
-- [📖 Wiki](https://github.com/luciano2-web/Luciano-Sarmiento/wiki) - Documentaci\u00f3n detallada
-- [🎥 Video Demo](https://www.youtube.com/) - F\u00e9lix en acci\u00f3n (pr\u00f3ximamente)
-- [💬 Discord](https://discord.gg/felix-gatogpt) - Comunidad (pr\u00f3ximamente)
-
----
-
-## \u2764\ufe0f **Agradecimientos**
-
-- A **Luciano** por crear este proyecto \u00fanico.
-- A todos los **colaboradores** que han contribuido con c\u00f3digo, ideas y soporte.
-- A la comunidad **open-source** por hacer esto posible.
+- A **Luciano** por crear este proyecto único
+- A todos los colaboradores que aportan ideas, mejoras y energía
+- A la comunidad open-source por hacer posible proyectos como este
 
 ---
 
 <div align="center">
 
-**\ud83d\udc31 F\u00e9lix te espera... Ronronea... \ud83d\udc3e**
+**🐱 Félix te espera… Ronronea… 🐾**
 
-*Hecho con \u2764\ufe0f para Luciano y todos los amantes de los gatos y la IA.*
+*Hecho con ❤️ para Luciano y todos los amantes de los gatos y la IA.*
 
 </div>
