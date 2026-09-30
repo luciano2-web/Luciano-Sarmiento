@@ -2,65 +2,65 @@
 
 **🐱 ¡Gracias por tu interés en ayudar a que Félix sea mejor!**
 
-Este proyecto es **open source** y crece gracias a colaboradores como tú. A continuación te explicamos cómo puedes contribuir de manera efectiva.
+Este proyecto es **open source** y crece gracias a colaboradores como tú. A continuación te explicamos cómo puedes contribuir de manera efectiva, clara y respetuosa.
 
 ---
 
 ## 📁 Índice
-1. [Reglas Generales](#-reglas-generales)
-2. [Áreas de Contribución](#-áreas-de-contribución)
-3. [Primeros Pasos](#-primeros-pasos)
-4. [Estándares de Código](#-estándares-de-código)
-5. [Enviando Cambios](#-enviando-cambios)
-6. [Reportando Problemas](#-reportando-problemas)
-7. [Solicitando Funciones](#-solicitando-funciones)
-8. [Código de Conducta](#-código-de-conducta)
+1. [Reglas generales](#-reglas-generales)
+2. [Áreas de contribución](#-áreas-de-contribución)
+3. [Primeros pasos](#-primeros-pasos)
+4. [Estándares de código](#-estándares-de-código)
+5. [Enviando cambios](#-enviando-cambios)
+6. [Reportando problemas](#-reportando-problemas)
+7. [Solicitando funciones](#-solicitando-funciones)
+8. [Código de conducta](#-código-de-conducta)
 9. [Reconocimiento](#-reconocimiento)
 
 ---
 
-## 📓 Reglas Generales
+## 📓 Reglas generales
 
-### ✅ Qué se espera de ti:
+### ✅ Qué se espera de ti
 - **Sé amable y respetuoso** con todos los miembros de la comunidad.
 - **Sigue el [Código de Conducta](CODE_OF_CONDUCT.md)**.
-- **Documenta tus cambios**: Añade comentarios en el código y actualiza la documentación si es necesario.
-- **Prueba tus cambios**: Asegúrate de que el código funcione antes de enviar un Pull Request.
-- **Usa ramas descriptivas**: Ej: `feat/tts-voice`, `fix/bluetooth-bug`, `docs/hardware-guide`.
+- **Documenta tus cambios**: añade comentarios en el código y actualiza la documentación si es necesario.
+- **Prueba tus cambios**: asegúrate de que el código funcione antes de enviar un pull request.
+- **Usa ramas descriptivas**: por ejemplo, `feat/tts-voice`, `fix/bluetooth-bug`, `docs/hardware-guide`.
 
-### ❌ Qué NO hacer:
-- **No envíes código sin probar**.
-- **No ignores los tests existentes** (si los hay).
-- **No modifiques el sistema de personalidad de Félix** (`personality.py`) sin consultar primero. Este es el **corazón** del proyecto y debe mantenerse consistente en todas las versiones.
+### ❌ Qué NO hacer
+- **No envíes código sin probarlo**.
+- **No ignores las pruebas existentes** (si las hay).
+- **No modifiques el sistema de personalidad de Félix** (`personality.py`) sin consultar antes. Este es el **corazón** del proyecto y debe mantenerse consistente en todas las versiones.
 - **No incluyas información personal o sensible** en el repositorio.
 - **No uses el nombre del proyecto para fines comerciales** sin permiso.
 
 ---
 
-## 🐟 Áreas de Contribución
+## 🐟 Áreas de contribución
 
 Félix es un proyecto **multidisciplinario**. Puedes ayudar en varias áreas:
 
-| Área | Descripción | Dificultad | Habilidades Requeridas | Etiqueta en Issues |
+| Área | Descripción | Dificultad | Habilidades requeridas | Etiqueta en issues |
 |------|-------------|------------|------------------------|-------------------|
-| **Hardware** | Mejorar esquemáticos, añadir sensores, optimizar conexiones | Media/Alta | Electrónica, ESP32, Fritzing | `hardware` |
-| **Firmware** | Optimizar código MicroPython, añadir funcionalidades al ESP32 | Alta | MicroPython, C/C++, ESP-IDF | `firmware` |
-| **App Móvil** | Mejorar UI/UX, añadir funciones, optimizar rendimiento | Media | Kivy, Python, Android | `mobile` |
-| **IA / Modelos** | Fine-tunear el modelo de Félix, mejorar prompts, optimizar inferencia | Alta | PyTorch, Transformers, ONNX | `ai` |
-| **Voz (TTS/STT)** | Integrar motores de voz, mejorar reconocimiento | Media | Python, librerías de audio | `voice` |
-| **Documentación** | Traducir, mejorar guías, crear tutoriales | Baja | Markdown, GitHub | `documentation` |
-| **Testing** | Añadir tests unitarios/integración, reportar bugs | Media | pytest, unittest | `testing` |
-| **Comunidad** | Moderar Discord, ayudar en issues, crear contenido | Baja | Comunicación, paciencia | `community` |
-| **Diseño 3D** | Crear casos imprimibles en 3D para el hardware | Media | Blender, Tinkercad, Fusion 360 | `3d-design` |
+| **Hardware** | Mejorar esquemáticos, añadir sensores y optimizar conexiones | Media/Alta | Electrónica, ESP32, Fritzing | `hardware` |
+| **Firmware** | Optimizar código MicroPython y añadir funcionalidades al ESP32 | Alta | MicroPython, C/C++, ESP-IDF | `firmware` |
+| **App móvil** | Mejorar UI/UX, añadir funciones y optimizar rendimiento | Media | Kivy, Python, Android | `mobile` |
+| **IA / Modelos** | Fine-tunear modelos, mejorar prompts y optimizar inferencia | Alta | PyTorch, Transformers, ONNX | `ai` |
+| **Voz (TTS/STT)** | Integrar motores de voz y mejorar reconocimiento | Media | Python, librerías de audio | `voice` |
+| **Documentación** | Traducir, mejorar guías y crear tutoriales | Baja | Markdown, GitHub | `documentation` |
+| **Testing** | Añadir tests unitarios/integración y reportar bugs | Media | pytest, unittest | `testing` |
+| **Comunidad** | Moderar Discord, ayudar en issues y crear contenido | Baja | Comunicación, paciencia | `community` |
+| **Diseño 3D** | Crear carcasas e impresiones 3D para el hardware | Media | Blender, Tinkercad, Fusion 360 | `3d-design` |
 
 ---
 
-## 🚀 Primeros Pasos
+## 🚀 Primeros pasos
 
-### 1️⃣ Fork y Clone
+### 1️⃣ Fork y clone
 ```bash
 # 1. Haz fork del repositorio en GitHub
-#    (Botón "Fork" en la parte superior derecha de la página del repo)
+#    (botón "Fork" en la parte superior derecha de la página del repo)
 
 # 2. Clona tu fork localmente
 git clone https://github.com/tu-usuario/Luciano-Sarmiento.git
@@ -102,17 +102,18 @@ git checkout -b tipo/descripcion  # Ej: feat/tts-voice, fix/bluetooth-bug
 
 ---
 
-## 💡 Estándares de Código
+## 💡 Estándares de código
 
 ### 🐍 Python
-- **Sigue PEP 8**: Usa 4 espacios para indentación, líneas de máximo 88 caracteres.
-- **Nombres descriptivos**: Usa `snake_case` para variables/funciones y `PascalCase` para clases.
-- **Tipado**: Usa type hints cuando sea posible.
-- **Documentación**: Añade docstrings a funciones y clases.
+- **Sigue PEP 8**: usa 4 espacios para indentación y líneas de máximo 88 caracteres.
+- **Nombres descriptivos**: usa `snake_case` para variables y funciones, y `PascalCase` para clases.
+- **Tipado**: usa type hints cuando sea posible.
+- **Documentación**: añade docstrings a funciones y clases.
 
 **Ejemplo:**
 ```python
 from typing import Optional
+
 
 def generate_felix_response(prompt: str, max_length: int = 100) -> Optional[str]:
     """
@@ -130,14 +131,15 @@ def generate_felix_response(prompt: str, max_length: int = 100) -> Optional[str]
 ```
 
 ### 🧑‍💻 MicroPython (ESP32)
-- **Evita librerías pesadas**: El ESP32 tiene memoria limitada.
-- **Manejo de errores**: Usa `try-except` para operaciones críticas (Bluetooth, I2C).
-- **Optimiza el uso de memoria**: Libera recursos cuando no se usen.
+- **Evita librerías pesadas**: el ESP32 tiene memoria limitada.
+- **Manejo de errores**: usa `try-except` para operaciones críticas (Bluetooth, I2C).
+- **Optimiza el uso de memoria**: libera recursos cuando no se usen.
 
 **Ejemplo:**
 ```python
 from machine import I2C, Pin
 import time
+
 
 def read_inmp441(i2c: I2C, address: int = 0x34) -> bytes:
     """Lee datos del micrófono INMP441."""
@@ -149,14 +151,14 @@ def read_inmp441(i2c: I2C, address: int = 0x34) -> bytes:
         return b''
 ```
 
-### 📖 Kivy (App Móvil)
-- **Sigue el patrón MVVM**: Separa la lógica de negocio de la interfaz.
-- **Usa .kv files**: Para diseños complejos, usa archivos `.kv` en lugar de Python puro.
-- **Optimiza el rendimiento**: Evita actualizaciones innecesarias de la UI.
+### 📖 Kivy (App móvil)
+- **Sigue el patrón MVVM**: separa la lógica de negocio de la interfaz.
+- **Usa archivos `.kv`**: para diseños complejos, usa archivos `.kv` en lugar de Python puro.
+- **Optimiza el rendimiento**: evita actualizaciones innecesarias de la UI.
 
 ---
 
-## 📥 Enviando Cambios
+## 📥 Enviando cambios
 
 ### 1️⃣ Haz commit de tus cambios
 ```bash
@@ -169,7 +171,7 @@ git commit -m "feat: añadir motor de voz TTS para Félix"
 
 **Reglas para mensajes de commit:**
 - Usa el prefijo `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, etc. (según [Conventional Commits](https://www.conventionalcommits.org/)).
-- Mantén el mensaje en **máximo 50 caracteres** (primera línea).
+- Mantén el mensaje en **máximo 50 caracteres** en la primera línea.
 - Si es necesario, añade una descripción extendida.
 
 **Ejemplos:**
@@ -197,26 +199,26 @@ Luego:
 1. Ve a [https://github.com/luciano2-web/Luciano-Sarmiento](https://github.com/luciano2-web/Luciano-Sarmiento).
 2. Haz clic en **"Pull Requests"** > **"New Pull Request"**.
 3. Selecciona tu rama y describe:
-   - **Título**: Claro y descriptivo (ej: "feat: añadir TTS para voz de Félix").
-   - **Descripción**: Explica **qué** hiciste y **por qué**. Incluye capturas de pantalla si es relevante.
-   - **Issues relacionadas**: Usa `Closes #123` o `Fixes #456` para cerrar issues automáticamente.
+   - **Título**: claro y descriptivo (ej.: "feat: añadir TTS para voz de Félix").
+   - **Descripción**: explica **qué** hiciste y **por qué**. Incluye capturas de pantalla si es relevante.
+   - **Issues relacionadas**: usa `Closes #123` o `Fixes #456` para cerrar issues automáticamente.
 
 ---
 
-## 📢 Reportando Problemas
+## 📢 Reportando problemas
 
 Si encuentras un **bug**, abre un **Issue** en GitHub:
 
 1. Ve a [Issues](https://github.com/luciano2-web/Luciano-Sarmiento/issues).
 2. Haz clic en **"New Issue"**.
 3. Usa la plantilla **"Bug Report"** y completa:
-   - **Título**: Descripción corta del problema.
-   - **Descripción**: Explica el problema en detalle.
-   - **Pasos para reproducir**: Cómo podemos replicar el error.
-   - **Comportamiento esperado**: Qué debería pasar.
-   - **Comportamiento actual**: Qué pasa realmente.
-   - **Entorno**: Versión de Python, SO, hardware, etc.
-   - **Capturas de pantalla/Logs**: Si aplica.
+   - **Título**: descripción corta del problema.
+   - **Descripción**: explica el problema en detalle.
+   - **Pasos para reproducir**: cómo podemos replicar el error.
+   - **Comportamiento esperado**: qué debería pasar.
+   - **Comportamiento actual**: qué pasa realmente.
+   - **Entorno**: versión de Python, SO, hardware, etc.
+   - **Capturas de pantalla / logs**: si aplica.
 
 **Ejemplo de un buen reporte de bug:**
 ```
@@ -246,17 +248,17 @@ Entorno:
 
 ---
 
-## 💋 Solicitando Funciones
+## 💋 Solicitando funciones
 
 Si tienes una **idea para mejorar Félix**, abre un **Issue** con la plantilla **"Feature Request"**:
 
 1. Ve a [Issues](https://github.com/luciano2-web/Luciano-Sarmiento/issues).
 2. Haz clic en **"New Issue"**.
 3. Usa la plantilla **"Feature Request"** y completa:
-   - **Título**: Nombre de la funcionalidad.
-   - **Descripción**: Explica qué hace la funcionalidad y por qué es útil.
-   - **Problema que resuelve**: Qué problema actual soluciona.
-   - **Posible implementación**: Ideas técnicas (opcional).
+   - **Título**: nombre de la funcionalidad.
+   - **Descripción**: explica qué hace la funcionalidad y por qué es útil.
+   - **Problema que resuelve**: qué problema actual soluciona.
+   - **Posible implementación**: ideas técnicas (opcional).
 
 **Ejemplo de una buena solicitud de funcionalidad:**
 ```
@@ -276,15 +278,15 @@ Posible implementación:
 
 ---
 
-## 👌 Código de Conducta
+## 👌 Código de conducta
 
 Este proyecto sigue el **[Código de Conducta del Contribuidor](CODE_OF_CONDUCT.md)**, basado en el [Contributor Covenant](https://www.contributor-covenant.org/).
 
 **Reglas clave:**
-- **Sé inclusivo**: No toleramos discriminación por género, raza, religión, orientación sexual, etc.
-- **Sé respetuoso**: Critica las ideas, no a las personas.
-- **Sé responsable**: No compartas información personal sin consentimiento.
-- **Sé colaborativo**: Ayuda a otros y acepta ayuda.
+- **Sé inclusivo**: no toleramos discriminación por género, raza, religión, orientación sexual, etc.
+- **Sé respetuoso**: critica las ideas, no a las personas.
+- **Sé responsable**: no compartas información personal sin consentimiento.
+- **Sé colaborativo**: ayuda a otros y acepta ayuda.
 
 **⚠️ Si ves un comportamiento inapropiado, repórtalo a [luciano2-web](https://github.com/luciano2-web).**
 
@@ -295,7 +297,7 @@ Este proyecto sigue el **[Código de Conducta del Contribuidor](CODE_OF_CONDUCT.
 Todos los colaboradores serán reconocidos en:
 - El archivo **[CONTRIBUTORS.md](CONTRIBUTORS.md)**.
 - La sección de **🏖 Top Contribuidores** en el README.md.
-- **Badges** en sus perfiles de GitHub (ej: *Félix Contributor*).
+- **Badges** en sus perfiles de GitHub (por ejemplo, *Félix Contributor*).
 
 **Niveles de reconocimiento:**
 | Nivel | Requisitos | Badge |
@@ -307,12 +309,12 @@ Todos los colaboradores serán reconocidos en:
 
 ---
 
-## 🐧 Issues para Principiantes
+## 🐧 Issues para principiantes
 
 Si eres nuevo en el proyecto, te recomendamos empezar con issues etiquetados como:
-- [`good first issue`](https://github.com/luciano2-web/Luciano-Sarmiento/labels/good%20first%20issue): Problemas simples y bien definidos.
-- [`documentation`](https://github.com/luciano2-web/Luciano-Sarmiento/labels/documentation): Mejorar guías o traducciones.
-- [`enhancement`](https://github.com/luciano2-web/Luciano-Sarmiento/labels/enhancement): Mejoras menores.
+- [`good first issue`](https://github.com/luciano2-web/Luciano-Sarmiento/labels/good%20first%20issue): problemas simples y bien definidos.
+- [`documentation`](https://github.com/luciano2-web/Luciano-Sarmiento/labels/documentation): mejorar guías o traducciones.
+- [`enhancement`](https://github.com/luciano2-web/Luciano-Sarmiento/labels/enhancement): mejoras menores.
 
 **Ejemplos de "good first issues":**
 - Añadir más emojis de gato a las respuestas de Félix.
@@ -326,8 +328,8 @@ Si eres nuevo en el proyecto, te recomendamos empezar con issues etiquetados com
 
 - **¿Preguntas sobre el código?** Abre un [Issue](https://github.com/luciano2-web/Luciano-Sarmiento/issues) con la etiqueta `question`.
 - **¿Quieres chatear?** ¡Únete a nuestro [Discord](https://discord.gg/felix-gatogpt) (próximamente)!
-- **¿Encontraste un bug?** Sigue las instrucciones en [Reportando Problemas](#-reportando-problemas).
-- **¿Tienes una idea?** Sigue las instrucciones en [Solicitando Funciones](#-solicitando-funciones).
+- **¿Encontraste un bug?** Sigue las instrucciones en [Reportando problemas](#-reportando-problemas).
+- **¿Tienes una idea?** Sigue las instrucciones en [Solicitando funciones](#-solicitando-funciones).
 
 ---
 
