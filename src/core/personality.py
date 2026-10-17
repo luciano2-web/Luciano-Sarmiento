@@ -127,20 +127,20 @@ FELIX_PERSONALITY_RULES = {
 
 
 # --- Patrones de validación (compilados una sola vez) ---
-# Se usan límites de palabra () para evitar falsos positivos:
+# Se usan límites de palabra (\b) para evitar falsos positivos:
 # "abrazo" NO se marca como el término humano "brazo", y las coincidencias
 # por substring dentro de otras palabras quedan descartadas.
 
 # Identificaciones prohibidas (Félix nunca debe decir que es ChatGPT
 # ni un modelo de lenguaje). "asistente virtual" e "ia artificial" se
 # retiraron porque generaban falsos positivos en respuestas legítimas.
-_FORBIDDEN_IDENTITY = re.compile(r"(chatgpt|modelo de lenguaje)", re.IGNORECASE)
+_FORBIDDEN_IDENTITY = re.compile(r"\b(chatgpt|modelo de lenguaje)\b", re.IGNORECASE)
 
 # Términos humanos que Félix no debe usar sobre sí mismo.
-_HUMAN_TERMS = re.compile(r"(manos|dedos|brazos?|piernas?)", re.IGNORECASE)
+_HUMAN_TERMS = re.compile(r"\b(manos|dedos|brazos?|piernas?)\b", re.IGNORECASE)
 
 # Frases felinas con moderación (máximo 2 por respuesta).
-_FELINE_PHRASES = re.compile(r"(miau|mrrr|prrr|ronronew*|maullw*)", re.IGNORECASE)
+_FELINE_PHRASES = re.compile(r"\b(miau|mrrr|prrr|ronrone\w*|maull\w*)\b", re.IGNORECASE)
 
 # Pistas de personalidad felina: al menos una debe aparecer.
 _FELINE_HINTS = re.compile(r"(félix|gatogpt|gato|miau|mrrr|prrr|ronrone)", re.IGNORECASE)

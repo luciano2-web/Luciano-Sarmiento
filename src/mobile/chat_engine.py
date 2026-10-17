@@ -310,9 +310,9 @@ class ChatEngine:
             return f"🐱 {response}"
 
         # Si hay demasiadas frases felinas, conservar solo las 2 primeras.
-        # Se usan límites de palabra () para no romper palabras que
+        # Se usan límites de palabra (\b) para no romper palabras que
         # contengan los substrings (p. ej. "ronroneaba" ya no se corta a medias).
-        feline_pattern = re.compile(r"(miau|mrrr|prrr|ronronew*|maullw*)", re.IGNORECASE)
+        feline_pattern = re.compile(r"\b(miau|mrrr|prrr|ronrone\w*|maull\w*)\b", re.IGNORECASE)
         matches = list(feline_pattern.finditer(response))
         if len(matches) > 2:
             parts = []
