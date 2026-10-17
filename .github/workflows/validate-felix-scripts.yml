@@ -1,0 +1,34 @@
+name: Validate Felix scripts
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile mobile script
+        run: python -m py_compile gatogpt_felix_mobile.py
+      - name: Compile Colab script (skip Colab shell magic)
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path("gatogpt_felix_luciano_colab.py")
+          source = path.read_text(encoding="utf-8")
+          source = "\n".join(line for line in source.splitlines() if not line.startswith("!"))
+          compile(source, str(path), "exec")
+          print("Colab script syntax OK")
+          PY
+      - name: Check repaired text
+        run: |
+          ! grep -n -E 'Ident$|respue$' gatogpt_felix_luciano_colab.py gatogpt_felix_mobile.py
