@@ -10,6 +10,7 @@ Uso:
     from personality import FELIX_PERSONALITY_RULES, validate_felix_response
 """
 
+import re
 
 FELIX_SYSTEM_PROMPT = """
 Eres Félix, también llamado GatoGPT, el asistente felino de Luciano.
@@ -125,50 +126,69 @@ FELIX_PERSONALITY_RULES = {
 }
 
 
+# --- Patrones de validación (compilados una sola vez) ---
+# Se usan límites de palabra (\b) para evitar falsos positivos:
+# "abrazo" NO se marca como el término humano "brazo", y las coincidencias
+# por substring dentro de otras palabras quedan descartadas.
+
+# Identificaciones prohibidas (Félix nunca debe decir que es ChatGPT
+# ni un modelo de lenguaje). "asistente virtual" e "ia artificial" se
+# retiraron porque generaban falsos positivos en respuestas legítimas.
+_FORBIDDEN_IDENTITY = re.compile(r"\b(chatgpt|modelo de lenguaje)\b", re.IGNORECASE)
+
+# Términos humanos que Félix no debe usar sobre sí mismo.
+_HUMAN_TERMS = re.compile(r"\b(manos|dedos|brazos?|piernas?)\b", re.IGNORECASE)
+
+# Frases felinas con moderación (máximo 2 por respuesta).
+_FELINE_PHRASES = re.compile(r"\b(miau|mrrr|prrr|ronrone\w*|maull\w*)\b", re.IGNORECASE)
+
+# Pistas de personalidad felina: al menos una debe aparecer.
+_FELINE_HINTS = re.compile(r"(félix|gatogpt|gato|miau|mrrr|prrr|ronrone)", re.IGNORECASE)
+
+
 def validate_felix_response(response: str, is_mobile: bool = False) -> tuple:
     """
     Valida que una respuesta cumpla con las reglas de personalidad de Félix.
-    
+
     Args:
         response: La respuesta generada
         is_mobile: Si es versión móvil (límite más estricto)
-    
+
     Returns:
         tuple: (is_valid: bool, issues: list, suggestions: list)
     """
     issues = []
     suggestions = []
-    
+
     # Verificar longitud
     max_length = 100 if is_mobile else 450
     if len(response.split()) > max_length:
         issues.append(f"Respuesta demasiado larga ({len(response.split())} palabras)")
         suggestions.append(f"Reducir a máximo {max_length} palabras")
-    
-    # Verificar frases felinas (máximo 2 por respuesta)
-    feline_phrases = ["miau", "mrrr", "prrr", "ronrone", "maull"]
-    feline_count = sum(response.lower().count(phrase) for phrase in feline_phrases)
+
+    # Verificar frases felinas (máximo 2 por respuesta, con límites de palabra)
+    feline_count = len(_FELINE_PHRASES.findall(response))
     if feline_count > 2:
         issues.append(f"Demasiadas frases felinas ({feline_count})")
         suggestions.append("Usar máximo 1-2 frases felinas por respuesta")
-    
-    # Verificar que no se identifique como ChatGPT
-    forbidden = ["chatgpt", "modelo de lenguaje", "ia artificial", "asistente virtual"]
-    for phrase in forbidden:
-        if phrase.lower() in response.lower():
-            issues.append(f"Identificación prohibida: '{phrase}'")
-            suggestions.append("Usar 'Félix' o 'GatoGPT' en su lugar")
-    
-    # Verificar que no use términos humanos
-    human_terms = ["manos", "dedos", "brazo", "piernas"]
-    for term in human_terms:
-        if term in response.lower():
-            issues.append(f"Término humano: '{term}'")
-            suggestions.append(f"Usar 'patas' o 'bigotes' en lugar de '{term}'")
-    
+
+    # Verificar que no se identifique como ChatGPT (límites de palabra,
+    # evita marcar palabras que solo contengan el substring)
+    forbidden_match = _FORBIDDEN_IDENTITY.search(response)
+    if forbidden_match:
+        issues.append(f"Identificación prohibida: '{forbidden_match.group(0)}'")
+        suggestions.append("Usar 'Félix' o 'GatoGPT' en su lugar")
+
+    # Verificar que no use términos humanos (límites de palabra,
+    # evita falsos positivos como "abrazo" por "brazo")
+    human_match = _HUMAN_TERMS.search(response)
+    if human_match:
+        issues.append(f"Término humano: '{human_match.group(0)}'")
+        suggestions.append(f"Usar 'patas' o 'bigotes' en lugar de '{human_match.group(0)}'")
+
     # Verificar que tenga personalidad felina
-    if not any(phrase in response.lower() for phrase in ["félix", "gato", "miau", "prrr", "ronrone"]):
+    if not _FELINE_HINTS.search(response):
         issues.append("Falta personalidad felina")
         suggestions.append("Añadir al menos una referencia a Félix o comportamiento felino")
-    
+
     return (len(issues) == 0, issues, suggestions)
