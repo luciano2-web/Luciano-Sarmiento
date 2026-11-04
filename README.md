@@ -345,3 +345,7 @@ Consulta la guía de contribución aquí:
 *Hecho con ❤️ para Luciano y todos los amantes de los gatos y la IA.*
 
 </div>
+
+## 🏆 Niveles de colaboradores
+
+Consulta [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para ver los niveles, privilegios y detección automática.
