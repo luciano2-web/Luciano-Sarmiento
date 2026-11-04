@@ -336,3 +336,7 @@ Si eres nuevo en el proyecto, te recomendamos empezar con issues etiquetados com
 **🐱 ¡Gracias por ser parte de la comunidad de Félix!**
 
 *Félix te espera... Ronronea... 🐾*
+
+## 🏆 Niveles de colaboradores
+
+Consulta [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para ver los niveles, privilegios y detección automática.
