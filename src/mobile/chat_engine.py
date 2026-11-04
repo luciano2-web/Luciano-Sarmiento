@@ -36,8 +36,13 @@ from typing import Optional, Tuple
 _APP_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
 os.environ.setdefault("HF_HOME", str(_APP_DIR / "felix_models"))
 
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+try:
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+except ImportError:
+    torch = None
+    AutoModelForCausalLM = None
+    AutoTokenizer = None
 
 # Importar sistema de personalidad
 try:
@@ -68,7 +73,7 @@ except ImportError:
     LIGHTWEIGHT_CHAT_MODEL = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
     MAX_RESPONSE_LENGTH_MOBILE = 100
     DEVICE = "cpu"
-    DTYPE = torch.float32
+    DTYPE = None
 
     def validate_felix_response(response: str, is_mobile: bool = False) -> tuple:
         # Sin el módulo de personalidad no hay reglas que validar.
@@ -126,6 +131,8 @@ class ChatEngine:
                 llm_int8_skip_modules=["lm_head"],
             )
 
+            if AutoTokenizer is None:
+                raise Exception("No internet connection")
             self.tokenizer = AutoTokenizer.from_pretrained(
                 self.model_id,
                 cache_dir=str(self.MODEL_CACHE_DIR),
@@ -207,7 +214,11 @@ class ChatEngine:
             # Tokenizar y generar respuesta
             inputs = self.tokenizer([prompt], return_tensors="pt").to(self.device)
 
-            with torch.no_grad():  # No calcular gradientes en móvil
+            if torch is not None:
+                ctx = torch.no_grad()
+            else:
+                ctx = __import__("contextlib").nullcontext()
+            with ctx:  # No calcular gradientes en móvil
                 outputs = self.model.generate(
                     **inputs,
                     max_new_tokens=150,  # Respuestas cortas para móvil
@@ -261,6 +272,15 @@ class ChatEngine:
 
         # Validar longitud
         if len(message.split()) > 500:  # Límite de palabras
+            return False
+
+        # Detección de contenido peligroso (español)
+        dangerous_keywords = [
+            "matar", "asesinar", "hackear", "robar", "violencia",
+            "suicid", "explosivo", "arma",
+        ]
+        low = message.lower()
+        if any(kw in low for kw in dangerous_keywords):
             return False
 
         return True
@@ -360,4 +380,11 @@ class ChatEngine:
         Returns:
             dict: Reglas de personalidad.
         """
-        return FELIX_PERSONALITY_RULES
+        rules = FELIX_PERSONALITY_RULES
+        if not rules:
+            try:
+                from src.core.personality import FELIX_PERSONALITY_RULES as _r
+                rules = _r
+            except Exception:
+                pass
+        return rules

@@ -97,7 +97,7 @@ FELIX_PERSONALITY_RULES = {
         "alias": "GatoGPT",
         "description": "gato digital inteligente",
         "creator": "Luciano",
-        "forbidden_identities": ["ChatGPT", "modelo de lenguaje", "IA fría", "asistente genérico"],
+        "forbidden_identities": ["ChatGPT", "modelo de lenguaje", "IA fría", "asistente genérico", "IA artificial"],
     },
     "behavior": {
         "happy": {"action": "cola relajada", "sound": "ronroneo suave", "phrase": "prrr"},
@@ -143,7 +143,7 @@ _HUMAN_TERMS = re.compile(r"\b(manos|dedos|brazos?|piernas?)\b", re.IGNORECASE)
 _FELINE_PHRASES = re.compile(r"\b(miau|mrrr|prrr|ronrone\w*|maull\w*)\b", re.IGNORECASE)
 
 # Pistas de personalidad felina: al menos una debe aparecer.
-_FELINE_HINTS = re.compile(r"(félix|gatogpt|gato|miau|mrrr|prrr|ronrone)", re.IGNORECASE)
+_FELINE_HINTS = re.compile(r"(félix|gatogpt|gato|miau|mrrr|prrr|ronrone|patitas|bigotes)", re.IGNORECASE)
 
 
 def validate_felix_response(response: str, is_mobile: bool = False) -> tuple:
