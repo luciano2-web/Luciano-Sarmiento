@@ -63,7 +63,7 @@ La representación de un proyecto puede definirse y aclararse aún más por los 
 
 Las instancias de comportamiento abusivo, acosador o inaceptable pueden reportarse a la dirección de correo electrónico:
 
-**luciano2-web@github.com**
+**sarmientoluciano2015@gmail.com**
 
 Todos los reportes serán revisados y tratados de forma confidencial y respetuosa. Las personas responsables del proyecto analizarán cada situación y determinarán las medidas que correspondan.
 
