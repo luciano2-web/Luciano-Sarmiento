@@ -248,7 +248,7 @@ Entorno:
 
 ---
 
-## 💋 Solicitando funciones
+##  Solicitando funciones
 
 Si tienes una **idea para mejorar Félix**, abre un **Issue** con la plantilla **"Feature Request"**:
 
