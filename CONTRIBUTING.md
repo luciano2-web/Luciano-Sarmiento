@@ -288,7 +288,7 @@ Este proyecto sigue el **[Código de Conducta del Contribuidor](CODE_OF_CONDUCT.
 - **Sé responsable**: no compartas información personal sin consentimiento.
 - **Sé colaborativo**: ayuda a otros y acepta ayuda.
 
-**⚠️ Si ves un comportamiento inapropiado, repórtalo a [luciano2-web](https://github.com/luciano2-web).**
+**⚠️ Si ves un comportamiento inapropiado, repórtalo al  correo de [luciano2-web](sarmientoluciano2015@gmail.com).**
 
 ---
 
