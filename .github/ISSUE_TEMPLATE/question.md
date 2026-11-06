@@ -1,31 +1,21 @@
---- 
-name: \u2753 Pregunta
-title: '[QUESTION] '
-description: 'Haz una pregunta sobre el proyecto'
-labels: ['question']
-assignees: ''
+---
+name: "Pregunta"
+title: "[QUESTION] "
+description: "Haz una pregunta sobre el proyecto"
+labels: ["question"]
+assignees: []
 ---
 
-## \u2753 Pregunta
-**Describe tu pregunta de manera clara y detallada.**
+## ¿Cuál es tu pregunta?
+Describe tu duda o consulta con el mayor detalle posible.
 
----
+## Contexto
+Explica qué intentaste, qué buscaste o qué problema estás tratando de resolver.
 
-## \ud83d\udc80 Contexto
-**Proporciona informaci\u00f3n adicional sobre lo que has intentado o investigado.**
+## Entorno
+- Sistema operativo y versión:
+- Versión del proyecto o herramienta:
+- Hardware o dispositivo (si aplica):
 
----
-
-## \ud83d\udcf1 Entorno
-- **Sistema Operativo:** [ej: Android 13, Windows 11]
-- **Versi\u00f3n de Python:** [ej: Python 3.9.7]
-- **Hardware:** [ej: ESP32-WROOM-32]
-
----
-
-## \ud83d\udc81 Informaci\u00f3n Adicional
-**Cualquier otro detalle relevante.**
-
----
-
-**\ud83d\udc31 F\u00e9lix intentar\u00e1 responder... miau!**
+## Información adicional
+Añade cualquier detalle útil, capturas, errores o enlaces relacionados.
