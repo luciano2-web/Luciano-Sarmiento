@@ -1,53 +1,36 @@
---- 
-name: \ud83d\udc1b Reporte de Bug
-title: '[BUG] '
-description: 'Reporta un problema o error en el proyecto'
-labels: ['bug']
-assignees: ''
+---
+name: "Reporte de error"
+title: "[BUG] "
+description: "Reporta un error o comportamiento inesperado"
+labels: ["bug"]
+assignees: []
 ---
 
-## \ud83d\udce2 Descripci\u00f3n del Bug
-**Describe el problema de manera clara y concisa.**
+## Descripción del problema
+Explica de forma clara qué ocurre.
 
----
-
-## \ud83d\udd3c Pasos para Reproducir
+## Pasos para reproducirlo
 1. 
 2. 
 3. 
 
----
+## Resultado esperado
+¿Qué debería ocurrir?
 
-## \u2705 Comportamiento Esperado
-**\u00bfQu\u00e9 deber\u00eda pasar?**
+## Resultado actual
+¿Qué ocurre en realidad?
 
----
+## Entorno
+- Sistema operativo y versión:
+- Navegador o aplicación y versión (si corresponde):
+- Versión del proyecto (si se conoce):
 
-## \u274c Comportamiento Actual
-**\u00bfQu\u00e9 pasa en realidad?**
+## Evidencias y mensajes de error
+Adjunta capturas o pega aquí los mensajes relevantes. No incluyas contraseñas, tokens ni otros datos sensibles.
 
----
-
-## \ud83d\udccd Capturas de Pantalla / Logs
-**Si aplica, adjunta capturas de pantalla, videos o logs de error.**
+```text
+Pega aquí los mensajes de error, si los hay.
 ```
-[Pega aqu\u00ed los logs o descripci\u00f3n de las capturas]
-```
 
----
-
-## \ud83d\udcf1 Entorno
-- **Sistema Operativo:** [ej: Android 13, Windows 11, Ubuntu 22.04]
-- **Dispositivo:** [ej: Samsung Galaxy S23, ESP32-WROOM-32, Raspberry Pi 4]
-- **Versi\u00f3n de Python:** [ej: Python 3.9.7]
-- **Versi\u00f3n de la App:** [ej: 1.0.0]
-- **Hardware:** [Describe el hardware usado, si aplica]
-
----
-
-## \ud83d\udc81 Informaci\u00f3n Adicional
-**Cualquier otro contexto o detalles sobre el problema.**
-
----
-
-**\ud83d\udc31 Gracias por ayudar a mejorar F\u00e9lix!**
+## Información adicional
+Añade cualquier otro detalle que pueda ayudar a investigar el problema.
