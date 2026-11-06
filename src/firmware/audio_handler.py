@@ -1,33 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Audio Handler para Félix / GatoGPT
-
-Módulo para manejar la grabación y reproducción de audio en el ESP32.
-Soporta:
-- Grabación de audio usando el micrófono INMP441 (I2S)
-- Reproducción de audio usando un parlante (PWM)
-
-Dependencias:
-    - MicroPython (ESP32)
-    - Módulo machine para I2S y PWM
-
-Uso:
-    from src.firmware.audio_handler import AudioHandler
-    
-    audio = AudioHandler()
-    audio.initialize()
-    
-    # Grabar audio
-    audio_data = audio.record(duration=3)  # Grabar 3 segundos
-    
-    # Reproducir audio
-    audio.play(audio_data)
-"""
+"""Grabación y reproducción básica de audio para MicroPython en ESP32."""
 
 import time
 from machine import I2S, Pin, PWM
 
-# Importar constantes
 try:
     from src.core.constants import (
         ESP32_I2S_BCK_PIN,
@@ -37,264 +13,133 @@ try:
         ESP32_SPEAKER_PIN,
     )
 except ImportError:
-    # Fallback si no se encuentra el módulo de constantes
-    ESP32_I2S_BCK_PIN = 24  # GPIO 24
-    ESP32_I2S_WS_PIN = 23   # GPIO 23
-    ESP32_I2S_SD_PIN = 25   # GPIO 25
-    ESP32_I2S_PORT = 0     # Puerto I2S 0
-    ESP32_SPEAKER_PIN = 26 # GPIO 26
+    ESP32_I2S_BCK_PIN = 27
+    ESP32_I2S_WS_PIN = 23
+    ESP32_I2S_SD_PIN = 25
+    ESP32_I2S_PORT = 0
+    ESP32_SPEAKER_PIN = 26
 
 
 class AudioHandler:
-    """
-    Clase para manejar la grabación y reproducción de audio.
-    
-    Atributos:
-        i2s (I2S): Objeto I2S para grabación.
-        pwm (PWM): Objeto PWM para reproducción.
-        is_initialized (bool): Indica si el audio está inicializado.
-    """
-    
+    """Gestiona captura I2S y salida PWM experimental."""
+
     def __init__(self):
-        """Inicializa el manejador de audio."""
         self.i2s = None
         self.pwm = None
         self.is_initialized = False
-    
-    def initialize(self, sample_rate: int = 16000, bits_per_sample: int = 16) -> bool:
-        """
-        Inicializa el hardware de audio (I2S para micrófono, PWM para parlante).
-        
-        Args:
-            sample_rate: Frecuencia de muestreo en Hz (default: 16000).
-            bits_per_sample: Bits por muestra (default: 16).
-        
-        Returns:
-            bool: True si la inicialización fue exitosa, False en caso contrario.
-        """
+        self.sample_rate = 16000
+        self.bits_per_sample = 16
+
+    def initialize(self, sample_rate=16000, bits_per_sample=16):
+        """Inicializa el micrófono I2S y la salida PWM; devuelve éxito o fallo."""
+        self.sample_rate = sample_rate
+        self.bits_per_sample = bits_per_sample
         try:
-            # Inicializar I2S para el micrófono INMP441
-            self._initialize_i2s(sample_rate, bits_per_sample)
-            
-            # Inicializar PWM para el parlante
-            self._initialize_pwm()
-            
-            self.is_initialized = True
-            print(f"[Audio] Inicializado: I2S @ {sample_rate}Hz, {bits_per_sample} bits")
-            return True
-            
-        except Exception as e:
-            print(f"[Audio] Error al inicializar: {e}")
-            self.is_initialized = False
-            return False
-    
-    def _initialize_i2s(self, sample_rate: int, bits_per_sample: int):
-        """
-        Inicializa el periférico I2S para el micrófono INMP441.
-        
-        Args:
-            sample_rate: Frecuencia de muestreo en Hz.
-            bits_per_sample: Bits por muestra.
-        """
-        try:
-            # Configurar pines
-            bck_pin = Pin(ESP32_I2S_BCK_PIN)
-            ws_pin = Pin(ESP32_I2S_WS_PIN)
-            sd_pin = Pin(ESP32_I2S_SD_PIN)
-            
-            # Configurar I2S
             self.i2s = I2S(
                 ESP32_I2S_PORT,
-                sck=bck_pin,
-                ws=ws_pin,
-                sd=sd_pin,
-                mode=I2S.RX,  # Modo recepción (grabación)
+                sck=Pin(ESP32_I2S_BCK_PIN),
+                ws=Pin(ESP32_I2S_WS_PIN),
+                sd=Pin(ESP32_I2S_SD_PIN),
+                mode=I2S.RX,
                 bits=bits_per_sample,
-                format=I2S.MONO,  # Mono (el INMP441 es mono)
+                format=I2S.MONO,
                 rate=sample_rate,
-                ibuf=2048,  # Tamaño del buffer de entrada
+                ibuf=4096,
             )
-            print(f"[Audio] I2S inicializado para grabación")
-            
-        except Exception as e:
-            print(f"[Audio] Error al inicializar I2S: {e}")
-            self.i2s = None
-    
-    def _initialize_pwm(self):
-        """Inicializa el PWM para el parlante."""
-        try:
-            # Configurar PWM para el parlante
             self.pwm = PWM(Pin(ESP32_SPEAKER_PIN))
-            self.pwm.freq(44100)  # Frecuencia de 44.1 kHz (calidad CD)
-            self.pwm.duty(0)  # Inicialmente apagado
-            print(f"[Audio] PWM inicializado para parlante en GPIO {ESP32_SPEAKER_PIN}")
-            
-        except Exception as e:
-            print(f"[Audio] Error al inicializar PWM: {e}")
-            self.pwm = None
-    
-    def record(self, duration: float = 1.0) -> bytes:
-        """
-        Graba audio desde el micrófono INMP441.
-        
-        Args:
-            duration: Duración de la grabación en segundos (default: 1.0).
-        
-        Returns:
-            bytes: Datos de audio grabados. Si hay error, devuelve b''.
-        """
-        if not self.is_initialized or self.i2s is None:
-            print("[Audio] Audio no inicializado")
-            return b''
-        
-        try:
-            # Calcular número de muestras a grabar
-            samples = int(duration * self.i2s.rate())
-            
-            # Leer datos del I2S
-            audio_data = bytearray()
-            
-            # Leer en bloques para evitar desbordamiento de buffer
-            block_size = 1024
-            blocks_to_read = (samples * 2) // block_size  # 2 bytes por muestra (16 bits)
-            
-            for _ in range(blocks_to_read):
-                block = self.i2s.read(block_size)
-                if block:
-                    audio_data.extend(block)
-            
-            print(f"[Audio] Grabados {len(audio_data)} bytes ({duration}s)")
-            return bytes(audio_data)
-            
-        except Exception as e:
-            print(f"[Audio] Error al grabar: {e}")
-            return b''
-    
-    def play(self, audio_data: bytes, sample_rate: int = 16000) -> bool:
-        """
-        Reproduce audio a través del parlante usando PWM.
-        
-        Args:
-            audio_data: Datos de audio a reproducir (formato raw PCM).
-            sample_rate: Frecuencia de muestreo en Hz (default: 16000).
-        
-        Returns:
-            bool: True si la reproducción fue exitosa, False en caso contrario.
-        
-        Nota:
-            Este método implementa una reproducción básica usando PWM.
-            Para mejor calidad, considera usar un DAC externo o el I2S en modo TX.
-        """
-        if not self.is_initializado or self.pwm is None:
-            print("[Audio] Audio no inicializado")
-            return False
-        
-        if not audio_data:
-            print("[Audio] Datos de audio vacíos")
-            return False
-        
-        try:
-            # Configurar frecuencia del PWM según la frecuencia de muestreo
-            self.pwm.freq(sample_rate)
-            
-            # Reproducir cada muestra
-            # Nota: Esto es una implementación simplificada.
-            # Para audio de calidad, se necesita un DAC o I2S en modo TX.
-            for i in range(0, len(audio_data), 2):
-                # Leer muestra de 16 bits (little-endian)
-                if i + 1 < len(audio_data):
-                    sample = audio_data[i] | (audio_data[i + 1] << 8)
-                    # Convertir a valor de duty (0-1023 para PWM de 10 bits)
-                    duty = int((sample + 32768) / 65535 * 1023)
-                    self.pwm.duty(duty)
-                    # Pequeña pausa para mantener la frecuencia de muestreo
-                    time.sleep_us(1000000 // sample_rate)
-            
-            # Apagar el PWM al terminar
-            self.pwm.duty(0)
-            print(f"[Audio] Reproducidos {len(audio_data)} bytes")
+            self._set_duty(0)
+            self.is_initialized = True
             return True
-            
-        except Exception as e:
-            print(f"[Audio] Error al reproducir: {e}")
-            self.pwm.duty(0)
+        except Exception as exc:
+            print(f"[Audio] Error al inicializar: {exc}")
+            self.deinitialize()
             return False
-    
-    def play_tone(self, frequency: int, duration: float = 0.5) -> bool:
-        """
-        Reproduce un tono simple (para pruebas o notificaciones).
-        
-        Args:
-            frequency: Frecuencia del tono en Hz.
-            duration: Duración en segundos (default: 0.5).
-        
-        Returns:
-            bool: True si fue exitoso, False en caso contrario.
-        """
-        if not self.is_initialized or self.pwm is None:
-            print("[Audio] Audio no inicializado")
+
+    def _set_duty(self, value):
+        """Ajusta PWM en MicroPython antiguo (10 bits) o actual (16 bits)."""
+        if self.pwm is None:
+            return
+        if hasattr(self.pwm, "duty_u16"):
+            self.pwm.duty_u16(max(0, min(65535, value * 65535 // 1023)))
+        else:
+            self.pwm.duty(max(0, min(1023, value)))
+
+    def record(self, duration=1.0):
+        """Graba PCM mono usando readinto, API estándar de I2S en MicroPython."""
+        if not self.is_initialized or self.i2s is None or duration <= 0:
+            return b""
+        target_bytes = int(duration * self.sample_rate * self.bits_per_sample // 8)
+        audio_data = bytearray()
+        block = bytearray(min(1024, target_bytes))
+        deadline = time.ticks_add(time.ticks_ms(), int(duration * 1000))
+        try:
+            while len(audio_data) < target_bytes and time.ticks_diff(deadline, time.ticks_ms()) > 0:
+                count = self.i2s.readinto(block)
+                if count:
+                    remaining = target_bytes - len(audio_data)
+                    audio_data.extend(memoryview(block)[:min(count, remaining)])
+            return bytes(audio_data)
+        except Exception as exc:
+            print(f"[Audio] Error al grabar: {exc}")
+            return b""
+
+    def play(self, audio_data, sample_rate=16000):
+        """Reproduce PCM firmado de 16 bits mediante PWM (calidad limitada)."""
+        if not self.is_initialized or self.pwm is None or not audio_data or sample_rate <= 0:
             return False
-        
+        try:
+            period_us = max(1, 1000000 // sample_rate)
+            for index in range(0, len(audio_data) - 1, 2):
+                sample = audio_data[index] | (audio_data[index + 1] << 8)
+                if sample >= 32768:
+                    sample -= 65536
+                self._set_duty((sample + 32768) * 1023 // 65535)
+                time.sleep_us(period_us)
+            self._set_duty(0)
+            return True
+        except Exception as exc:
+            print(f"[Audio] Error al reproducir: {exc}")
+            self._set_duty(0)
+            return False
+
+    def play_tone(self, frequency, duration=0.5):
+        """Reproduce un tono de prueba."""
+        if not self.is_initialized or self.pwm is None or frequency <= 0 or duration < 0:
+            return False
         try:
             self.pwm.freq(frequency)
-            self.pwm.duty(512)  # 50% duty cycle
+            self._set_duty(512)
             time.sleep(duration)
-            self.pwm.duty(0)
+            self._set_duty(0)
             return True
-            
-        except Exception as e:
-            print(f"[Audio] Error al reproducir tono: {e}")
-            self.pwm.duty(0)
+        except Exception as exc:
+            print(f"[Audio] Error al reproducir tono: {exc}")
+            self._set_duty(0)
             return False
-    
+
     def stop(self):
-        """Detiene la reproducción de audio."""
-        if self.pwm is not None:
-            self.pwm.duty(0)
-        print("[Audio] Reproducción detenida")
-    
+        """Silencia la salida PWM."""
+        self._set_duty(0)
+
     def deinitialize(self):
-        """Desinicializa el hardware de audio."""
+        """Libera los periféricos de audio, incluso tras un fallo parcial."""
         self.stop()
-        if self.i2s is not None:
-            self.i2s.deinit()
-            self.i2s = None
-        if self.pwm is not None:
-            self.pwm.deinit()
-            self.pwm = None
+        for peripheral in (self.i2s, self.pwm):
+            if peripheral is not None:
+                try:
+                    peripheral.deinit()
+                except Exception:
+                    pass
+        self.i2s = None
+        self.pwm = None
         self.is_initialized = False
-        print("[Audio] Audio desinicializado")
 
 
-# =============================================================================
-# FUNCIONES DE UTILIDAD
-# =============================================================================
-
-def normalize_audio(audio_data: bytes, target_volume: int = 50) -> bytes:
-    """
-    Normaliza el volumen de los datos de audio.
-    
-    Args:
-        audio_data: Datos de audio en formato raw PCM (16 bits).
-        target_volume: Volumen objetivo en porcentaje (0-100).
-    
-    Returns:
-        bytes: Datos de audio normalizados.
-    """
-    # Implementación simplificada
-    # En una implementación real, se calcularía el máximo y se escalaría
+def normalize_audio(audio_data, target_volume=50):
+    """Devuelve el audio sin cambios; normalización aún no implementada."""
     return audio_data
 
 
-def convert_to_mono(audio_data: bytes) -> bytes:
-    """
-    Convierte audio estéreo a mono (si es necesario).
-    
-    Args:
-        audio_data: Datos de audio.
-    
-    Returns:
-        bytes: Datos de audio en mono.
-    """
-    # El INMP441 ya graba en mono, así que esto es solo por compatibilidad
+def convert_to_mono(audio_data):
+    """El INMP441 ya entrega captura mono; conserva los bytes recibidos."""
     return audio_data
