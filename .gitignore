@@ -1,0 +1,49 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging / build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+*.spec
+
+# Kivy / Android build artifacts
+.buildozer/
+bin/
+*.apk
+*.aab
+
+# IDE / editor files
+.vscode/
+.idea/
+.DS_Store
+
+# Test and cache folders
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+coverage.xml
+htmlcov/
+
+# Local environment files
+.env
+.env.*
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Generated assets or media (keep if needed for local experiments)
+# Remove these if you want to track generated outputs intentionally.
+# generated/
+
