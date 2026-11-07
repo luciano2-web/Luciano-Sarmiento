@@ -211,7 +211,7 @@ Si encuentras un **bug**, abre un **Issue** en GitHub:
 
 1. Ve a [Issues](https://github.com/luciano2-web/Luciano-Sarmiento/issues).
 2. Haz clic en **"New Issue"**.
-3. Usa la plantilla **"Bug Report"** y completa:
+3. Usa la plantilla **"Reporte de error"** y completa:
    - **Título**: descripción corta del problema.
    - **Descripción**: explica el problema en detalle.
    - **Pasos para reproducir**: cómo podemos replicar el error.
@@ -254,7 +254,7 @@ Si tienes una **idea para mejorar Félix**, abre un **Issue** con la plantilla *
 
 1. Ve a [Issues](https://github.com/luciano2-web/Luciano-Sarmiento/issues).
 2. Haz clic en **"New Issue"**.
-3. Usa la plantilla **"Feature Request"** y completa:
+3. Usa la plantilla **"Solicitud de funcionalidad"** y completa:
    - **Título**: nombre de la funcionalidad.
    - **Descripción**: explica qué hace la funcionalidad y por qué es útil.
    - **Problema que resuelve**: qué problema actual soluciona.
@@ -301,8 +301,9 @@ Todos los colaboradores serán reconocidos en:
 
 ## Niveles
 
-| # | Emoji | Nombre | Cómo se alcanza | Privilegios |
-|---|-------|--------|-----------------|-------------|
+Consulta [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para ver los niveles, privilegios y detección automática.
+
+---|-------|--------|-----------------|-------------|
 | 1 | 👾 | Pixel | Primer PR merged (docs, typo, fix menor) | Badge en README, mención en CONTRIBUTORS, rol "Pixel" en Discord |
 | 2 | 🐝 | Flyer | 3+ PRs merged o triage activo de issues | Reviewer de docs, puede etiquetar issues, acceso a canal de colaboradores |
 | 3 | 🐧 | Penguin | 5+ PRs merged con código o tests | Merge de PRs de docs/tests, acceso a Discussions, invitación a syncs |
