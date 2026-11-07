@@ -1,6 +1,6 @@
 # 🐱 Código de Conducta de Félix / GatoGPT
 
-> ⚠️ **IMPORTANTE:** En cualquier versión del proyecto, no se aceptarán cambios en el archivo `personality.py`.
+> ⚠️ **IMPORTANTE:** Los cambios en `personality.py` requieren aprobación explícita del mantenedor (Luciano/Félix). No se aceptan modificaciones sin revisión previa.
 
 ## 📓 Nuestro Compromiso
 
@@ -35,7 +35,7 @@ Ejemplos de comportamiento que contribuyen a crear un entorno positivo para nues
 - Troleo, insultos o comentarios ofensivos deliberados.
 - Discriminación por motivos de raza, género, orientación sexual, religión, discapacidad, nacionalidad o cualquier otra característica personal.
 - Cualquier otra conducta que razonablemente pueda considerarse inapropiada en un entorno profesional.
-- Modificar el archivo `personality.py` en cualquier versión del proyecto.
+- Modificar `personality.py` sin aprobación del mantenedor.
 
 ---
 
@@ -45,7 +45,7 @@ Los mantenedores del proyecto son responsables de aclarar los estándares de com
 
 Los mantenedores tienen el derecho y la responsabilidad de eliminar, editar o rechazar comentarios, commits, código, ediciones de wiki, issues y otras contribuciones que no se alineen con este Código de Conducta. También pueden bloquear temporal o permanentemente a cualquier colaborador por comportamientos que consideren inapropiados, amenazantes, ofensivos o dañinos.
 
-Los mantenedores también son responsables de proteger las reglas específicas del proyecto. Por esta razón, el archivo `personality.py` no debe modificarse en ninguna versión.
+Los mantenedores también son responsables de proteger las reglas específicas del proyecto. Por esta razón, `personality.py` solo se modifica con aprobación del mantenedor.
 
 ---
 
