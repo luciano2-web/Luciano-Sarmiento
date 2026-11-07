@@ -1,7 +1,7 @@
 ---
 name: "Reporte de error"
 title: "[BUG] "
-description: "Reporta un error o comportamiento inesperado"
+about: "Reporta un error o comportamiento inesperado"
 labels: ["bug"]
 assignees: []
 ---
