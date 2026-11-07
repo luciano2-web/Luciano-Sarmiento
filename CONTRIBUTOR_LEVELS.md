@@ -11,6 +11,7 @@
 | 1 | 👾 | Pixel | Primer PR merged (docs, typo, fix menor) | Badge en README, mención en CONTRIBUTORS, rol "Pixel" en Discord |
 | 2 | 🐝 | Flyer | 3+ PRs merged o triage activo de issues | Reviewer de docs, puede etiquetar issues, acceso a canal de colaboradores |
 | 3 | 🐧 | Penguin | 5+ PRs merged con código o tests | Merge de PRs de docs/tests, acceso a Discussions, invitación a syncs |
+| 4 | 🦝 | Raccoon | Contribuciones recurrentes en un área | Revisión de PRs del área, etiquetar issues, acceso a canal de colaboradores |
 | 5 | 🦊 | Fox | Contribuciones sustanciales (features, firmware, móvil) | Merge de código, crear releases, acceso a CI/Actions, botón "Approve" |
 | 6 | 🐺 | Wolfy | Liderazgo de área (hardware/firmware/app/IA) | Admin parcial: labels, milestones, moderación, gestionar projects board |
 | 7 | 🦉 | Buhny | Maintainer confirmado por Luciano | Admin full: aprobar PRs, gestionar repo, merge a main, moderación final |
