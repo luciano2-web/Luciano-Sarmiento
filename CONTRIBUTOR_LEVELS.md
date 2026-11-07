@@ -23,16 +23,16 @@ El sistema (GitHub Actions + bot) revisa tus contribuciones y ajusta tu nivel:
 
 - **Sube de nivel** cuando: PRs merged, issues cerrados, reviews realizados, documentación mejorada.
 - **Baja de nivel** cuando: inactividad prolongada (>90 días sin contribución), PRs rechazados repetidamente, violación del código de conducta.
-- El nivel se recalcula semanalmente y se notifica por Discord/email.
+- El nivel se recalculará y notificará cuando el sistema esté implementado (planificado).
 
 ## Acompañamiento al colaborador
 
 Para que te sientas acompañado desde el primer día:
 
 - **Onboarding**: guía paso a paso en `CONTRIBUTING.md` + mensaje de bienvenida automático.
-- **Mentoría**: cada colaborador nivel 🐧 o superior puede ser mentor de un nivel 👾/🐝.
-- **Feedback**: cada PR recibe revisión con comentarios constructivos en <48h.
-- **Canal privado**: acceso a Discord de colaboradores a partir de 🐧.
+- **Mentoría**: planificada cuando haya suficientes colaboradores activos.
+- **Feedback**: revisión con comentarios constructivos según disponibilidad del mantenedor (sin promesa de 48h).
+- **Canal privado**: acceso a Discord de colaboradores a partir de 🐧 (planificado; Discord aún no disponible).
 - **Reconocimiento**: badge visual en README, mención en releases, invitación a syncs.
 
 ## Reglas
