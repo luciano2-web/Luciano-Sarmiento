@@ -346,3 +346,8 @@ Si eres nuevo en el proyecto, te recomendamos empezar con issues etiquetados com
 ## 🏆 Niveles de colaboradores
 
 Consulta [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para ver los niveles, privilegios y detección automática.
+
+## 🌟 Posibles colaboradores bienvenidos
+
+Buscamos personas con interés en: Python/Kivy, MicroPython/ESP32, IA/Transformers, documentación, diseño 3D, testing. Abre un issue `good first issue` o propón una mejora.
+
