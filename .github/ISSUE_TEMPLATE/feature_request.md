@@ -1,7 +1,7 @@
 ---
 name: "Solicitud de funcionalidad"
 title: "[FEAT] "
-description: "Propón una mejora o una nueva funcionalidad para Félix"
+about: "Propón una mejora o una nueva funcionalidad para Félix"
 labels: ["enhancement"]
 assignees: []
 ---
