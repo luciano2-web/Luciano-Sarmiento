@@ -1,23 +1,23 @@
-# \ud83d\udcbb Lista de Componentes de Hardware
+# 💻 Lista de Componentes de Hardware
 
-**\ud83d\udc31 F\u00e9lix v2.0** | **\u00daltima actualizaci\u00f3n: 2024-09-28**
+**🐱 Félix v2.0** | **Última actualización: 2024-09-28**
 
-Este documento detalla **todos los componentes de hardware** necesarios para construir a F\u00e9lix, incluyendo alternativas, precios aproximados y enlaces de compra.
+Este documento detalla **todos los componentes de hardware** necesarios para construir a Félix, incluyendo alternativas, precios aproximados y enlaces de compra.
 
 ---
 
-## \ud83c\udf0d Tabla de Contenidos
+## 🌍 Tabla de Contenidos
 1. [Lista de Componentes](#-lista-de-componentes)
 2. [Diagrama de Conexiones](#-diagrama-de-conexiones)
 3. [Alternativas y Recomendaciones](#-alternativas-y-recomendaciones)
-4. [Donde Comprar](#-donde-comprar)
+4. [Dónde Comprar](#-dónde-comprar)
 5. [Herramientas Necesarias](#-herramientas-necesarias)
 
 ---
 
-## \ud83d\udccb Lista de Componentes
+## 📋 Lista de Componentes
 
-### \u2705 **Componentes B\u00e1sicos (Obligatorios)**
+### ✅ Componentes Básicos (Obligatorios)
 
 | # | Componente | Modelo | Cantidad | Precio (USD) | Función | Protocolo |
 |---|------------|--------|----------|--------------|---------|-----------|
@@ -33,7 +33,7 @@ Este documento detalla **todos los componentes de hardware** necesarios para con
 
 ---
 
-### \u26a1 **Componentes Opcionales (Mejoras)**
+### ⚡ Componentes Opcionales (Mejoras)
 
 | # | Componente | Modelo | Cantidad | Precio (USD) | Función | Protocolo |
 |---|------------|--------|----------|--------------|---------|-----------|
@@ -48,7 +48,7 @@ Este documento detalla **todos los componentes de hardware** necesarios para con
 
 ---
 
-## \ud83c\udfa8 Diagrama de Conexiones
+## 🎨 Diagrama de Conexiones
 
 ### Conexiones del ESP32
 
@@ -114,15 +114,15 @@ graph TD
 
 ---
 
-## \ud83d\udc68 Alternativas y Recomendaciones
+## 👨 Alternativas y Recomendaciones
 
 ### Microcontroladores
 | Modelo | Pros | Contras | Precio | Compatibilidad |
 |--------|------|---------|--------|----------------|
-| **ESP32-WROOM-32** | WiFi + Bluetooth, popular, buena documentación | - | $8-$12 | \u2705 Recomendado |
-| ESP32-S3 | Más memoria, USB nativo | Menos soporte en librerías | $10-$15 | \u2705 Bueno |
-| ESP32-C3 | WiFi + Bluetooth 5.0 | Menos GPIO | $8-$12 | \u2705 Bueno |
-| Raspberry Pi Pico W | Más potente, MicroPython | No Bluetooth nativo | $10 | \u274c No recomendado |
+| **ESP32-WROOM-32** | WiFi + Bluetooth, popular, buena documentación | - | $8-$12 | ✅ Recomendado |
+| ESP32-S3 | Más memoria, USB nativo | Menos soporte en librerías | $10-$15 | ✅ Bueno |
+| ESP32-C3 | WiFi + Bluetooth 5.0 | Menos GPIO | $8-$12 | ✅ Bueno |
+| Raspberry Pi Pico W | Más potente, MicroPython | No Bluetooth nativo | $10 | ❌ No recomendado |
 
 **Recomendación:** **ESP32-WROOM-32** (el más probado y con mejor soporte).
 
@@ -131,7 +131,7 @@ graph TD
 ### Pantallas OLED
 | Modelo | Tamaño | Resolución | Protocolo | Precio | Notas |
 |--------|--------|------------|-----------|--------|-------|
-| **SSD1306** | 0.96" | 128x64 | I2C | $3-$6 | \u2705 Recomendado |
+| **SSD1306** | 0.96" | 128x64 | I2C | $3-$6 | ✅ Recomendado |
 | SH1106 | 1.3" | 128x64 | I2C | $5-$8 | Más grande, mismo precio |
 | SSD1309 | 1.3" | 128x64 | SPI/I2C | $7-$10 | Mejor contraste |
 
@@ -142,7 +142,7 @@ graph TD
 ### Micrófonos
 | Modelo | Tipo | Protocolo | Sensibilidad | Precio | Notas |
 |--------|------|-----------|--------------|--------|-------|
-| **INMP441** | MEMS | I2S | Alta | $2-$4 | \u2705 Recomendado |
+| **INMP441** | MEMS | I2S | Alta | $2-$4 | ✅ Recomendado |
 | MAX44660 | Electret | Analógico | Media | $3-$5 | Requiere amplificador |
 | MAX9814 | Electret | Analógico | Media | $2-$4 | Más simple |
 
@@ -153,7 +153,7 @@ graph TD
 ### Parlantes
 | Modelo | Impedancia | Potencia | Tamaño | Precio | Notas |
 |--------|------------|----------|--------|--------|-------|
-| **4Ω 3W** | 4Ω | 3W | 40mm | $2-$5 | \u2705 Recomendado |
+| **4Ω 3W** | 4Ω | 3W | 40mm | $2-$5 | ✅ Recomendado |
 | 8Ω 0.5W | 8Ω | 0.5W | 30mm | $1-$3 | Menos potencia |
 | 4Ω 5W | 4Ω | 5W | 50mm | $5-$8 | Más grande |
 
@@ -161,7 +161,7 @@ graph TD
 
 ---
 
-## \ud83d\udccd Donde Comprar
+## 📍 Dónde Comprar
 
 ### Tiendas Internacionales
 | Tienda | Enlace | Notas |
@@ -176,26 +176,26 @@ graph TD
 
 ### Tiendas por País
 
-#### \ud83c\uddee\ud83c\uddea **Colombia**
+#### 🇮🇨 Colombia
 | Tienda | Enlace | Notas |
 |--------|--------|-------|
 | **Mercado Libre** | [www.mercadolibre.com.co](https://www.mercadolibre.com.co) | Envío local |
 | **Linio** | [www.linio.com.co](https://www.linio.com.co) | Variedad de productos |
 | **Electrónica RC** | [www.electronicarcto.com](https://www.electronicarcto.com) | Componentes electrónicos |
 
-#### \ud83c\uddea\ud83c\uddf8 **España**
+#### 🇪🇸 España
 | Tienda | Enlace | Notas |
 |--------|--------|-------|
 | **Amazon España** | [www.amazon.es](https://www.amazon.es) | Envío rápido |
 | **Electrónica Picasa** | [www.picasa-electronica.com](https://www.picasa-electronica.com) | Componentes para makers |
 
-#### \ud83c\uddee\ud83c\uddf7 **México**
+#### 🇲🇽 México
 | Tienda | Enlace | Notas |
 |--------|--------|-------|
 | **Mercado Libre México** | [www.mercadolibre.com.mx](https://www.mercadolibre.com.mx) | Envío local |
 | **Amazon México** | [www.amazon.com.mx](https://www.amazon.com.mx) | Envío rápido |
 
-#### \ud83c\udde7\ud83c\uddf7 **Argentina**
+#### 🇦🇷 Argentina
 | Tienda | Enlace | Notas |
 |--------|--------|-------|
 | **Mercado Libre Argentina** | [www.mercadolibre.com.ar](https://www.mercadolibre.com.ar) | Envío local |
@@ -203,17 +203,17 @@ graph TD
 
 ---
 
-## \ud83d\udc7c Herramientas Necesarias
+## 🐾 Herramientas Necesarias
 
 ### Herramientas Básicas
 | Herramienta | Descripción | Precio (USD) | Opcional |
 |-------------|-------------|--------------|----------|
-| **Soldador** | 30W-60W | $10-$20 | \u274c No (se usa protoboard) |
-| **Pasta para soldar** | - | $5 | \u274c No |
-| **Cautín** | - | - | \u2705 Sí (si se suelda) |
-| **Multímetro** | Medir voltaje, corriente | $15-$50 | \u2705 Sí |
-| **Pinzas** | Cortar y pelar cables | $5-$10 | \u2705 Sí |
-| **Destornillador** | Ajustar tornillos | $5 | \u2705 Sí |
+| **Soldador** | 30W-60W | $10-$20 | ❌ No (se usa protoboard) |
+| **Pasta para soldar** | - | $5 | ❌ No |
+| **Cautín** | - | - | ✅ Sí (si se suelda) |
+| **Multímetro** | Medir voltaje, corriente | $15-$50 | ✅ Sí |
+| **Pinzas** | Cortar y pelar cables | $5-$10 | ✅ Sí |
+| **Destornillador** | Ajustar tornillos | $5 | ✅ Sí |
 
 ### Software Necesario
 | Software | Descripción | Enlace | Plataforma |
@@ -227,7 +227,7 @@ graph TD
 
 ---
 
-## \ud83d\udc81 Guía de Compra Rápida
+## 👋 Guía de Compra Rápida
 
 ### Opción 1: Kit Básico (Mínimo)
 | Componente | Modelo | Cantidad | Precio (USD) | Total |
@@ -259,26 +259,26 @@ graph TD
 
 ---
 
-## \ud83d\udc31 \u00bfPreguntas Frecuentes?
+## 🐱 ¿Preguntas Frecuentes?
 
-### \u2753 ¿Puedo usar otros componentes?
+### ❓ ¿Puedo usar otros componentes?
 **Sí**, pero asegúrate de que sean **compatibles** con el ESP32 y el firmware de Félix. Si usas alternativas, puede que necesites modificar el código.
 
-### \u2753 ¿Dónde puedo comprar los componentes en mi país?
-Consulta la sección **[Donde Comprar](#-donde-comprar)** o busca en **Mercado Libre** o **Amazon** de tu país.
+### ❓ ¿Dónde puedo comprar los componentes en mi país?
+Consulta la sección **[Dónde Comprar](#-dónde-comprar)** o busca en **Mercado Libre** o **Amazon** de tu país.
 
-### \u2753 ¿Necesito soldar?
+### ❓ ¿Necesito soldar?
 **No**, el diseño actual usa **protoboard y cables jumper**, por lo que no es necesario soldar. Sin embargo, si quieres un montaje más permanente, puedes soldar los componentes.
 
-### \u2753 ¿Puedo usar una Raspberry Pi en lugar del ESP32?
+### ❓ ¿Puedo usar una Raspberry Pi en lugar del ESP32?
 **No recomendado**. El proyecto está optimizado para **ESP32** (bajo consumo, Bluetooth integrado). Si quieres usar una Raspberry Pi, tendrías que reescribir gran parte del firmware.
 
-### \u2753 ¿Puedo usar un micrófono analógico?
+### ❓ ¿Puedo usar un micrófono analógico?
 **Sí**, pero necesitarás un **convertidor ADC** (el ESP32 tiene ADC integrado, pero la calidad no será tan buena como con el INMP441 I2S).
 
 ---
 
-## \ud83d\udcc8 Recursos Adicionales
+## 📈 Recursos Adicionales
 
 - [Hoja de datos del ESP32-WROOM-32](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf)
 - [Hoja de datos del SSD1306](https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf)
@@ -288,6 +288,6 @@ Consulta la sección **[Donde Comprar](#-donde-comprar)** o busca en **Mercado L
 
 ---
 
-**\ud83d\udc31 F\u00e9lix te espera... ¡Es hora de construirlo! \ud83d\udc3e**
+**🐱 Félix te espera... ¡Es hora de construirlo! 🐾**
 
-[\u2190 Volver a Hardware](hardware) | [\ud83d\udc82 Ver Assembly Guide \u2192](assembly.md)
+[← Volver a Hardware](hardware) | [💂 Ver Assembly Guide →](assembly.md)
