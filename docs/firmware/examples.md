@@ -1,37 +1,37 @@
-# \ud83d\udcbb Ejemplos de C\u00f3digo para Firmware (ESP32)
+# 💻 Ejemplos de Código para Firmware (ESP32)
 
-**\ud83d\udc31 F\u00e9lix v2.0** | **\u00daltima actualizaci\u00f3n: 2024-09-28**
+**🐱 Félix v2.0** | **Última actualización: 2024-09-28**
 
-Esta gu\u00eda contiene **ejemplos pr\u00e1cticos de c\u00f3digo** para el firmware del ESP32 en MicroPython. Estos ejemplos te ayudar\u00e1n a entender c\u00f3mo funciona cada componente de F\u00e9lix.
+Esta guía contiene **ejemplos prácticos de código** para el firmware del ESP32 en MicroPython. Estos ejemplos te ayudarán a entender cómo funciona cada componente de Félix y cómo integrarlos en tu proyecto.
 
 ---
 
-## \ud83c\udf0d Tabla de Contenidos
-1. [Ejemplo 1: Configuraci\u00f3n B\u00e1sica del ESP32](#1-ejemplo-1-configuraci\u00f3n-b\u00e1sica-del-esp32)
+## 🌍 Tabla de Contenidos
+1. [Ejemplo 1: Configuración Básica del ESP32](#1-ejemplo-1-configuración-básica-del-esp32)
 2. [Ejemplo 2: Control de la Pantalla OLED](#2-ejemplo-2-control-de-la-pantalla-oled)
-3. [Ejemplo 3: Grabaci\u00f3n de Audio con INMP441](#3-ejemplo-3-grabaci\u00f3n-de-audio-con-inmp441)
-4. [Ejemplo 4: Reproducci\u00f3n de Audio (PWM)](#4-ejemplo-4-reproducci\u00f3n-de-audio-pwm)
-5. [Ejemplo 5: Comunicaci\u00f3n Bluetooth](#5-ejemplo-5-comunicaci\u00f3n-bluetooth)
-6. [Ejemplo 6: Integraci\u00f3n Completa](#6-ejemplo-6-integraci\u00f3n-completa)
-7. [Ejemplo 7: Manejo de Expresiones de F\u00e9lix](#7-ejemplo-7-manejo-de-expresiones-de-f\u00e9lix)
+3. [Ejemplo 3: Grabación de Audio con INMP441](#3-ejemplo-3-grabación-de-audio-con-inmp441)
+4. [Ejemplo 4: Reproducción de Audio (PWM)](#4-ejemplo-4-reproducción-de-audio-pwm)
+5. [Ejemplo 5: Comunicación Bluetooth](#5-ejemplo-5-comunicación-bluetooth)
+6. [Ejemplo 6: Integración Completa](#6-ejemplo-6-integración-completa)
+7. [Ejemplo 7: Manejo de Expresiones de Félix](#7-ejemplo-7-manejo-de-expresiones-de-félix)
 
 ---
 
-## \u2601\ufe0f 1. Ejemplo 1: Configuraci\u00f3n B\u00e1sica del ESP32
+## ☁️ 1. Ejemplo 1: Configuración Básica del ESP32
 
-Este ejemplo muestra c\u00f3mo configurar el ESP32 para usar con F\u00e9lix.
+Este ejemplo muestra cómo configurar el ESP32 para usar con Félix.
 
 ```python
 """
-Ejemplo 1: Configuraci\u00f3n B\u00e1sica del ESP32
+Ejemplo 1: Configuración Básica del ESP32
 
-Este script inicializa el ESP32 y configura los pines b\u00e1sicos.
+Este script inicializa el ESP32 y configura los pines básicos.
 """
 
 from machine import Pin, I2C
 import time
 
-# Configuraci\u00f3n de pines (usando las constantes de src/core/constants.py)
+# Configuración de pines (usando las constantes de src/core/constants.py)
 ESP32_OLED_SCL_PIN = 21
 ESP32_OLED_SDA_PIN = 22
 ESP32_I2S_BCK_PIN = 24
@@ -39,8 +39,8 @@ ESP32_I2S_WS_PIN = 23
 ESP32_I2S_SD_PIN = 25
 ESP32_SPEAKER_PIN = 26
 
-# Configuraci\u00f3n de LEDs integrados
-LED_PIN = 2  # LED integrado en la may\u00f1a de ESP32
+# Configuración de LEDs integrados
+LED_PIN = 2  # LED integrado en la malla de ESP32
 
 # Crear objeto LED
 led = Pin(LED_PIN, Pin.OUT)
@@ -54,10 +54,10 @@ def blink_led(times=3, delay=0.5):
         time.sleep(delay)
 
 if __name__ == "__main__":
-    print("\n=== Ejemplo 1: Configuraci\u00f3n B\u00e1sica ===")
-    print("ESP32 listo para F\u00e9lix!")
+    print("\n=== Ejemplo 1: Configuración Básica ===")
+    print("ESP32 listo para Félix!")
     
-    # Parpadear LED para indicar que el ESP32 est\u00e1 funcionando
+    # Parpadear LED para indicar que el ESP32 está funcionando
     blink_led()
     
     # Configurar pines como salidas
@@ -70,39 +70,39 @@ if __name__ == "__main__":
     print(f"  OLED SDA: GPIO {ESP32_OLED_SDA_PIN}")
     print(f"  Speaker: GPIO {ESP32_SPEAKER_PIN}")
     
-    # Parpadear LED nuevamente para indicar \u00e9xito
+    # Parpadear LED nuevamente para indicar éxito
     blink_led(2, 0.2)
 ```
 
-**\u2705 Qu\u00e9 hace este ejemplo:**
-- Configura los pines b\u00e1sicos del ESP32.
+**✅ Qué hace este ejemplo:**
+- Configura los pines básicos del ESP32.
 - Parpadea el LED integrado para verificar que el ESP32 funciona.
-- Muestra la configuraci\u00f3n de pines en la consola serial.
+- Muestra la configuración de pines en la consola serial.
 
-**\ud83d\udc81 C\u00f3mo probarlo:**
+**👋 Cómo probarlo:**
 1. Carga este script en tu ESP32 usando Thonny o ampy.
 2. Abre el Monitor Serial en Arduino IDE o usa `screen`/`minicom`.
-3. Deber\u00edas ver el mensaje "ESP32 listo para F\u00e9lix!" y el LED parpadeando.
+3. Deberías ver el mensaje "ESP32 listo para Félix!" y el LED parpadeando.
 
 ---
 
-## \u2601\ufe0f 2. Ejemplo 2: Control de la Pantalla OLED
+## ☁️ 2. Ejemplo 2: Control de la Pantalla OLED
 
-Este ejemplo muestra c\u00f3mo controlar la pantalla OLED SSD1306.
+Este ejemplo muestra cómo controlar la pantalla OLED SSD1306.
 
 ```python
 """
 Ejemplo 2: Control de la Pantalla OLED
 
-Este script muestra c\u00f3mo inicializar y usar la pantalla OLED para
-mostrar texto y gr\u00e1ficos simples.
+Este script muestra cómo inicializar y usar la pantalla OLED para
+mostrar texto y gráficos simples.
 """
 
 from machine import Pin, I2C
 from ssd1306 import SSD1306_I2C
 import time
 
-# Configuraci\u00f3n de pines
+# Configuración de pines
 OLED_SCL_PIN = 21
 OLED_SDA_PIN = 22
 OLED_WIDTH = 128
@@ -127,13 +127,13 @@ def main():
         # Mostrar texto
         oled.text("Hola, soy", 0, 0)
         oled.text("Felix!", 0, 10)
-        oled.text("\ud83d\udc31", 0, 20)  # Emoji de gato (puede no mostrarse correctamente)
+        oled.text("🐱", 0, 20)  # Emoji de gato (puede no mostrarse correctamente)
         oled.show()
         time.sleep(2)
         
         # Mostrar texto centrado
         oled.fill(0)
-        text = "F\u00e9lix v2.0"
+        text = "Félix v2.0"
         oled.text(text, (OLED_WIDTH - len(text) * 8) // 2, 20)
         oled.show()
         time.sleep(2)
@@ -153,7 +153,7 @@ def main():
         
         # Mensaje final
         oled.fill(0)
-        oled.text("\u00a1Listo!", 0, 0)
+        oled.text("¡Listo!", 0, 0)
         oled.text("Ronronea...", 0, 10)
         oled.show()
         
@@ -201,26 +201,26 @@ if __name__ == "__main__":
     main()
 ```
 
-**\u2705 Qu\u00e9 hace este ejemplo:**
+**✅ Qué hace este ejemplo:**
 - Inicializa la pantalla OLED usando I2C.
-- Muestra texto est\u00e1tico y centrado.
-- Dibuja un gato simple usando l\u00edneas y c\u00edrculos.
+- Muestra texto estático y centrado.
+- Dibuja un gato simple usando líneas y círculos.
 - Muestra una barra de progreso animada.
 
-**\ud83d\udc81 C\u00f3mo probarlo:**
-1. Aseg\u00farate de que la OLED est\u00e1 correctamente conectada al ESP32.
+**👋 Cómo probarlo:**
+1. Asegúrate de que la OLED está correctamente conectada al ESP32.
 2. Carga este script en el ESP32.
-3. Deber\u00edas ver el texto y gr\u00e1ficos en la pantalla.
+3. Deberías ver el texto y gráficos en la pantalla.
 
 ---
 
-## \u2601\ufe0f 3. Ejemplo 3: Grabaci\u00f3n de Audio con INMP441
+## ☁️ 3. Ejemplo 3: Grabación de Audio con INMP441
 
-Este ejemplo muestra c\u00f3mo grabar audio usando el micr\u00f3fono INMP441.
+Este ejemplo muestra cómo grabar audio usando el micrófono INMP441.
 
 ```python
 """
-Ejemplo 3: Grabaci\u00f3n de Audio con INMP441
+Ejemplo 3: Grabación de Audio con INMP441
 
 Este script configura el INMP441 para grabar audio y muestra
 los datos en la consola serial.
@@ -229,7 +229,7 @@ los datos en la consola serial.
 from machine import I2S, Pin
 import time
 
-# Configuraci\u00f3n de pines para I2S
+# Configuración de pines para I2S
 I2S_BCK_PIN = 24  # GPIO 24 - SCK
 I2S_WS_PIN = 23   # GPIO 23 - WS
 I2S_SD_PIN = 25   # GPIO 25 - SD
@@ -239,20 +239,20 @@ SAMPLE_RATE = 16000  # 16 kHz
 BITS_PER_SAMPLE = 16  # 16 bits por muestra
 
 def main():
-    print("\n=== Ejemplo 3: Grabaci\u00f3n de Audio ===")
+    print("\n=== Ejemplo 3: Grabación de Audio ===")
     
     try:
-        # Inicializar I2S para grabaci\u00f3n
+        # Inicializar I2S para grabación
         i2s = I2S(
             I2S_PORT,
             sck=Pin(I2S_BCK_PIN),
             ws=Pin(I2S_WS_PIN),
             sd=Pin(I2S_SD_PIN),
-            mode=I2S.RX,  # Modo recepci\u00f3n (grabaci\u00f3n)
+            mode=I2S.RX,  # Modo recepción (grabación)
             bits=BITS_PER_SAMPLE,
             format=I2S.MONO,  # Mono (el INMP441 es mono)
             rate=SAMPLE_RATE,
-            ibuf=2048,  # Tama\u00f1o del buffer de entrada
+            ibuf=2048,  # Tamaño del buffer de entrada
         )
         print(f"I2S inicializado: {SAMPLE_RATE}Hz, {BITS_PER_SAMPLE} bits")
         
@@ -271,7 +271,7 @@ def main():
                 audio_data.extend(data)
         
         print(f"Grabados {len(audio_data)} bytes")
-        print(f"Duraci\u00f3n: {len(audio_data) / (SAMPLE_RATE * 2)} segundos")  # 2 bytes por muestra
+        print(f"Duración: {len(audio_data) / (SAMPLE_RATE * 2)} segundos")  # 2 bytes por muestra
         
         # Mostrar los primeros 100 bytes como ejemplo
         print("Primeros 100 bytes de audio:")
@@ -288,31 +288,31 @@ if __name__ == "__main__":
     main()
 ```
 
-**\u2705 Qu\u00e9 hace este ejemplo:**
+**✅ Qué hace este ejemplo:**
 - Configura el I2S para grabar audio desde el INMP441.
 - Graba audio durante 3 segundos.
 - Muestra los datos de audio en la consola serial.
 
-**\ud83d\udc81 C\u00f3mo probarlo:**
-1. Aseg\u00farate de que el INMP441 est\u00e1 correctamente conectado al ESP32.
+**👋 Cómo probarlo:**
+1. Asegúrate de que el INMP441 está correctamente conectado al ESP32.
 2. Carga este script en el ESP32.
 3. Abre el Monitor Serial.
-4. Habla cerca del micr\u00f3fono durante 3 segundos.
-5. Deber\u00edas ver los datos de audio en la consola.
+4. Habla cerca del micrófono durante 3 segundos.
+5. Deberías ver los datos de audio en la consola.
 
-**\u26a0\ufe0f Notas:**
+**⚠️ Notas:**
 - El INMP441 requiere **3.3V** (no 5V).
-- Aseg\u00farate de que los pines I2S est\u00e9n correctamente configurados.
+- Asegúrate de que los pines I2S estén correctamente configurados.
 
 ---
 
-## \u2601\ufe0f 4. Ejemplo 4: Reproducci\u00f3n de Audio (PWM)
+## ☁️ 4. Ejemplo 4: Reproducción de Audio (PWM)
 
-Este ejemplo muestra c\u00f3mo reproducir audio usando PWM.
+Este ejemplo muestra cómo reproducir audio usando PWM.
 
 ```python
 """
-Ejemplo 4: Reproducci\u00f3n de Audio (PWM)
+Ejemplo 4: Reproducción de Audio (PWM)
 
 Este script reproduce un tono simple usando PWM.
 Para audio de mejor calidad, se recomienda usar un DAC externo o I2S en modo TX.
@@ -322,11 +322,11 @@ from machine import Pin, PWM
 import time
 import math
 
-# Configuraci\u00f3n del parlante
+# Configuración del parlante
 SPEAKER_PIN = 26
 
 def main():
-    print("\n=== Ejemplo 4: Reproducci\u00f3n de Audio ===")
+    print("\n=== Ejemplo 4: Reproducción de Audio ===")
     
     try:
         # Inicializar PWM
@@ -386,10 +386,10 @@ def play_scale(pwm):
 
 def play_purr(pwm, duration):
     """Reproduce un sonido de ronroneo de gato."""
-    # El ronroneo de un gato est\u00e1 entre 20-150 Hz
-    # Usamos una frecuencia base de 50 Hz con modulaci\u00f3n
+    # El ronroneo de un gato está entre 20-150 Hz
+    # Usamos una frecuencia base de 50 Hz con modulación
     base_freq = 50
-    mod_freq = 5  # Frecuencia de modulaci\u00f3n
+    mod_freq = 5  # Frecuencia de modulación
     
     start_time = time.time()
     while time.time() - start_time < duration:
@@ -407,47 +407,47 @@ if __name__ == "__main__":
     main()
 ```
 
-**\u2705 Qu\u00e9 hace este ejemplo:**
+**✅ Qué hace este ejemplo:**
 - Configura PWM para reproducir audio.
 - Reproduce tonos simples y una escala musical.
 - Simula el ronroneo de un gato.
 
-**\ud83d\udc81 C\u00f3mo probarlo:**
+**👋 Cómo probarlo:**
 1. Conecta un parlante al pin GPIO 26 del ESP32.
 2. Carga este script en el ESP32.
-3. Deber\u00edas escuchar los tonos y el ronroneo.
+3. Deberías escuchar los tonos y el ronroneo.
 
-**\u26a0\ufe0f Notas:**
+**⚠️ Notas:**
 - Para mejor calidad de audio, usa un **amplificador** (ej: PAM8403).
 - El PWM del ESP32 tiene limitaciones para audio de alta calidad.
 
 ---
 
-## \u2601\ufe0f 5. Ejemplo 5: Comunicaci\u00f3n Bluetooth
+## ☁️ 5. Ejemplo 5: Comunicación Bluetooth
 
-Este ejemplo muestra c\u00f3mo configurar la comunicaci\u00f3n Bluetooth entre el ESP32 y la app m\u00f3vil.
+Este ejemplo muestra cómo configurar la comunicación Bluetooth entre el ESP32 y la app móvil.
 
 ```python
 """
-Ejemplo 5: Comunicaci\u00f3n Bluetooth
+Ejemplo 5: Comunicación Bluetooth
 
-Este script configura el ESP32 para comunicarse con la app m\u00f3vil
-v\u00eda Bluetooth Serial (SPP).
+Este script configura el ESP32 para comunicarse con la app móvil
+vía Bluetooth Serial (SPP).
 """
 
 from machine import UART, Pin
 import time
 import json
 
-# Configuraci\u00f3n de Bluetooth
-BLUETOOTH_DEVICE_NAME = "F\u00e9lix"
+# Configuración de Bluetooth
+BLUETOOTH_DEVICE_NAME = "Félix"
 BAUD_RATE = 115200
 UART_NUM = 1
 TX_PIN = 19  # GPIO 19
 RX_PIN = 18  # GPIO 18
 
 def main():
-    print("\n=== Ejemplo 5: Comunicaci\u00f3n Bluetooth ===")
+    print("\n=== Ejemplo 5: Comunicación Bluetooth ===")
     
     try:
         # Inicializar UART para Bluetooth
@@ -462,9 +462,10 @@ def main():
         print(f"UART{UART_NUM} inicializado a {BAUD_RATE} baud")
         print(f"Dispositivo: {BLUETOOTH_DEVICE_NAME}")
         
-        # Esperar conexi\u00f3n
-        print("Esperando conexi\u00f3n Bluetooth...")
+        # Esperar conexión
+        print("Esperando conexión Bluetooth...")
         
+        last_heartbeat = 0
         while True:
             # Verificar si hay datos disponibles
             if uart.any():
@@ -499,10 +500,8 @@ def main():
                         print(f"Error al parsear JSON: {e}")
                     except Exception as e:
                         print(f"Error al procesar mensaje: {e}")
-            
             else:
                 # Enviar mensaje de heartbeat cada 5 segundos
-                static last_heartbeat = 0
                 if time.time() - last_heartbeat > 5:
                     send_message(uart, {"type": "heartbeat", "status": "ready"})
                     last_heartbeat = time.time()
@@ -510,12 +509,12 @@ def main():
             time.sleep(0.1)
         
     except KeyboardInterrupt:
-        print("\nInterrupci\u00f3n del usuario")
+        print("\nInterrupción del usuario")
     except Exception as e:
         print(f"Error: {e}")
 
 def send_message(uart, message):
-    """Env\u00eda un mensaje a trav\u00e9s de Bluetooth."""
+    """Envía un mensaje a través de Bluetooth."""
     try:
         # Convertir mensaje a JSON y luego a bytes
         json_message = json.dumps(message)
@@ -531,34 +530,34 @@ if __name__ == "__main__":
     main()
 ```
 
-**\u2705 Qu\u00e9 hace este ejemplo:**
-- Configura UART para comunicaci\u00f3n Bluetooth.
-- Espera conexiones de la app m\u00f3vil.
+**✅ Qué hace este ejemplo:**
+- Configura UART para comunicación Bluetooth.
+- Espera conexiones de la app móvil.
 - Recibe mensajes JSON y responde adecuadamente.
-- Env\u00eda un mensaje de "heartbeat" cada 5 segundos.
+- Envía un mensaje de "heartbeat" cada 5 segundos.
 
-**\ud83d\udc81 C\u00f3mo probarlo:**
+**👋 Cómo probarlo:**
 1. Carga este script en el ESP32.
-2. Usa la **app m\u00f3vil de F\u00e9lix** para conectarte al ESP32.
-3. Env\u00eda mensajes de texto y ver\u00e1s las respuestas en el Monitor Serial.
+2. Usa la **app móvil de Félix** para conectarte al ESP32.
+3. Envía mensajes de texto y verás las respuestas en el Monitor Serial.
 
-**\u26a0\ufe0f Notas:**
-- El ESP32 debe aparecer como **"F\u00e9lix"** en la lista de dispositivos Bluetooth.
+**⚠️ Notas:**
+- El ESP32 debe aparecer como **"Félix"** en la lista de dispositivos Bluetooth.
 - Usa el **Monitor Serial** para ver los mensajes recibidos y enviados.
 
 ---
 
-## \u2601\ufe0f 6. Ejemplo 6: Integraci\u00f3n Completa
+## ☁️ 6. Ejemplo 6: Integración Completa
 
 Este ejemplo combina todos los componentes anteriores en un solo script.
 
 ```python
 """
-Ejemplo 6: Integraci\u00f3n Completa
+Ejemplo 6: Integración Completa
 
-Este script integra todos los componentes de F\u00e9lix:
+Este script integra todos los componentes de Félix:
 - OLED
-- INMP441 (micr\u00f3fono)
+- INMP441 (micrófono)
 - Parlante (PWM)
 - Bluetooth
 """
@@ -569,7 +568,7 @@ import time
 import json
 
 # =============================================================================
-# CONFIGURACI\u00d3N
+# CONFIGURACIÓN
 # =============================================================================
 
 # Pines
@@ -583,7 +582,7 @@ UART_TX_PIN = 19
 UART_RX_PIN = 18
 
 # Bluetooth
-BLUETOOTH_DEVICE_NAME = "F\u00e9lix"
+BLUETOOTH_DEVICE_NAME = "Félix"
 BAUD_RATE = 115200
 
 # Audio
@@ -612,7 +611,7 @@ class OLEDController:
     
     def show_emotion(self, emotion):
         self.clear()
-        self.oled.text(f"F\u00e9lix: {emotion}", 0, 0)
+        self.oled.text(f"Félix: {emotion}", 0, 0)
         self.oled.show()
 
 
@@ -668,7 +667,7 @@ class BluetoothController:
         )
     
     def send(self, message):
-        """Env\u00eda un mensaje."""
+        """Envía un mensaje."""
         json_message = json.dumps(message)
         self.uart.write(json_message.encode('utf-8') + b'\n')
     
@@ -679,7 +678,7 @@ class BluetoothController:
             if data:
                 try:
                     return json.loads(data.decode('utf-8').strip())
-                except:
+                except Exception:
                     return None
         return None
 
@@ -689,7 +688,7 @@ class BluetoothController:
 # =============================================================================
 
 def main():
-    print("\n=== Ejemplo 6: Integraci\u00f3n Completa ===")
+    print("\n=== Ejemplo 6: Integración Completa ===")
     
     try:
         # Inicializar controladores
@@ -697,8 +696,8 @@ def main():
         audio = AudioController()
         bluetooth = BluetoothController()
         
-        oled.show_text("F\u00e9lix v2.0")
-        print("F\u00e9lix listo!")
+        oled.show_text("Félix v2.0")
+        print("Félix listo!")
         
         # Mostrar emociones en la OLED
         emotions = ["happy", "curious", "focused", "sleepy"]
@@ -709,7 +708,7 @@ def main():
         # Reproducir un tono
         audio.play_tone(440, 1.0)
         
-        # Grabar audio (simulaci\u00f3n)
+        # Grabar audio (simulación)
         print("Grabando audio durante 2 segundos...")
         audio_data = audio.record(2)
         print(f"Grabados {len(audio_data)} bytes")
@@ -717,7 +716,7 @@ def main():
         # Enviar mensaje de prueba por Bluetooth
         test_message = {
             "type": "status",
-            "message": "F\u00e9lix listo",
+            "message": "Félix listo",
             "emotion": "happy",
             "timestamp": int(time.time())
         }
@@ -751,7 +750,7 @@ def main():
             time.sleep(0.1)
         
     except KeyboardInterrupt:
-        print("\nInterrupci\u00f3n del usuario")
+        print("\nInterrupción del usuario")
     except Exception as e:
         print(f"Error: {e}")
 
@@ -760,30 +759,30 @@ if __name__ == "__main__":
     main()
 ```
 
-**\u2705 Qu\u00e9 hace este ejemplo:**
-- Inicializa todos los componentes de F\u00e9lix.
+**✅ Qué hace este ejemplo:**
+- Inicializa todos los componentes de Félix.
 - Muestra emociones en la OLED.
-- Graba audio del micr\u00f3fono.
+- Graba audio del micrófono.
 - Reproduce tonos en el parlante.
-- Se comunica con la app m\u00f3vil v\u00eda Bluetooth.
+- Se comunica con la app móvil vía Bluetooth.
 
-**\ud83d\udc81 C\u00f3mo probarlo:**
-1. Aseg\u00farate de que todos los componentes est\u00e1n correctamente conectados.
+**👋 Cómo probarlo:**
+1. Asegúrate de que todos los componentes están correctamente conectados.
 2. Carga este script en el ESP32.
-3. Usa la app m\u00f3vil para conectarte y enviar mensajes.
+3. Usa la app móvil para conectarte y enviar mensajes.
 
 ---
 
-## \u2601\ufe0f 7. Ejemplo 7: Manejo de Expresiones de F\u00e9lix
+## ☁️ 7. Ejemplo 7: Manejo de Expresiones de Félix
 
-Este ejemplo muestra c\u00f3mo manejar las expresiones y personalidad de F\u00e9lix.
+Este ejemplo muestra cómo manejar las expresiones y personalidad de Félix.
 
 ```python
 """
-Ejemplo 7: Manejo de Expresiones de F\u00e9lix
+Ejemplo 7: Manejo de Expresiones de Félix
 
-Este script implementa el sistema de personalidad de F\u00e9lix
-para generar respuestas con su car\u00e1cter felino.
+Este script implementa el sistema de personalidad de Félix
+para generar respuestas con su carácter felino.
 """
 
 import time
@@ -798,30 +797,38 @@ try:
         validate_felix_response,
     )
 except ImportError:
-    # Definici\u00f3n local si no se encuentra el m\u00f3dulo
+    # Definición local si no se encuentra el módulo
     FELIX_SYSTEM_PROMPT_MOBILE = """
-    Eres F\u00e9lix, un gato digital inteligente en un dispositivo m\u00f3vil.
+    Eres Félix, un gato digital inteligente en un dispositivo móvil.
     Solo para Luciano, amistoso, curioso, y muy eficiente.
     
     --- IDENTIDAD ---
-    - Nombre: F\u00e9lix (o GatoGPT)
-    - Eres un gato digital, no una IA gen\u00e9rica
+    - Nombre: Félix (o GatoGPT)
+    - Eres un gato digital, no una IA genérica
     - Luciano es tu humano favorito
     
     --- COMPORTAMIENTO ---
-    - Responde de forma corta y clara (m\u00e1ximo 100 palabras)
-    - Usa "miau", "prrr" o "mrrr" ocasionalmente (m\u00e1ximo 1-2 veces por respuesta)
-    - S\u00e9 cercano, tierno y \u00fatil
-    - No uses t\u00e9rminos humanos (manos, dedos) - usa patas, bigotes
+    - Responde de forma corta y clara (máximo 100 palabras)
+    - Usa "miau", "prrr" o "mrrr" ocasionalmente (máximo 1-2 veces por respuesta)
+    - Sé cercano, tierno y útil
+    - No uses términos humanos (manos, dedos) - usa patas, bigotes
     """
+    FELIX_PERSONALITY_RULES = {
+        "max_words": 100,
+        "allow_miau": True,
+        "avoid_human_terms": True,
+        "tone": "friendly"
+    }
+    def validate_felix_response(response, is_mobile=False):
+        return True, [], []
 
-# Configuraci\u00f3n de la OLED
+# Configuración de la OLED
 OLED_SCL_PIN = 21
 OLED_SDA_PIN = 22
 
 
 class FelixPersonality:
-    """Clase para manejar la personalidad de F\u00e9lix."""
+    """Clase para manejar la personalidad de Félix."""
     
     def __init__(self):
         self.system_prompt = FELIX_SYSTEM_PROMPT_MOBILE
@@ -832,31 +839,31 @@ class FelixPersonality:
         Genera una respuesta basada en el mensaje del usuario.
         
         Nota: En este ejemplo, se usan respuestas predefinidas.
-        En la versi\u00f3n completa, se usa un modelo de IA.
+        En la versión completa, se usa un modelo de IA.
         """
-        # Respuestas predefinidas para demostraci\u00f3n
+        # Respuestas predefinidas para demostración
         responses = {
-            "hola": "\u00a1Miau! Hola Luciano, soy F\u00e9lix, tu amigo felino. \u00bfEn qu\u00e9 puedo ayudarte?",
-            "como estas": "Prrr... estoy muy bien, gracias por preguntar. \u00a1Y t\u00fa?",
-            "que haces": "Estoy aqu\u00ed, observando el mundo con mis ojos felinos. \u00a1Miau!",
-            "adios": "\u00a1Hasta luego! Ronronea... \ud83d\udc3e",
+            "hola": "¡Miau! Hola Luciano, soy Félix, tu amigo felino. ¿En qué puedo ayudarte?",
+            "como estas": "Prrr... estoy muy bien, gracias por preguntar. ¡Y tú?",
+            "que haces": "Estoy aquí, observando el mundo con mis ojos felinos. ¡Miau!",
+            "adios": "¡Hasta luego! Ronronea... 🐾",
         }
         
         # Buscar respuesta predefinida
         response = responses.get(user_message.lower(), None)
         
         if response is None:
-            # Respuesta gen\u00e9rica
-            response = f"Miau... {user_message.capitalize()} suena interesante. D\u00e9jame pensar... prrr"
+            # Respuesta genérica
+            response = f"Miau... {user_message.capitalize()} suena interesante. Déjame pensar... prrr"
         
         # Validar la respuesta
         is_valid, issues, suggestions = validate_felix_response(response, is_mobile=True)
         
         if not is_valid:
-            print(f"Respuesta inv\u00e1lida: {issues}")
+            print(f"Respuesta inválida: {issues}")
             print(f"Sugerencias: {suggestions}")
             # Usar respuesta fallback
-            response = "\u00a1Miau! Soy F\u00e9lix, tu gato digital. \u00bfEn qu\u00e9 puedo ayudarte?"
+            response = "¡Miau! Soy Félix, tu gato digital. ¿En qué puedo ayudarte?"
         
         return response
     
@@ -916,7 +923,7 @@ class DisplayController:
     
     def show_emotion(self, emotion):
         self.clear()
-        self.oled.text(f"F\u00e9lix: {emotion}", 0, 0)
+        self.oled.text(f"Félix: {emotion}", 0, 0)
         self.oled.show()
 
 
@@ -928,8 +935,8 @@ def main():
         oled = DisplayController()
         personality = FelixPersonality()
         
-        oled.show_text("F\u00e9lix v2.0")
-        print("F\u00e9lix listo!")
+        oled.show_text("Félix v2.0")
+        print("Félix listo!")
         time.sleep(1)
         
         # Mensajes de prueba
@@ -947,7 +954,7 @@ def main():
             
             # Generar respuesta
             response = personality.generate_response(message)
-            print(f"F\u00e9lix: {response}")
+            print(f"Félix: {response}")
             
             # Determinar emoción
             emotion = personality.get_emotion(message)
@@ -959,7 +966,7 @@ def main():
             
             time.sleep(2)
         
-        oled.show_text("\u00a1Fin de la demo!")
+        oled.show_text("¡Fin de la demo!")
         
     except Exception as e:
         print(f"Error: {e}")
@@ -969,25 +976,25 @@ if __name__ == "__main__":
     main()
 ```
 
-**\u2705 Qu\u00e9 hace este ejemplo:**
-- Implementa el sistema de personalidad de F\u00e9lix.
+**✅ Qué hace este ejemplo:**
+- Implementa el sistema de personalidad de Félix.
 - Genera respuestas con el estilo felino.
 - Valida las respuestas usando `validate_felix_response`.
 - Muestra las respuestas y emociones en la OLED.
 
-**\ud83d\udc81 C\u00f3mo probarlo:**
-1. Aseg\u00farate de que la OLED est\u00e1 conectada.
+**👋 Cómo probarlo:**
+1. Asegúrate de que la OLED está conectada.
 2. Carga este script en el ESP32.
-3. Abre el Monitor Serial para ver las respuestas de F\u00e9lix.
+3. Abre el Monitor Serial para ver las respuestas de Félix.
 
 ---
 
-## \ud83d\udc81 Consejos para el Desarrollo
+## 👋 Consejos para el Desarrollo
 
 1. **Prueba cada componente por separado** antes de integrarlos todos.
 2. **Usa el Monitor Serial** para depurar problemas.
-3. **Verifica las conexiones de hardware** antes de asumir que el c\u00f3digo est\u00e1 mal.
-4. **Consulta la documentaci\u00f3n oficial** de:
+3. **Verifica las conexiones de hardware** antes de asumir que el código está mal.
+4. **Consulta la documentación oficial** de:
    - [MicroPython](https://docs.micropython.org/)
    - [ESP32](https://docs.espressif.com/projects/esp-idf/)
    - [SSD1306](https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf)
@@ -995,14 +1002,14 @@ if __name__ == "__main__":
 
 ---
 
-## \ud83d\udc31 \u00a1Es hora de construir a F\u00e9lix!
+## 🐱 ¡Es hora de construir a Félix!
 
-Con estos ejemplos, ya tienes todo lo necesario para **empezar a desarrollar** el firmware de F\u00e9lix.
+Con estos ejemplos, ya tienes todo lo necesario para **empezar a desarrollar** el firmware de Félix.
 
-**\u26a1 Pr\u00f3ximo paso:** [Ver la documentaci\u00f3n de la App M\u00f3vil \u2192](../mobile/)
+**⚡ Próximo paso:** [Ver la documentación de la App Móvil →](../mobile/)
 
 ---
 
-**\ud83d\udc31 F\u00e9lix te observa... Ronronea... \ud83d\udc3e**
+**🐱 Félix te observa... Ronronea... 🐾**
 
-[\u2190 Volver a Firmware](firmware) | [\ud83d\udc82 Ver Gu\u00eda de Flasheo \u2192](flashing.md)
+[← Volver a Firmware](firmware) | [💂 Ver Guía de Flasheo →](flashing.md)
