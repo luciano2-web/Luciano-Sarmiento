@@ -6,7 +6,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-1A237E?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-A7D8FF?style=for-the-badge&logo=python)](https://www.python.org/)
-[![Kivy](https://img.shields.io/badge/Kivy-2.2%2B-39FFB6?style=for-the-badge)](https://kivy.org/)
+[![Kivy](https://img.shields.io/badge/Kivy-2.2%2B-39FFB6?style=for-the-badge&logo=kivy)](https://kivy.org/)
 [![ESP32](https://img.shields.io/badge/ESP32-WROOM--32-1A237E?style=for-the-badge)](https://www.espressif.com/)
 
 [![Stars](https://img.shields.io/github/stars/luciano2-web/Luciano-Sarmiento?style=social)](https://github.com/luciano2-web/Luciano-Sarmiento/stargazers)
@@ -77,7 +77,7 @@ flowchart TD
     
     style Hardware fill:#1A237E,stroke:#fff,color:#fff
     style Mobile fill:#A7D8FF,stroke:#1A237E,color:#1A237E
-    style Cloud fill:#39FFB6,stroke:#1A237E,color:#1A237E
+    style Cloud fill:#39FFB6,stroke:#1A237E,color:#39FFB6
 ```
 
 ---
@@ -214,12 +214,27 @@ Félix no es solo un chatbot: es un gato digital con alma felina, calidez y curi
 
 ---
 
+## 🏆 Niveles y colaboradores
+
+Consulta [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para ver los niveles, privilegios y detección automática.
+
+<!-- BADGES-START -->
+| Usuario | Contribuciones | Nivel |
+|---|---|---|
+| 🐱 **Luciano Sarmiento (Kiten)** | Owner — creador del proyecto | 🐱 Kiten |
+<!-- BADGES-END -->
+
+> 🤖 Esta tabla se actualiza automáticamente con `.github/workflows/levels.yml`.
+
+---
+
 ## 📁 Estructura del proyecto
 
 ```text
 Luciano-Sarmiento/
 ├── docs/                          # Documentación
 │   ├── ARCHITECTURE.md           # Arquitectura general
+│   ├── PLAN_CUMPLIMIENTO_PROMESAS.md
 │   ├── hardware/
 │   │   ├── components.md         # Lista de componentes
 │   │   └── assembly.md           # Guía de montaje
@@ -228,6 +243,9 @@ Luciano-Sarmiento/
 │   │   └── examples.md           # Ejemplos de MicroPython
 │   └── mobile/
 │       └── setup.md              # Configuración de la app
+│
+├── scripts/
+│   └── update_levels.py          # Detección automática de niveles
 │
 ├── src/
 │   ├── core/
@@ -243,6 +261,10 @@ Luciano-Sarmiento/
 │       ├── audio_handler.py
 │       └── display.py
 │
+├── .github/workflows/
+│   ├── levels.yml                # Niveles automáticos
+│   └── welcome.yml               # Bienvenida automática
+│
 ├── assets/                       # Recursos visuales
 │   ├── felix_concept.jpg
 │   └── felix_robot_simulator.html
@@ -251,6 +273,8 @@ Luciano-Sarmiento/
 │   ├── test_personality.py
 │   └── test_chat_engine.py
 │
+├── CONTRIBUTORS.json             # Fuente de verdad de contribuciones
+├── CONTRIBUTORS.md               # Tabla humana de colaboradores
 ├── CONTRIBUTING.md               # Cómo contribuir
 ├── CODE_OF_CONDUCT.md            # Código de conducta
 ├── LICENSE                       # Licencia Apache 2.0
@@ -262,12 +286,15 @@ Luciano-Sarmiento/
 
 ## 🎯 Roadmap
 
+- [x] Sistema de niveles automático (GitHub Actions)
+- [x] Bienvenida automática en issues y PRs
 - [ ] Mejorar la integración de voz
 - [ ] Añadir más expresiones faciales físicas
 - [ ] Mejorar la personalidad con memoria contextual
 - [ ] Soporte para más modelos de IA
 - [ ] Optimizar la app móvil para Android
 - [ ] Publicar guías más detalladas de montaje y firmware
+- [ ] Demo reproducible con capturas reales
 
 ---
 
@@ -345,7 +372,3 @@ Consulta la guía de contribución aquí:
 *Hecho con ❤️ para Luciano y todos los amantes de los gatos y la IA.*
 
 </div>
-
-## 🏆 Niveles de colaboradores
-
-Consulta [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para ver los niveles, privilegios y detección automática.
