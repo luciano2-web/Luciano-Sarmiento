@@ -1,0 +1,62 @@
+{
+  "updated_at": "2026-11-08T00:00:00Z",
+  "rules": {
+    "auto_levels": {
+      "1": {
+        "name": "Pixel",
+        "emoji": "👾",
+        "requirement": "prs_merged >= 1"
+      },
+      "2": {
+        "name": "Flyer",
+        "emoji": "🐝",
+        "requirement": "prs_merged >= 3"
+      },
+      "3": {
+        "name": "Penguin",
+        "emoji": "🐧",
+        "requirement": "prs_merged >= 5"
+      }
+    },
+    "manual_levels": {
+      "4": {
+        "name": "Raccoon",
+        "emoji": "🦝",
+        "requirement": "contribuciones recurrentes en un área (decisión del mantenedor)"
+      },
+      "5": {
+        "name": "Fox",
+        "emoji": "🦊",
+        "requirement": "contribuciones sustanciales (decisión del mantenedor)"
+      },
+      "6": {
+        "name": "Wolfy",
+        "emoji": "🐺",
+        "requirement": "liderazgo de área (decisión del mantenedor)"
+      },
+      "7": {
+        "name": "Buhny",
+        "emoji": "🦉",
+        "requirement": "maintainer confirmado por Luciano"
+      }
+    },
+    "demotion": "inactividad > 90 días sin contribución",
+    "max_auto_level": 3
+  },
+  "contributors": [
+    {
+      "login": "luciano2-web",
+      "name": "Luciano Sarmiento",
+      "emoji": "🐱",
+      "role": "owner",
+      "level": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "reviews": 0,
+      "last_contribution": null,
+      "joined": "2026-11-08",
+      "manual": true,
+      "note": "Kiten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones."
+    }
+  ]
+}
