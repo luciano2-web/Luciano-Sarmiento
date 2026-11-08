@@ -1,0 +1,47 @@
+name: 🏆 Niveles de colaboradores
+
+on:
+  pull_request_target:
+    types: [closed]
+  issues:
+    types: [closed]
+  schedule:
+    - cron: "0 6 * * 1"   # recálculo semanal (inactividad)
+  workflow_dispatch:        # ejecución manual
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  update-levels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Actualizar niveles y badges
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+        run: python scripts/update_levels.py
+
+      - name: Publicar cambios en CONTRIBUTORS.md y README
+        run: |
+          git config user.name "felix-gato-bot"
+          git config user.email "actions@github.com"
+          git add CONTRIBUTORS.json CONTRIBUTORS.md README.md
+          if git diff --cached --quiet; then
+            echo "Sin cambios que publicar."
+          else
+            git commit -m "🤖 niveles: actualiza contribuciones, niveles y badges"
+            git push
+          fi
