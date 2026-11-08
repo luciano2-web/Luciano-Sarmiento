@@ -15,7 +15,7 @@
 | 5 | 🦊 | Fox | Contribuciones sustanciales (features, firmware, móvil) | Merge de código, crear releases, acceso a CI/Actions, botón "Approve" |
 | 6 | 🐺 | Wolfy | Liderazgo de área (hardware/firmware/app/IA) | Admin parcial: labels, milestones, moderación, gestionar projects board |
 | 7 | 🦉 | Buhny | Maintainer confirmado por Luciano | Admin full: aprobar PRs, gestionar repo, merge a main, moderación final |
-| 🐦‍🔥 | — | Félix | Nivel casi inalcanzable: visión técnica + decisión final | Define roadmap, aprueba cambios a personality.py, firma releases |
+| 🐦‍🔥 | — | Fénix | Nivel casi inalcanzable: visión técnica + decisión final | Define roadmap, aprueba cambios a personality.py, firma releases |
 | 🐱 | — | Kiten (Luciano) | Owner del proyecto | Control absoluto: repo, branding, licencia, decisiones finales |
 
 ## Detección automática
