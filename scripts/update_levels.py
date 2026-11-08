@@ -56,6 +56,14 @@ def save(data):
 
 
 def get_contributor(data, login):
+    if login.lower() == "luciano2-web":
+        for c in data["contributors"]:
+            if c["login"].lower() == "luciano2-web":
+                c["role"]="owner"; c["level"]=0; c["manual"]=True; c["name"]="Luciano Sarmiento"
+                return c
+        c = {"login":"luciano2-web","name":"Luciano Sarmiento","emoji":"🐱","role":"owner","level":0,"prs_merged":0,"issues_closed":0,"reviews":0,"last_contribution":None,"joined":"2026-11-08","manual":True,"note":"Kiten — Owner. Inmutable."}
+        data["contributors"].insert(0,c)
+        return c
     for c in data["contributors"]:
         if c["login"].lower() == login.lower():
             return c
@@ -91,7 +99,7 @@ def process_event(data):
         # un issue cerrado por el propio autor cuenta como triage suave
         login = os.environ.get("ISSUE_AUTHOR", "")
 
-    if login:
+    if login and login.lower() != "luciano2-web":
         c = get_contributor(data, login)
         if event == "pull_request_target":
             c["prs_merged"] += 1
@@ -113,6 +121,7 @@ def demote_inactive(data):
     changes = []
     limit = now() - timedelta(days=INACTIVITY_DAYS)
     for c in data["contributors"]:
+        if c.get("login","").lower()=="luciano2-web": continue
         if c.get("manual") or c["level"] <= 0 or not c.get("last_contribution"):
             continue
         last = datetime.strptime(c["last_contribution"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
