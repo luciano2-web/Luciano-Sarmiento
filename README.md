@@ -108,6 +108,15 @@ flowchart TD
 
 ---
 
+## ⚡ Empezar en 5 minutos
+
+1. `git clone https://github.com/luciano2-web/Luciano-Sarmiento.git && cd Luciano-Sarmiento`
+2. `python -m venv venv && source venv/bin/activate`
+3. `pip install -r src/mobile/requirements_mobile.txt`
+4. `python src/mobile/main.py`
+
+¿Primera contribución? Mira los issues etiquetados `good first issue`.
+
 ## 🚀 Inicio rápido
 
 ### 1) Computadora local
