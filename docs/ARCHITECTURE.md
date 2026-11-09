@@ -96,7 +96,7 @@ Módulos existentes en `src/firmware/`:
 - `audio_handler.py`: inicialización de I2S para captura mono y salida PWM experimental; incluye grabación y tonos de prueba.
 - `bluetooth_bridge.py`: serializa mensajes JSON delimitados por salto de línea y los envía/recibe mediante UART. **UART no proporciona por sí solo Bluetooth SPP**; para una conexión inalámbrica se necesita un periférico o módulo Bluetooth compatible y su configuración correspondiente.
 - `display.py`: inicializa y controla una pantalla OLED SSD1306 por I2C.
-- `touch_sensor.py`: lee el TouchPad capacitivo del ESP32 clásico (GPIO 32 por defecto) y emite eventos de toque corto y pulsación larga. Aún debe ser llamado desde un bucle principal; no está integrado automáticamente.
+- `touch_sensor.py`: lee el TouchPad capacitivo del ESP32 clásico (GPIO 32 por defecto) y emite eventos de toque corto (`pet`), doble toque (`annoyed`) y pulsación larga (`press_to_talk`). Aún debe ser llamado desde un bucle principal; no está integrado automáticamente.
 
 No existe todavía un módulo `servos.py` ni código que inicialice o controle `servo_head` y `servo_tail`. Los nombres quedan establecidos como referencias de documentación; la selección de servos, alimentación, controlador, pines y pruebas debe definirse antes de implementar el control.
 
