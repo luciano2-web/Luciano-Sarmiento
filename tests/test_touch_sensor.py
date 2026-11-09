@@ -29,7 +29,7 @@ class TouchSensorTests(unittest.TestCase):
         self.assertEqual(sensor.poll(101)["type"], "pet")
 
     def test_long_touch_emits_press_to_talk_events(self):
-        pad = FakeTouchPad([1000, 500, 500, 500, 1000, 1000])
+        pad = FakeTouchPad([1000, 500, 500, 500, 500, 1000, 1000])
         sensor = TouchSensor(
             pad, threshold=800, long_press_ms=900, debounce_ms=0
         )
