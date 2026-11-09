@@ -32,6 +32,11 @@ Asegúrate de tener todos los componentes de la **[lista de componentes](compone
 - ✅ Protoboard de 400+ puntos
 - ✅ Cables jumper (Macho-Hembra)
 - ✅ Power Bank 5V/2A
+- ⏳ Servos para cabeza y cola (`servo_head` / `servo_tail`): previstos, pero modelo, cantidad física, alimentación y conexiones pendientes de definir.
+
+### 🦾 Servos: estado de integración
+
+Los servos forman parte de los componentes previstos, pero todavía no existe un módulo de firmware para controlarlos ni un esquema eléctrico aprobado. No añadas conexiones a pines concretos ni alimentes los servos desde el ESP32 hasta que se documenten el modelo, el consumo, la alimentación y el controlador adecuados. El colaborador puede implementar y probar esta parte cuando esas especificaciones estén confirmadas.
 
 ### 🐾 Herramientas Necesarias
 - ✅ Pinzas para cortar/pelar cables
