@@ -94,9 +94,9 @@ flowchart TD
 | **Parlante** | 4Ω 3W | $2 - $5 | Reproducir voz |
 | **Protoboard** | 400 puntos | $5 - $10 | Montaje |
 | **Power Bank** | 5V/2A | $10 - $20 | Alimentación |
-| **Servos** | Modelo y alimentación por definir | Por definir | Movimiento de cabeza y cola (servo_head / servo_tail) |
+| **Servos** | Modelo y alimentación por definir | Por definir | Movimiento de cabeza y cola (servo_head / servo_tail) |\n| **Sensor táctil** | TouchPad capacitivo GPIO 32 (ESP32 clásico) | Incluido en el chip + electrodo | Detectar caricias y pulsaciones largas |\n| **Cámara** | Placa ESP32-S3 con PSRAM + cámara compatible (por seleccionar) | Por definir | Capturar imágenes para visión; pendiente de integración |
 
-**Nota sobre servos:** `servo_head` y `servo_tail` son nombres de referencia para el diseño. El firmware todavía no incluye un módulo de control de servos; consulta la [lista de componentes](docs/hardware/components.md) antes de definir conexiones o pines.
+**Nota sobre el tacto:** el módulo `src/firmware/touch_sensor.py` ya traduce un toque corto en `pet` y una pulsación larga en eventos de inicio/fin de pulsar-para-hablar. Todavía falta conectarlo al bucle principal y al audio de la app.\n\n**Nota sobre la cámara:** no está lista para conectar al ESP32-WROOM-32 actual. La placa y el sensor deben seleccionarse antes de escribir el controlador. Consulta el [Issue #39](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39).\n\n**Nota sobre servos:** `servo_head` y `servo_tail` son nombres de referencia para el diseño. El firmware todavía no incluye un módulo de control de servos; consulta la [lista de componentes](docs/hardware/components.md) antes de definir conexiones o pines.
 
 → [Ver lista completa de componentes](docs/hardware/components.md)
 
