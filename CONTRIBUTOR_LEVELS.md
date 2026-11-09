@@ -2,7 +2,7 @@
 
 > Sistema de progresión por contribuciones **para personas**, no para el robot.
 > Cada nivel desbloquea privilegios reales dentro del proyecto y el sistema
-> detecta automáticamente lo que haces para subirte o bajarte de nivel.
+detecta automáticamente lo que haces para subirte o bajarte de nivel.
 
 ## Niveles
 
@@ -41,6 +41,7 @@ Para que te sientas acompañado desde el primer día:
 - Un PR grande puede contar como +2 niveles si Luciano lo decide.
 - La pérdida de privilegios por mal comportamiento queda a discreción del nivel Buhny/Félix.
 - Los niveles 🐦‍🔥 y 🐱 son simbólicos y no se "alcanzan": representan la identidad del proyecto.
+- El nivel más alto alcanzable por contribución es 🦉 Buhny. Kiten y Fénix son roles simbólicos del owner y no forman parte del sistema automático.
 
 ## Reconocimiento
 - Badge visual en el README por nivel.

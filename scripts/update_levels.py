@@ -10,24 +10,26 @@ y regenera:
   - README.md          (badges, entre los marcadores BADGES)
 
 Reglas automáticas (hasta nivel 3):
-  Nivel 1 👾 Pixel    : >= 1 PR merged
-  Nivel 2 🐝 Flyer   : >= 3 PRs merged
-  Nivel 3 🐧 Penguin : >= 5 PRs merged
-Niveles 4-7 son manuales (decisión del mantenedor).
-Baja de nivel por inactividad > 90 días (solo si nivel fue automático).
+  Nivel 1 👾 Pixel  : >= 1 PR merged
+  Nivel 2 🐝 Flyer  : >= 3 PRs merged
+  Nivel 3 🐧 Penguin: >= 5 PRs merged
+  Nivel 4+ son manuales (Raccoon, Fox, Wolfy, Buhny)
+
+Kiten y Fénix son roles simbólicos del owner y no forman parte de la progresión
+automática ni pueden alcanzarse por contribuciones.
 """
 import json
 import os
 import sys
 from datetime import datetime, timezone, timedelta
 
+OWNER_LOGIN = "luciano2-web"
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JSON_PATH = os.path.join(REPO_ROOT, "CONTRIBUTORS.json")
 CONTRIB_MD = os.path.join(REPO_ROOT, "CONTRIBUTORS.md")
 README_MD = os.path.join(REPO_ROOT, "README.md")
 INACTIVITY_DAYS = 90
 LEVEL_NAMES = {
-    0: ("🐱", "Kiten (Owner)"),
     1: ("👾", "Pixel"),
     2: ("🐝", "Flyer"),
     3: ("🐧", "Penguin"),
@@ -43,6 +45,10 @@ def now():
     return datetime.now(timezone.utc)
 
 
+def normalize_login(login):
+    return (login or "").strip().lower()
+
+
 def load():
     with open(JSON_PATH, encoding="utf-8") as f:
         return json.load(f)
@@ -56,25 +62,59 @@ def save(data):
 
 
 def get_contributor(data, login):
-    if login.lower() == "luciano2-web":
+    normalized = normalize_login(login)
+    if not normalized:
+        raise ValueError("login vacío")
+
+    if normalized == OWNER_LOGIN:
         for c in data["contributors"]:
-            if c["login"].lower() == "luciano2-web":
-                c["role"]="owner"; c["level"]=0; c["manual"]=True; c["name"]="Luciano Sarmiento"
+            if normalize_login(c.get("login", "")) == OWNER_LOGIN:
+                c["login"] = "luciano2-web"
+                c["name"] = "Luciano Sarmiento"
+                c["emoji"] = "🐱"
+                c["role"] = "owner"
+                c["level"] = 0
+                c["manual"] = True
+                c["note"] = "Kiten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones."
                 return c
-        c = {"login":"luciano2-web","name":"Luciano Sarmiento","emoji":"🐱","role":"owner","level":0,"prs_merged":0,"issues_closed":0,"reviews":0,"last_contribution":None,"joined":"2026-11-08","manual":True,"note":"Kiten — Owner. Inmutable."}
-        data["contributors"].insert(0,c)
-        return c
+
+        contributor = {
+            "login": "luciano2-web",
+            "name": "Luciano Sarmiento",
+            "emoji": "🐱",
+            "role": "owner",
+            "level": 0,
+            "prs_merged": 0,
+            "issues_closed": 0,
+            "reviews": 0,
+            "last_contribution": None,
+            "joined": now().strftime("%Y-%m-%d"),
+            "manual": True,
+            "note": "Kiten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones.",
+        }
+        data["contributors"].insert(0, contributor)
+        return contributor
+
     for c in data["contributors"]:
-        if c["login"].lower() == login.lower():
+        if normalize_login(c.get("login", "")) == normalized:
             return c
-    c = {
-        "login": login, "name": login, "emoji": "", "role": "contributor",
-        "level": 0, "prs_merged": 0, "issues_closed": 0, "reviews": 0,
-        "last_contribution": None, "joined": now().strftime("%Y-%m-%d"),
-        "manual": False, "note": "",
+
+    contributor = {
+        "login": login,
+        "name": login,
+        "emoji": "",
+        "role": "contributor",
+        "level": 0,
+        "prs_merged": 0,
+        "issues_closed": 0,
+        "reviews": 0,
+        "last_contribution": None,
+        "joined": now().strftime("%Y-%m-%d"),
+        "manual": False,
+        "note": "",
     }
-    data["contributors"].append(c)
-    return c
+    data["contributors"].append(contributor)
+    return contributor
 
 
 def auto_level(prs_merged):
@@ -96,23 +136,31 @@ def process_event(data):
         if os.environ.get("PR_MERGED", "false") == "true":
             login = os.environ.get("PR_AUTHOR", "")
     elif event == "issues":
-        # un issue cerrado por el propio autor cuenta como triage suave
         login = os.environ.get("ISSUE_AUTHOR", "")
 
-    if login and login.lower() != "luciano2-web":
-        c = get_contributor(data, login)
-        if event == "pull_request_target":
-            c["prs_merged"] += 1
-        elif event == "issues":
-            c["issues_closed"] += 1
-        c["last_contribution"] = now().strftime("%Y-%m-%d")
-        if not c["manual"]:
-            old = c["level"]
-            new = max(c["level"], auto_level(c["prs_merged"]))
-            if new > old:
-                c["level"] = new
-                emoji, name = LEVEL_NAMES[new]
-                changes.append(f"{login} sube a nivel {new} {emoji} {name}")
+    if not login:
+        return changes
+
+    normalized = normalize_login(login)
+    if normalized == OWNER_LOGIN:
+        return changes
+
+    contributor = get_contributor(data, login)
+    if contributor.get("manual"):
+        return changes
+
+    if event == "pull_request_target":
+        contributor["prs_merged"] = int(contributor.get("prs_merged", 0)) + 1
+    elif event == "issues":
+        contributor["issues_closed"] = int(contributor.get("issues_closed", 0)) + 1
+
+    contributor["last_contribution"] = now().strftime("%Y-%m-%d")
+    old = int(contributor.get("level", 0) or 0)
+    new = max(old, auto_level(int(contributor.get("prs_merged", 0))))
+    if new > old:
+        contributor["level"] = new
+        emoji, name = LEVEL_NAMES[new]
+        changes.append(f"{login} sube a nivel {new} {emoji} {name}")
     return changes
 
 
@@ -120,26 +168,31 @@ def demote_inactive(data):
     """Baja un nivel a contribuidores inactivos > 90 días (solo automáticos)."""
     changes = []
     limit = now() - timedelta(days=INACTIVITY_DAYS)
-    for c in data["contributors"]:
-        if c.get("login","").lower()=="luciano2-web": continue
-        if c.get("manual") or c["level"] <= 0 or not c.get("last_contribution"):
+    for contributor in data["contributors"]:
+        if normalize_login(contributor.get("login", "")) == OWNER_LOGIN:
             continue
-        last = datetime.strptime(c["last_contribution"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        if contributor.get("manual") or contributor.get("level", 0) <= 0 or not contributor.get("last_contribution"):
+            continue
+        last = datetime.strptime(contributor["last_contribution"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
         if last < limit:
-            c["level"] -= 1
-            changes.append(f"{c['login']} baja a nivel {c['level']} por inactividad")
+            contributor["level"] -= 1
+            changes.append(f"{contributor['login']} baja a nivel {contributor['level']} por inactividad")
     return changes
 
 
-def badge_line(c):
-    if c.get("role") == "owner":
-        return f"| 🐱 **{c['name']} (Kiten)** | Owner — creador del proyecto | 🐱 Kiten |"
-    emoji, name = LEVEL_NAMES.get(c["level"], ("", "?"))
-    return f"| [@{c['login']}](https://github.com/{c['login']}) | {c['prs_merged']} PRs · {c['issues_closed']} issues | {emoji} {name} |"
+def badge_line(contributor):
+    if contributor.get("role") == "owner":
+        return f"| 🐱 **{contributor['name']} (Kiten)** | Owner — creador del proyecto | 🐱 Kiten |"
+
+    level = int(contributor.get("level", 0) or 0)
+    if level <= 0:
+        return f"| [@{contributor['login']}](https://github.com/{contributor['login']}) | {contributor.get('prs_merged', 0)} PRs · {contributor.get('issues_closed', 0)} issues | — Sin nivel |"
+
+    emoji, name = LEVEL_NAMES.get(level, ("", "?"))
+    return f"| [@{contributor['login']}](https://github.com/{contributor['login']}) | {contributor.get('prs_merged', 0)} PRs · {contributor.get('issues_closed', 0)} issues | {emoji} {name} |"
 
 
 def regenerate_docs(data):
-    # --- CONTRIBUTORS.md ---
     rows = "\n".join(badge_line(c) for c in data["contributors"])
     md = (
         "# Colaboradores de Felix / GatoGPT\n\n"
@@ -153,7 +206,6 @@ def regenerate_docs(data):
     with open(CONTRIB_MD, "w", encoding="utf-8") as f:
         f.write(md)
 
-    # --- README badges (entre marcadores) ---
     badges = "\n".join(badge_line(c) for c in data["contributors"])
     section = f"<!-- BADGES-START -->\n| Usuario | Contribuciones | Nivel |\n|---|---|---|\n{badges}\n<!-- BADGES-END -->"
     with open(README_MD, encoding="utf-8") as f:
