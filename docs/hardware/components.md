@@ -28,6 +28,7 @@ Este documento detalla **todos los componentes de hardware** necesarios para con
 | 5 | **Protoboard** | 400 puntos | 1 | $5 - $10 | Montaje de componentes | - |
 | 6 | **Cables Jumper** | Macho-Hembra | 20 | $3 - $6 | Conexiones | - |
 | 7 | **Fuente de Poder** | Power Bank 5V/2A | 1 | $10 - $20 | Alimentación | USB |
+| 8 | **Servos** | Modelo por definir | Por definir | Por definir | Movimiento de cabeza y cola (`servo_head` / `servo_tail`) | Por definir |
 
 **Total estimado (básico):** **$33 - $63 USD**
 
@@ -45,6 +46,15 @@ Este documento detalla **todos los componentes de hardware** necesarios para con
 | 13 | **Carcasa 3D** | Impresión 3D | 1 | $10 - $30 | Cuerpo de Félix | - |
 
 **Total estimado (con mejoras):** **$62 - $135 USD**
+
+### 🦾 Servos y movimiento
+
+Los servos se contemplan como componentes del proyecto para permitir el movimiento de la cabeza y la cola. Para mantener una nomenclatura coherente, se reservan estos identificadores:
+
+- `servo_head`: servo destinado al movimiento de la cabeza.
+- `servo_tail`: servo destinado al movimiento de la cola.
+
+**Estado actual:** el repositorio todavía no contiene un módulo de firmware que controle servos. El modelo, cantidad física, alimentación, controlador, pines y límites de movimiento quedan pendientes de definir según los servos y el montaje que se seleccionen. No conectes servos ni asumas pines o voltajes hasta documentar y verificar esas especificaciones. Esta sección no representa una implementación funcional.
 
 ---
 
