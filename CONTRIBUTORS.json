@@ -3,7 +3,7 @@
   "rules": {
     "auto_levels": {
       "1": {
-        "name": "Kitten",
+        "name": "Pixel",
         "emoji": "👾",
         "requirement": "prs_merged >= 1"
       },
