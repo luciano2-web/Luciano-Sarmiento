@@ -1,59 +1,26 @@
----
-name: Pull Request
-title: ''
-description: ''
-labels: ''
-assignees: ''
----
+## ¿Qué cambia y por qué?
+<!-- Explica el problema que resuelve este PR. -->
 
-## 📣 Tipo de cambio
-- [ ] ⚡️ **Corrección de error** (Corrige un error)
-- [ ] ✨ **Nueva funcionalidad** (Añade una nueva funcionalidad)
-- [ ] 📚 **Documentación** (Mejoras en la documentación)
-- [ ] 🧹 **Refactorización de código** (Reorganiza el código sin cambiar la funcionalidad)
-- [ ] ⚙️ **Hardware** (Cambios en el hardware o firmware)
-- [ ] 🚀 **Rendimiento** (Optimización del rendimiento)
-- [ ] 🎨 **Interfaz de usuario / experiencia** (Mejoras en la interfaz de usuario)
-- [ ] ✅ **Pruebas** (Añade o mejora pruebas)
-- [ ] 👨‍💻 **Mantenimiento** (Tareas de mantenimiento)
+## Equipo / issue relacionado
+<!-- Enlaza el issue y el equipo (1 a 5). -->
 
----
+## Cambios realizados
+- 
 
-## 📑 Descripción
-**Explica de manera clara y detallada los cambios realizados.**
+## Cómo lo comprobaste
+- [ ] Pruebas automatizadas (indica el comando y resultado).
+- [ ] Simulación (indica qué se simuló).
+- [ ] Hardware real (indica placa y componentes exactos).
+- [ ] No pude ejecutar pruebas (explica por qué).
 
----
+## Estado y limitaciones
+<!-- Distingue código implementado, experimental y pendiente. No marques hardware como probado si no lo conectaste. -->
 
-## 📦 Motivación y contexto
-**¿Por qué se necesitan estos cambios?**
+## Lista de revisión
+- [ ] El cambio se limita al objetivo del issue.
+- [ ] Actualicé la documentación si hacía falta.
+- [ ] No añadí credenciales ni datos personales.
+- [ ] No inventé pines, voltajes, modelos ni resultados.
+- [ ] Respondí a los comentarios de revisión.
 
----
-
-## 📷 Capturas de pantalla / videos
-**Si aplica, adjunta capturas de pantalla o videos que muestren los cambios.**
-
----
-
-## 👩‍💻 Cambios relacionados
-- [ ] He actualizado la documentación.
-- [ ] He añadido pruebas para los cambios.
-- [ ] Todas las pruebas pasan.
-- [ ] He verificado que el sistema de personalidad de Félix (`personality.py`) siga funcionando correctamente.
-
----
-
-## 🧩 Issues relacionadas
-**Menciona las issues que este PR resuelve o está relacionado.**
-
-Cierra #
-Corrige #
-Relacionado con #
-
----
-
-## 📝 Notas adicionales
-**Cualquier otro detalle relevante.**
-
----
-
-**🐱 ¡Gracias por contribuir a Félix! Ronronea... 🐾**
+¡Gracias por aportar a Félix!
