@@ -32,7 +32,7 @@ Asegúrate de tener todos los componentes de la **[lista de componentes](compone
 - ✅ Protoboard de 400+ puntos
 - ✅ Cables jumper (Macho-Hembra)
 - ✅ Power Bank 5V/2A
-- ⏳ Servos para cabeza y cola (`servo_head` / `servo_tail`): previstos, pero modelo, cantidad física, alimentación y conexiones pendientes de definir.
+- ⏳ Servos para cabeza y cola (`servo_head` / `servo_tail`): previstos, pero modelo, cantidad física, alimentación y conexiones pendientes de definir. Esta es la convención estándar del proyecto para la nomenclatura de los servos.
 
 ### 🦾 Servos: estado de integración
 
