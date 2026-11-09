@@ -40,11 +40,31 @@ Félix no es solo un chatbot: es un gato digital con alma felina, capaz de conve
 - Conversación con IA en tiempo real
 - Personalidad felina y estilo propio
 - Interfaz móvil con Kivy
-- Soporte para audio y voz
-- Integración con ESP32
+- Módulos de audio/voz en desarrollo; conversación de extremo a extremo pendiente
+- Módulos de firmware ESP32 en desarrollo; integración física completa pendiente
 - Simulador web para probar sin hardware
 - Arquitectura abierta y extensible
 - Diseño pensado para proyectos maker e investigación creativa
+
+---
+
+## 🔎 Estado técnico transparente
+
+Esta tabla distingue el código que ya existe de las funciones que todavía no están completas. **Que un módulo esté en el repositorio no significa que esté validado en el robot físico.**
+
+| Área | Estado | Qué se puede afirmar hoy |
+|---|---|---|
+| App móvil Kivy | <strong>Implementado parcialmente</strong> | Hay estructura y módulos de aplicación; falta demostrar el flujo completo con el robot. |
+| Firmware de pantalla/audio/comunicación | <strong>Implementado parcialmente</strong> | Hay módulos separados; falta integrarlos y probarlos juntos en una placa concreta. |
+| Simulador web | <strong>Disponible</strong> | Permite explorar una representación de Félix; no equivale a hardware real. |
+| Sensor táctil | <strong>Experimental — PR #40</strong> | Hay una propuesta de módulo y pruebas de lógica; aún no está integrado en `main` ni validado físicamente. |
+| Servos y movimiento | <strong>Planeado</strong> | Los modelos, alimentación, conexiones y control todavía deben definirse. |
+| Cámara y visión | <strong>Planeado</strong> | Primero se debe seleccionar una placa y cámara compatibles; no hay captura integrada. |
+| Comunicación móvil ↔ ESP32 sin nube | <strong>En desarrollo de diseño</strong> | El protocolo, la reconexión y el modo local siguen pendientes. |
+| Proveedores en la app | <strong>Planeado</strong> | El directorio y sus filtros todavía deben construirse. |
+| Prototipo físico | <strong>Planeado para 2027</strong> | La construcción espera a disponer de materiales y revisar el diseño. |
+
+**Regla de publicación:** cada PR debe indicar si lo mostrado es código, simulación o una prueba realizada en hardware real. No se anunciará una función como terminada hasta que sus criterios de aceptación se hayan comprobado.
 
 ---
 
@@ -315,9 +335,11 @@ Las contribuciones son bienvenidas. No hace falta trabajar en todas las áreas n
 
 ### Tareas abiertas para nuevos colaboradores
 
-- [Diseñar el Félix físico con forma de gato (#36)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/36) — CAD, diseño 3D, mecánica y documentación. La compra de materiales y el montaje se dejan para 2027.
-- [Conectar la app móvil con el ESP32 y definir el modo local (#37)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/37) — Kivy, Python, Android y firmware.
-- [Crear la sección de proveedores en la app (#38)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38) — interfaz, datos y documentación.
+- [Equipo 1 — Firmware ESP32 (#42)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/42) — punto de entrada y coordinación de periféricos.
+- [Equipo 2 — App móvil y comunicación local (#37)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/37) y [directorio de proveedores (#38)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38).
+- [Equipo 3 — Diseño mecánico y CAD (#36)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/36) — diseño felino; construcción física aplazada hasta 2027.
+- [Equipo 4 — Sensores y visión (#39)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39) — cámara y privacidad; el tacto está propuesto en el [PR #40](https://github.com/luciano2-web/Luciano-Sarmiento/pull/40).
+- [Equipo 5 — Calidad, pruebas y documentación (#43)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/43).
 - [Ver otras tareas abiertas](https://github.com/luciano2-web/Luciano-Sarmiento/issues).
 
 Si quieres ayudar, elige un issue, comenta qué parte te interesa y espera confirmación antes de empezar cambios grandes. Las tareas deben indicar qué archivos tocar, qué resultado se espera y cómo comprobarlo.
@@ -364,8 +386,8 @@ Consulta la guía de contribución aquí:
 ## 📖 Recursos adicionales
 
 - [Wiki](https://github.com/luciano2-web/Luciano-Sarmiento/wiki) - Documentación detallada
-- [Video demo](https://www.youtube.com/) - Félix en acción (próximamente)
-- [Discord](https://discord.gg/felix-gatogpt) - Comunidad (próximamente)
+- [Issues abiertos](https://github.com/luciano2-web/Luciano-Sarmiento/issues) — espacio principal para coordinar contribuciones y preguntas.
+- No hay todavía un servidor de Discord ni un video físico publicado; se anunciarán aquí cuando existan.
 
 ---
 
