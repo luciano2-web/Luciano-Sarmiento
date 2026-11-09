@@ -94,6 +94,9 @@ flowchart TD
 | **Parlante** | 4Ω 3W | $2 - $5 | Reproducir voz |
 | **Protoboard** | 400 puntos | $5 - $10 | Montaje |
 | **Power Bank** | 5V/2A | $10 - $20 | Alimentación |
+| **Servos** | Modelo y alimentación por definir | Por definir | Movimiento de cabeza y cola (servo_head / servo_tail) |
+
+**Nota sobre servos:** `servo_head` y `servo_tail` son nombres de referencia para el diseño. El firmware todavía no incluye un módulo de control de servos; consulta la [lista de componentes](docs/hardware/components.md) antes de definir conexiones o pines.
 
 → [Ver lista completa de componentes](docs/hardware/components.md)
 
