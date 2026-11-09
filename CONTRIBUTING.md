@@ -64,3 +64,27 @@ Abre un Pull Request hacia `main` y enlaza el issue relacionado. Si no puedes ej
 - [#38 — Sección de proveedores en la app móvil](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38)
 
 ¡Gracias por ayudar a construir Félix! 🐾
+
+## 8. Equipos de trabajo
+
+El proyecto organiza las tareas en cinco equipos. No hace falta unirse formalmente a un equipo: puedes tomar una tarea concreta y colaborar de forma puntual.
+
+1. **Firmware y electrónica ESP32** — [Issue #42](https://github.com/luciano2-web/Luciano-Sarmiento/issues/42). Dificultad intermedia–alta.
+2. **App móvil y comunicación local** — [Issue #37](https://github.com/luciano2-web/Luciano-Sarmiento/issues/37) y [Issue #38](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38). Dificultad inicial–alta según la tarea.
+3. **Diseño mecánico y CAD** — [Issue #36](https://github.com/luciano2-web/Luciano-Sarmiento/issues/36). Dificultad intermedia–alta; el montaje físico está previsto para 2027.
+4. **Sensores y visión** — [Issue #39](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39) y [PR #40](https://github.com/luciano2-web/Luciano-Sarmiento/pull/40). Dificultad alta.
+5. **Calidad, pruebas y documentación** — [Issue #43](https://github.com/luciano2-web/Luciano-Sarmiento/issues/43). Dificultad intermedia.
+
+Cada issue explica su alcance, dificultad, primeros pasos y criterios de aceptación. Si una tarea te parece demasiado grande, comenta qué parte pequeña podrías abordar.
+
+## 9. Comunidades técnicas
+
+Consulta la [guía de comunidades y difusión respetuosa](docs/COMMUNITY_OUTREACH.md). Antes de publicar, lee las reglas de cada espacio, participa de forma auténtica y no envíes invitaciones masivas. No afirmes que una comunidad o persona respalda el proyecto sin su autorización.
+
+## 10. Revisión y agradecimiento
+
+- Se acusará recibo de las propuestas cuando sea posible, sin prometer tiempos de respuesta que no podamos cumplir.
+- Las revisiones deben ser específicas, amables y centradas en el cambio, no en la persona.
+- Si un PR necesita cambios, explica qué falta y cómo comprobarlo.
+- Agradece el tiempo de cada persona, incluso si su propuesta no se puede integrar.
+- No se fusiona código solo por cortesía: primero se comprueban alcance, pruebas, seguridad y documentación.
