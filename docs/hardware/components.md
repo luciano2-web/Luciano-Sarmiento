@@ -50,7 +50,7 @@ Este documento detalla **todos los componentes de hardware** necesarios para con
 
 ### 🐾 Sensor de tacto
 
-El ESP32 clásico incluye entradas capacitivas TouchPad. El firmware de Félix reserva **GPIO 32** para un electrodo táctil; el módulo `src/firmware/touch_sensor.py` distingue un toque corto (`pet`) de una pulsación larga (`press_to_talk_start` / `press_to_talk_end`). La pulsación larga solo emite eventos: el audio y la app todavía deben integrarse para que hablar funcione de extremo a extremo. El sensor capacitivo detecta contacto, no mide la fuerza aplicada. Calibra sin tocar el electrodo y confirma el pin de tu placa antes de cablear.
+El ESP32 clásico incluye entradas capacitivas TouchPad. El firmware de Félix reserva **GPIO 32** para un electrodo táctil; el módulo `src/firmware/touch_sensor.py` distingue un toque corto (`pet`), dos toques rápidos (`annoyed`) y una pulsación larga (`press_to_talk_start` / `press_to_talk_end`). La pulsación larga solo emite eventos: el audio y la app todavía deben integrarse para que hablar funcione de extremo a extremo. El sensor capacitivo detecta contacto, no mide la fuerza aplicada. Calibra sin tocar el electrodo y confirma el pin de tu placa antes de cablear.
 
 ### 📷 Cámara y visión
 
