@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Sensor capacitivo de tacto para Félix (ESP32 clásico / MicroPython).
 
-Un toque corto genera el evento "pet". Mantener el contacto genera
-"press_to_talk_start" y soltar genera "press_to_talk_end".
+Un toque corto genera "pet"; dos toques rápidos generan "annoyed".
+Mantener el contacto genera "press_to_talk_start" y soltar genera
+"press_to_talk_end".
 Este módulo detecta contacto, no mide la fuerza de presión.
 """
 
@@ -40,8 +41,8 @@ class TouchSensor:
     ):
         if touchpad is None:
             raise ValueError("Se necesita un objeto TouchPad válido")
-        if long_press_ms <= 0 or debounce_ms < 0:
-            raise ValueError("Los tiempos deben ser positivos")
+        if long_press_ms <= 0 or debounce_ms < 0 or double_tap_ms < 0:
+            raise ValueError("Los tiempos deben ser válidos")
         self.touchpad = touchpad
         self.threshold = threshold
         self.long_press_ms = long_press_ms
