@@ -23,7 +23,7 @@ Este documento describe la arquitectura que existe en el repositorio: sus compon
 Félix / GatoGPT reúne código para tres áreas principales:
 
 - **Hardware**: ejemplos y módulos para ESP32, pantalla OLED SSD1306, micrófono INMP441 y salida PWM de prueba.
-- **Firmware**: módulos MicroPython para pantalla, audio y un puente de mensajes basado en UART. En el repositorio no hay un `src/firmware/main.py` que integre estos módulos.
+- **Firmware**: módulos MicroPython para pantalla, audio y un puente de mensajes basado en UART. En el repositorio no hay un `src/firmware/main.py` que integre estos módulos ni un módulo de control de servos.
 - **Aplicación de escritorio/móvil**: una interfaz Kivy con modo de consola, un motor de chat y otro de generación de imágenes. El código de la app no incluye actualmente un puente Bluetooth ni un manejador de audio.
 - **IA**: el motor de chat usa Transformers cuando están disponibles; el motor de imágenes usa Diffusers. El uso de modelos depende de las dependencias, los recursos del dispositivo y la disponibilidad de los modelos.
 
@@ -85,6 +85,7 @@ flowchart TD
 | Micrófono | INMP441 | Captura de audio digital | I2S: WS GPIO 23, BCK/SCK GPIO 27, SD GPIO 25 |
 | Salida de audio | PWM de prueba | Señal de audio experimental | GPIO 26; usar amplificador adecuado |
 | Alimentación | USB de 5 V | Alimentar la placa ESP32 | USB de la placa |
+| Servos previstos | Modelo por definir | Movimiento de cabeza (`servo_head`) y cola (`servo_tail`) | Pendiente de diseño; sin pines ni alimentación definidos |
 
 **Advertencia:** no conectes directamente un parlante de 4 Ω y 3 W a un GPIO del ESP32. Usa un amplificador de audio adecuado y sigue las especificaciones de la placa y del amplificador.
 
@@ -95,6 +96,8 @@ Módulos existentes en `src/firmware/`:
 - `audio_handler.py`: inicialización de I2S para captura mono y salida PWM experimental; incluye grabación y tonos de prueba.
 - `bluetooth_bridge.py`: serializa mensajes JSON delimitados por salto de línea y los envía/recibe mediante UART. **UART no proporciona por sí solo Bluetooth SPP**; para una conexión inalámbrica se necesita un periférico o módulo Bluetooth compatible y su configuración correspondiente.
 - `display.py`: inicializa y controla una pantalla OLED SSD1306 por I2C.
+
+No existe todavía un módulo `servos.py` ni código que inicialice o controle `servo_head` y `servo_tail`. Los nombres quedan establecidos como referencias de documentación; la selección de servos, alimentación, controlador, pines y pruebas debe definirse antes de implementar el control.
 
 No existe actualmente un archivo `src/firmware/main.py` ni un punto de entrada que inicialice y coordine estos módulos.
 
