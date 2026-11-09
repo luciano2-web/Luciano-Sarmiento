@@ -1,4 +1,52 @@
 name: 🐾 Bienvenida a colaboradores
 
 on:
-  
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comentar bienvenida
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const isPR = context.eventName === 'pull_request_target';
+            const num = isPR ? context.payload.pull_request.number : context.payload.issue.number;
+            const author = isPR ? context.payload.pull_request.user.login : context.payload.issue.user.login;
+            const body = [
+              '¡Miau! ¡Hola, @' + author + '! 🐱 Soy **Félix**, el gato programador del proyecto.',
+              '',
+              'Gracias por tu ' + (isPR ? 'pull request' : 'issue') + '. Para que todo fluya:',
+              '',
+              '- 📘 Guía de contribución: [CONTRIBUTING.md](https://github.com/luciano2-web/Luciano-Sarmiento/blob/main/CONTRIBUTING.md)',
+              '- 🏆 Sistema de niveles: [CONTRIBUTOR_LEVELS.md](https://github.com/luciano2-web/Luciano-Sarmiento/blob/main/CONTRIBUTOR_LEVELS.md) — tu primer PR merged te hace 👾 Pixel',
+              '- 📜 Código de conducta: [CODE_OF_CONDUCT.md](https://github.com/luciano2-web/Luciano-Sarmiento/blob/main/CODE_OF_CONDUCT.md)',
+              '',
+              'Un mantenedor te responderá según su disponibilidad (sin promesa de 48h).',
+              '',
+              '*Ronroneando en espera... prrr* 🐾'
+            ].join('\n');
+            if (isPR) {
+              await github.rest.pulls.createReview({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: num,
+                event: 'COMMENT',
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: num,
+                body
+              });
+            }
