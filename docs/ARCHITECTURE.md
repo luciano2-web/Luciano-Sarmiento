@@ -97,7 +97,7 @@ Módulos existentes en `src/firmware/`:
 - `bluetooth_bridge.py`: serializa mensajes JSON delimitados por salto de línea y los envía/recibe mediante UART. **UART no proporciona por sí solo Bluetooth SPP**; para una conexión inalámbrica se necesita un periférico o módulo Bluetooth compatible y su configuración correspondiente.
 - `display.py`: inicializa y controla una pantalla OLED SSD1306 por I2C.
 
-No existe todavía un módulo `servos.py` ni código que inicialice o controle `servo_head` y `servo_tail`. Los nombres quedan establecidos como referencias de documentación; la selección de servos, alimentación, controlador, pines y pruebas debe definirse antes de implementar el control.
+La convención estándar del proyecto establece `servo_head` para la cabeza y `servo_tail` para la cola. No existe todavía un módulo `servos.py` ni código que inicialice o controle estos identificadores; la selección de servos, alimentación, controlador, pines y pruebas debe definirse antes de implementar el control.
 
 No existe actualmente un archivo `src/firmware/main.py` ni un punto de entrada que inicialice y coordine estos módulos.
 

@@ -49,7 +49,7 @@ Este documento detalla **todos los componentes de hardware** necesarios para con
 
 ### 🦾 Servos y movimiento
 
-Los servos se contemplan como componentes del proyecto para permitir el movimiento de la cabeza y la cola. Para mantener una nomenclatura coherente, se reservan estos identificadores:
+Los servos se contemplan como componentes del proyecto para permitir el movimiento de la cabeza y la cola. Para mantener una nomenclatura coherente y evitar typos, la convención estándar del proyecto es la siguiente:
 
 - `servo_head`: servo destinado al movimiento de la cabeza.
 - `servo_tail`: servo destinado al movimiento de la cola.
