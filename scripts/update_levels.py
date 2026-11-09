@@ -10,7 +10,7 @@ y regenera:
   - README.md          (badges, entre los marcadores BADGES)
 
 Reglas automáticas (hasta nivel 3):
-  Nivel 1 👾 Pixel    : >= 1 PR merged
+  Nivel 1 👾 Kitten : >= 1 PR merged
   Nivel 2 🐝 Flyer   : >= 3 PRs merged
   Nivel 3 🐧 Penguin : >= 5 PRs merged
 Niveles 4-7 son manuales (decisión del mantenedor).
@@ -28,7 +28,7 @@ README_MD = os.path.join(REPO_ROOT, "README.md")
 INACTIVITY_DAYS = 90
 LEVEL_NAMES = {
     0: ("🐱", "Kiten (Owner)"),
-    1: ("👾", "Pixel"),
+    1: ("👾", "Kitten"),
     2: ("🐝", "Flyer"),
     3: ("🐧", "Penguin"),
     4: ("🦝", "Raccoon"),
