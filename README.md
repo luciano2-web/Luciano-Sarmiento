@@ -175,20 +175,28 @@ buildozer android debug
 
 ## 🎨 Demo
 
-### 🖥️ Simulador web
-Puedes probar a Félix sin hardware usando el simulador web:
+### 🖼️ Imagen conceptual
+
+![Concepto visual de Félix](assets/felix_concept.jpg)
+
+> Esta imagen es una referencia conceptual, no una fotografía de un prototipo físico terminado.
+
+### 🎥 Video de demostración física
+
+El video real se añadirá cuando exista un prototipo físico construido y probado. No presentamos una simulación o un montaje como si fuera una demostración del robot real.
+
+- [Issue #36: colaborar en el diseño y construcción del Félix físico](https://github.com/luciano2-web/Luciano-Sarmiento/issues/36)
+- Las personas colaboradoras podrán aportar fotografías del proceso, una imagen final y un video corto mostrando sus funciones verificadas.
+
+### 🧪 Simulador web
+
+Puedes explorar la idea de Félix sin hardware usando el simulador:
 
 - [Abrir simulador](assets/felix_robot_simulator.html)
 
-### 📷 Capturas de pantalla
+### 📷 Capturas de la aplicación
 
-<div align="center">
-
-| **Interfaz móvil** | **Hardware** | **Expresiones** |
-|--------------------------|--------------|----------------|
-| ![App Mobile](assets/felix_concept.jpg) | ![Hardware](assets/felix_concept.jpg) | ![Expresiones](assets/felix_concept.jpg) |
-
-</div>
+Las capturas reales de la app se recopilan en el [Issue #29](https://github.com/luciano2-web/Luciano-Sarmiento/issues/29). Se publicarán aquí cuando estén disponibles.
 
 ---
 
@@ -303,15 +311,16 @@ Luciano-Sarmiento/
 
 ## 🧑‍💻 Contribuir
 
-Las contribuciones son bienvenidas.
+Las contribuciones son bienvenidas. No hace falta trabajar en todas las áreas ni tener experiencia avanzada: puedes elegir una tarea pequeña y pedir orientación.
 
-Si quieres ayudar, puedes:
+### Tareas abiertas para nuevos colaboradores
 
-- Abrir un issue con una idea o mejora
-- Proponer cambios en el código
-- Mejorar documentación
-- Agregar pruebas
-- Ayudar con el hardware o firmware
+- [Diseñar el Félix físico con forma de gato (#36)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/36) — CAD, diseño 3D, mecánica y documentación. La compra de materiales y el montaje se dejan para 2027.
+- [Conectar la app móvil con el ESP32 y definir el modo local (#37)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/37) — Kivy, Python, Android y firmware.
+- [Crear la sección de proveedores en la app (#38)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38) — interfaz, datos y documentación.
+- [Ver otras tareas abiertas](https://github.com/luciano2-web/Luciano-Sarmiento/issues).
+
+Si quieres ayudar, elige un issue, comenta qué parte te interesa y espera confirmación antes de empezar cambios grandes. Las tareas deben indicar qué archivos tocar, qué resultado se espera y cómo comprobarlo.
 
 Consulta la guía de contribución aquí:
 
