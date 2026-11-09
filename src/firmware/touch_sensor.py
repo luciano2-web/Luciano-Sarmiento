@@ -8,6 +8,11 @@ Este módulo detecta contacto, no mide la fuerza de presión.
 
 import time
 
+try:
+    from src.core.constants import ESP32_TOUCH_PIN
+except ImportError:
+    ESP32_TOUCH_PIN = 32
+
 
 def _ticks_ms():
     if hasattr(time, "ticks_ms"):
@@ -30,6 +35,7 @@ class TouchSensor:
         threshold,
         long_press_ms=900,
         debounce_ms=60,
+        double_tap_ms=450,
         clock_ms=None,
     ):
         if touchpad is None:
@@ -40,6 +46,8 @@ class TouchSensor:
         self.threshold = threshold
         self.long_press_ms = long_press_ms
         self.debounce_ms = debounce_ms
+        self.double_tap_ms = double_tap_ms
+        self._last_short_release = None
         self.clock_ms = clock_ms or _ticks_ms
         self._stable_touched = False
         self._candidate_touched = False
@@ -48,7 +56,7 @@ class TouchSensor:
         self._long_press_sent = False
 
     @classmethod
-    def from_esp32(cls, pin=32, samples=24, sample_delay_ms=20,
+    def from_esp32(cls, pin=ESP32_TOUCH_PIN, samples=24, sample_delay_ms=20,
                    threshold_ratio=0.80, long_press_ms=900,
                    debounce_ms=60):
         """Crea el TouchPad y calibra sin tocar el electrodo.
@@ -60,6 +68,8 @@ class TouchSensor:
 
         if not 0 < threshold_ratio < 1:
             raise ValueError("threshold_ratio debe estar entre 0 y 1")
+        if samples <= 0:
+            raise ValueError("samples debe ser mayor que cero")
         pad = TouchPad(Pin(pin))
         values = []
         for _ in range(samples):
@@ -69,6 +79,8 @@ class TouchSensor:
             else:
                 time.sleep(sample_delay_ms / 1000)
         baseline = sum(values) / len(values)
+        if baseline <= 0:
+            raise ValueError("No se pudo calibrar el sensor: lectura base inválida")
         threshold = int(baseline * threshold_ratio)
         print("[Touch] Calibración: base={}, umbral={}".format(
             int(baseline), threshold
@@ -114,10 +126,17 @@ class TouchSensor:
             was_long_press = self._long_press_sent
             self._pressed_at = None
             self._long_press_sent = False
-            return {
-                "type": "press_to_talk_end" if was_long_press else "pet",
-                "raw": raw,
-            }
+            if was_long_press:
+                self._last_short_release = None
+                event_type = "press_to_talk_end"
+            elif (self._last_short_release is not None and
+                  _ticks_diff(now, self._last_short_release) <= self.double_tap_ms):
+                self._last_short_release = None
+                event_type = "annoyed"
+            else:
+                self._last_short_release = now
+                event_type = "pet"
+            return {"type": event_type, "raw": raw}
 
         if touched and not self._long_press_sent:
             if self._pressed_at is not None:
