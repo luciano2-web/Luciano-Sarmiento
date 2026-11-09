@@ -355,6 +355,7 @@ Consulta la guía de contribución aquí:
 ### ❓ ¿Dudas?
 - Abre un [Issue](https://github.com/luciano2-web/Luciano-Sarmiento/issues) con la etiqueta `question`
 - Revisa la [documentación](docs/ARCHITECTURE.md)
+- Consulta la [guía de comunidades técnicas y difusión respetuosa](docs/COMMUNITY_OUTREACH.md)
 
 ### 🐛 ¿Encontraste un bug?
 - Abre un [Issue](https://github.com/luciano2-web/Luciano-Sarmiento/issues) con la etiqueta `bug`
