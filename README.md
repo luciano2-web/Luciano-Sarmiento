@@ -98,7 +98,7 @@ flowchart TD
 | **Sensor táctil** | TouchPad capacitivo GPIO 32 (ESP32 clásico) | Incluido en el chip + electrodo | Detectar caricias y pulsaciones largas |
 | **Cámara** | Placa ESP32-S3 con PSRAM + cámara compatible (por seleccionar) | Por definir | Capturar imágenes para visión; pendiente de integración |
 
-**Nota sobre el tacto:** el módulo `src/firmware/touch_sensor.py` ya traduce un toque corto en `pet` y una pulsación larga en eventos de inicio/fin de pulsar-para-hablar. Todavía falta conectarlo al bucle principal y al audio de la app.
+**Nota sobre el tacto:** el módulo `src/firmware/touch_sensor.py` ya traduce un toque corto en `pet`, dos toques rápidos en `annoyed` y una pulsación larga en eventos de inicio/fin de pulsar-para-hablar. Todavía falta conectarlo al bucle principal y al audio de la app.
 
 **Nota sobre la cámara:** no está lista para conectar al ESP32-WROOM-32 actual. La placa y el sensor deben seleccionarse antes de escribir el controlador. Consulta el [Issue #39](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39).
 
