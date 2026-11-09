@@ -41,11 +41,20 @@ Este documento detalla **todos los componentes de hardware** necesarios para con
 | 8 | **Amplificador de Audio** | PAM8403 | 1 | $2 - $4 | Mejorar calidad de audio | - |
 | 9 | **Batería LiPo** | 18650 3.7V | 1 | $8 - $15 | Alimentación portátil | - |
 | 10 | **Módulo Bluetooth** | HC-05 | 1 | $5 - $8 | Alternativa a Bluetooth del ESP32 | UART |
-| 11 | **Sensor de Tacto** | Capacitivo | 1 | $1 - $3 | Detector de caricias | GPIO |
+| 11 | **Sensor de tacto** | TouchPad capacitivo integrado / electrodo táctil | 1 | Sin módulo externo si se usa el TouchPad integrado | Detectar caricias y pulsaciones | GPIO 32 (ESP32 clásico) |
 | 12 | **LED RGB** | WS2812B | 1 | $1 - $2 | Indicador de estado | PWM |
-| 13 | **Carcasa 3D** | Impresión 3D | 1 | $10 - $30 | Cuerpo de Félix | - |
+| 13 | **Cámara (pendiente)** | Placa ESP32-S3 con PSRAM + cámara compatible (p. ej. OV2640 si la placa la admite) | 1 | Por definir | Capturar imágenes para visión | Interfaz de cámara de la placa |
+| 14 | **Carcasa 3D** | Impresión 3D | 1 | $10 - $30 | Cuerpo de Félix | - |
 
-**Total estimado (con mejoras):** **$62 - $135 USD**
+**Total estimado (con mejoras):** **$62 - $135 USD**, sin incluir cámara ni placa de visión (pendientes de selección).
+
+### 🐾 Sensor de tacto
+
+El ESP32 clásico incluye entradas capacitivas TouchPad. El firmware de Félix reserva **GPIO 32** para un electrodo táctil; el módulo `src/firmware/touch_sensor.py` distingue un toque corto (`pet`), dos toques rápidos (`annoyed`) y una pulsación larga (`press_to_talk_start` / `press_to_talk_end`). La pulsación larga solo emite eventos: el audio y la app todavía deben integrarse para que hablar funcione de extremo a extremo. El sensor capacitivo detecta contacto, no mide la fuerza aplicada. Calibra sin tocar el electrodo y confirma el pin de tu placa antes de cablear.
+
+### 📷 Cámara y visión
+
+La cámara **no está lista para conectar** al ESP32-WROOM-32 de la lista actual. Antes de escribir un controlador hay que elegir una placa concreta con memoria suficiente (recomendación a evaluar: ESP32-S3 con PSRAM y una cámara compatible, como OV2640 si la placa la soporta). El módulo de cámara debe tener un indicador visible y un control físico para apagarla; no se transmitirán imágenes sin autorización. La selección e integración están en el [Issue #39](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39).
 
 ### 🦾 Servos y movimiento
 
@@ -63,65 +72,35 @@ Los servos se contemplan como componentes del proyecto para permitir el movimien
 ### Conexiones del ESP32
 
 ```mermaid
-graph TD
-    subgraph ESP32[ESP32-WROOM-32]
-        A[GPIO 21] -->|SCL| B[OLED SCL]
-        A -->|SDA| C[OLED SDA]
-        D[GPIO 22] -->|WS| E[INMP441 WS]
-        D -->|SCK| F[INMP441 SCK]
-        D -->|SD| G[INMP441 SD]
-        H[GPIO 25] -->|PWM| I[Parlante +]
-        J[GND] -->|GND| I[Parlante -]
-        K[5V] -->|VCC| B
-        K -->|VCC| E
-        J -->|GND| B
-        J -->|GND| E
-    end
-    
-    subgraph OLED[OLED SSD1306]
-        B --> L[SCL]
-        C --> M[SDA]
-        K --> N[VCC]
-        J --> O[GND]
-    end
-    
-    subgraph Mic[INMP441]
-        E --> P[WS]
-        F --> Q[SCK]
-        G --> R[SD]
-        K --> S[VCC]
-        J --> T[GND]
-    end
-    
-    subgraph Speaker[Parlante 3W]
-        I --> U[+]
-        J --> V[-]
-    end
-    
-    subgraph Power[Power Bank]
-        W[USB] -->|5V| K
-        W -->|GND| J
-    end
-    
-    style ESP32 fill:#00f,stroke:#333
-    style OLED fill:#0f0,stroke:#333
-    style Mic fill:#ff0,stroke:#333
-    style Speaker fill:#f00,stroke:#333
-    style Power fill:#aaa,stroke:#333
+flowchart TD
+  ESP[ESP32-WROOM-32]
+  ESP -->|GPIO 21 SCL / GPIO 22 SDA| OLED[OLED SSD1306 I2C]
+  ESP -->|GPIO 23 WS / GPIO 27 SCK / GPIO 25 SD| MIC[INMP441 I2S]
+  ESP -->|GPIO 26 PWM experimental| AMP[Amplificador de audio]
+  AMP --> SPK[Parlante]
+  ESP -->|GPIO 32 TouchPad| TOUCH[Electrodo táctil]
+  PWR[Fuente regulada] --> ESP
+  PWR --> AMP
+  GND[GND común] --- ESP
+  GND --- OLED
+  GND --- MIC
+  GND --- AMP
+  GND --- TOUCH
 ```
+
 
 ### Tabla de Pines del ESP32
 
 | Componente | Pin ESP32 | Tipo | Notas |
 |------------|-----------|------|-------|
 | OLED SCL | GPIO 21 | Salida | I2C Clock |
-| OLED SDA | GPIO 22 | Salida/Entrada | I2C Data |
+| OLED SDA | GPIO 22 | Entrada/Salida | I2C Data |
 | INMP441 WS | GPIO 23 | Salida | I2S Word Select |
-| INMP441 SCK | GPIO 24 | Salida | I2S Clock |
+| INMP441 SCK | GPIO 27 | Salida | I2S Bit Clock |
 | INMP441 SD | GPIO 25 | Entrada | I2S Data |
-| Parlante | GPIO 26 | Salida | PWM |
-| Bluetooth | - | - | Integrado en ESP32 |
-
+| Audio PWM experimental | GPIO 26 | Salida | Solo entrada de amplificador; nunca conectar el parlante directamente |
+| Tacto capacitivo | GPIO 32 | Entrada TouchPad | Electrodo; lectura capacitiva, no mide fuerza |
+| Bluetooth | — | — | Radio integrada; el puente de la app todavía no está implementado |
 ---
 
 ## 👨 Alternativas y Recomendaciones
@@ -134,7 +113,7 @@ graph TD
 | ESP32-C3 | WiFi + Bluetooth 5.0 | Menos GPIO | $8-$12 | ✅ Bueno |
 | Raspberry Pi Pico W | Más potente, MicroPython | No Bluetooth nativo | $10 | ❌ No recomendado |
 
-**Recomendación:** **ESP32-WROOM-32** (el más probado y con mejor soporte).
+**Recomendación actual para control básico:** ESP32-WROOM-32. **Para visión integrada**, evaluar una placa ESP32-S3 con PSRAM y conector/interfaz de cámara; no asumir que el WROOM-32 puede sustituirla sin rediseñar pines y memoria.
 
 ---
 

@@ -115,6 +115,12 @@ flowchart TD
 | **Protoboard** | 400 puntos | $5 - $10 | Montaje |
 | **Power Bank** | 5V/2A | $10 - $20 | Alimentación |
 | **Servos** | Modelo y alimentación por definir | Por definir | Movimiento de cabeza y cola (servo_head / servo_tail) |
+| **Sensor táctil** | TouchPad capacitivo GPIO 32 (ESP32 clásico) | Incluido en el chip + electrodo | Detectar caricias y pulsaciones largas |
+| **Cámara** | Placa ESP32-S3 con PSRAM + cámara compatible (por seleccionar) | Por definir | Capturar imágenes para visión; pendiente de integración |
+
+**Nota sobre el tacto:** el módulo `src/firmware/touch_sensor.py` ya traduce un toque corto en `pet`, dos toques rápidos en `annoyed` y una pulsación larga en eventos de inicio/fin de pulsar-para-hablar. Todavía falta conectarlo al bucle principal y al audio de la app.
+
+**Nota sobre la cámara:** no está lista para conectar al ESP32-WROOM-32 actual. La placa y el sensor deben seleccionarse antes de escribir el controlador. Consulta el [Issue #39](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39).
 
 **Nota sobre servos:** la convención estándar del proyecto es `servo_head` para la cabeza y `servo_tail` para la cola. Estos nombres se usan como referencia de diseño; el firmware todavía no incluye un módulo de control de servos. Consulta la [lista de componentes](docs/hardware/components.md) antes de definir conexiones o pines.
 

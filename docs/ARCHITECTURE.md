@@ -96,10 +96,11 @@ Módulos existentes en `src/firmware/`:
 - `audio_handler.py`: inicialización de I2S para captura mono y salida PWM experimental; incluye grabación y tonos de prueba.
 - `bluetooth_bridge.py`: serializa mensajes JSON delimitados por salto de línea y los envía/recibe mediante UART. **UART no proporciona por sí solo Bluetooth SPP**; para una conexión inalámbrica se necesita un periférico o módulo Bluetooth compatible y su configuración correspondiente.
 - `display.py`: inicializa y controla una pantalla OLED SSD1306 por I2C.
+- `touch_sensor.py`: lee el TouchPad capacitivo del ESP32 clásico (GPIO 32 por defecto) y emite eventos de toque corto (`pet`), doble toque (`annoyed`) y pulsación larga (`press_to_talk`). Aún debe ser llamado desde un bucle principal; no está integrado automáticamente.
 
 La convención estándar del proyecto establece `servo_head` para la cabeza y `servo_tail` para la cola. No existe todavía un módulo `servos.py` ni código que inicialice o controle estos identificadores; la selección de servos, alimentación, controlador, pines y pruebas debe definirse antes de implementar el control.
 
-No existe actualmente un archivo `src/firmware/main.py` ni un punto de entrada que inicialice y coordine estos módulos.
+No existe actualmente un archivo `src/firmware/main.py` ni un punto de entrada que inicialice y coordine estos módulos. Tampoco hay un módulo de cámara: la visión queda pendiente de elegir una placa con memoria y conexión compatibles, y de implementar la captura.
 
 ### 3. Capa de Aplicación (Python y Kivy)
 
@@ -167,7 +168,8 @@ Los módulos de firmware ofrecen funciones de captura I2S, salida PWM experiment
 
 ### Mensajes del puente UART
 
-`src/firmware/bluetooth_bridge.py` representa mensajes como JSON y usa `\n` como delimitador. El módulo envía estos bytes por UART; no implementa por sí mismo el descubrimiento, emparejamiento ni transporte Bluetooth.
+`src/firmware/bluetooth_bridge.py` representa mensajes como JSON y usa `
+` como delimitador. El módulo envía estos bytes por UART; no implementa por sí mismo el descubrimiento, emparejamiento ni transporte Bluetooth.
 
 Ejemplo del formato JSON que el código puede serializar:
 
@@ -285,8 +287,9 @@ is_valid, issues, suggestions = validate_felix_response(
 - **Pines ESP32:** GPIO 24 no está disponible en ESP32-WROOM-32. El reloj I2S configurado en las constantes del proyecto es GPIO 27. Comprueba el modelo de placa y el cableado antes de conectar los módulos.
 - **Parlante:** la salida PWM es experimental y un GPIO no puede alimentar directamente un parlante de 4 Ω/3 W. Usa un amplificador apropiado.
 - **Bluetooth:** UART cableado no equivale a Bluetooth SPP. Hace falta hardware y firmware Bluetooth compatibles; la app móvil tampoco incluye actualmente el puente correspondiente.
-- **Firmware:** los módulos existen, pero no hay un punto de entrada `src/firmware/main.py` que los integre.
+- **Firmware:** los módulos existen, incluido el lector de tacto, pero no hay un punto de entrada `src/firmware/main.py` que los integre.
 - **Audio:** el reconocimiento y la síntesis de voz no están implementados como un flujo completo en la aplicación actual.
+- **Cámara:** no está implementada. Para visión práctica se debe seleccionar y probar una placa/cámara concreta; el ESP32-WROOM-32 documentado no se debe tratar como una solución de cámara lista para conectar.
 - **Modelos:** la ejecución local de modelos pesados depende de las capacidades del dispositivo y de las dependencias instaladas.
 
 ---
