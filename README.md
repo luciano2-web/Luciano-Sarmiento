@@ -81,7 +81,7 @@ flowchart TD
         F[Kivy UI] --> G[Chat Engine]
         G --> H[Modelos de IA]
         F --> I[Audio Handler]
-        F --> J[Bluetooth Bridge]
+        F --> J[Serial Bridge UART]
     end
     
     subgraph Cloud["☁️ Opcional: Nube"]
