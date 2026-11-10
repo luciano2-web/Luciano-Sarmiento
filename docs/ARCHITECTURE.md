@@ -1,8 +1,22 @@
 # 🎓 Arquitectura del Sistema — Félix / GatoGPT
 
-**🐱 Versión: 2.0** | **Última actualización: 2024-09-28**
+**🐱 Versión: 2.1** | **Actualizado: 2026-11-10**
 
-Este documento describe la arquitectura que existe en el repositorio: sus componentes, responsabilidades, conexiones de hardware y estructura de archivos. Las funciones indicadas como experimentales o pendientes no deben interpretarse como funciones ya integradas.
+Este documento describe la arquitectura del proyecto tal como existe en el
+repositorio de `main` (actualizado al 2026-11-09). Las funciones indicadas como
+`experimental`, `planificado` o `en desarrollo` no deben interpretarse como
+funciones ya integradas.
+
+Los cambios importantes en esta versión:
+
+- Se actualiza la fecha de la versión para reflejar el estado real del
+  repositorio.
+- Se añade un resumen ejecutivo y una tabla de estrategia.
+- Se deja explícito que la comunicación app ↔ ESP32 no está integrada.
+- Se mantiene la regla de publicación: un PR debe indicar si muestra código,
+  simulación o prueba real en hardware.
+
+---
 
 ---
 

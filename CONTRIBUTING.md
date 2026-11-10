@@ -19,21 +19,17 @@
 
 ## 3. Flujo recomendado
 
+1. Lee el [README](README.md) y el [Código de Conducta](CODE_OF_CONDUCT.md).
+2. Comprueba qué está implementado y qué está planificado.
+3. No inventes pines, modelos de componentes, voltajes, protocolos ni resultados de pruebas.
+4. Si falta información, pregunta en el issue antes de asumirla.
+5. Mantén los cambios relacionados con el objetivo del issue.
+
 ```bash
 git clone https://github.com/luciano2-web/Luciano-Sarmiento.git
 cd Luciano-Sarmiento
 git checkout -b tipo/descripcion-corta
 ```
-
-Haz cambios pequeños, describe lo que modificaste y ejecuta las pruebas pertinentes cuando sea posible. Después:
-
-```bash
-git add .
-git commit -m "tipo: resumen breve del cambio"
-git push -u origin tipo/descripcion-corta
-```
-
-Abre un Pull Request hacia `main` y enlaza el issue relacionado. Si no puedes ejecutar una prueba, indícalo con claridad; no marques como comprobado algo que no ejecutaste.
 
 ## 4. Qué debe incluir un Pull Request
 
@@ -63,9 +59,17 @@ Abre un Pull Request hacia `main` y enlaza el issue relacionado. Si no puedes ej
 - [#37 — Integración de la app móvil, ESP32 y funcionamiento local](https://github.com/luciano2-web/Luciano-Sarmiento/issues/37)
 - [#38 — Sección de proveedores en la app móvil](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38)
 
+## 8. Primer artículo de documentación
+
+- Añade o actualiza un artículo bajo `docs/` que explique un caso de uso concreto del proyecto (por ejemplo, cómo conectar la app móvil, cómo configurar el firmware ESP32 o cómo usar el simulador web).
+- Incluye: objetivo, requisitos, pasos, resultado esperado y lo que ya está probado.
+- Distingue claramente entre código listo, simulación y prueba real en hardware.
+- Si el artículo menciona un proceso, un archivo, un teclado, un botón o un modo, evita afirmar que está terminado hasta comprobarlo.
+- Incluye capturas de pantalla o registros solo si son reales del estado del proyecto.
+
 ¡Gracias por ayudar a construir Félix! 🐾
 
-## 8. Equipos de trabajo
+## 9. Equipos de trabajo
 
 El proyecto organiza las tareas en cinco equipos. No hace falta unirse formalmente a un equipo: puedes tomar una tarea concreta y colaborar de forma puntual.
 
@@ -75,13 +79,11 @@ El proyecto organiza las tareas en cinco equipos. No hace falta unirse formalmen
 4. **Sensores y visión** — [Issue #39](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39) y [PR #40](https://github.com/luciano2-web/Luciano-Sarmiento/pull/40). Dificultad alta.
 5. **Calidad, pruebas y documentación** — [Issue #43](https://github.com/luciano2-web/Luciano-Sarmiento/issues/43). Dificultad intermedia.
 
-Cada issue explica su alcance, dificultad, primeros pasos y criterios de aceptación. Si una tarea te parece demasiado grande, comenta qué parte pequeña podrías abordar.
-
-## 9. Comunidades técnicas
+## 10. Comunidades técnicas
 
 Consulta la [guía de comunidades y difusión respetuosa](docs/COMMUNITY_OUTREACH.md). Antes de publicar, lee las reglas de cada espacio, participa de forma auténtica y no envíes invitaciones masivas. No afirmes que una comunidad o persona respalda el proyecto sin su autorización.
 
-## 10. Revisión y agradecimiento
+## 11. Revisión y agradecimiento
 
 - Se acusará recibo de las propuestas cuando sea posible, sin prometer tiempos de respuesta que no podamos cumplir.
 - Las revisiones deben ser específicas, amables y centradas en el cambio, no en la persona.
