@@ -1,6 +1,6 @@
 # 📱 Guía de Configuración - App Móvil de Félix
 
-**🐱 Félix v2.0** | **Última actualización: 2024-09-28**
+**🐱 Félix v1.0.0** | **Última actualización: 2026-11-14**
 
 Esta guía te llevará paso a paso a través de la **configuración de la app móvil** de Félix en tu dispositivo Android, iOS o computadora.
 
@@ -99,7 +99,7 @@ Esta guía te llevará paso a paso a través de la **configuración de la app m�
    ```
 2. Ejecuta la app:
    ```bash
-   python gatogpt_felix_mobile.py
+   python -m src.mobile.main
    ```
 
 ---
@@ -147,7 +147,7 @@ Esta guía te llevará paso a paso a través de la **configuración de la app m�
 #### Paso 4: Ejecutar la App
 ```bash
 cd src/mobile
-python gatogpt_felix_mobile.py
+python -m src.mobile.main
 ```
 
 ---
@@ -196,7 +196,7 @@ python gatogpt_felix_mobile.py
 #### Paso 4: Ejecutar la App
 ```bash
 cd src/mobile
-python gatogpt_felix_mobile.py
+python -m src.mobile.main
 ```
 
 ---
@@ -249,7 +249,7 @@ python gatogpt_felix_mobile.py
 #### Paso 5: Ejecutar la App
 ```bash
 cd src/mobile
-python gatogpt_felix_mobile.py
+python -m src.mobile.main
 ```
 
 ---
@@ -275,7 +275,7 @@ python gatogpt_felix_mobile.py
    [app]
    title = Félix / GatoGPT
    package.name = gato_gpt_felix
-   package.domain = org.luciano2web
+   package.domain = org.luciano
    source.dir = .
    source.include_exts = py,png,jpg,kv,atlas,ttf
    version = 1.0.0
@@ -366,7 +366,7 @@ python gatogpt_felix_mobile.py
 #### Paso 4: Ejecutar la App
 ```bash
 cd src/mobile
-python gatogpt_felix_mobile.py
+python -m src.mobile.main
 ```
 
 ---
