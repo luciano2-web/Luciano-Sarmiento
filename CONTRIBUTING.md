@@ -59,9 +59,16 @@ Abre un Pull Request hacia `main` y enlaza el issue relacionado. Si no puedes ej
 
 ## 7. Issues activos para colaborar
 
+- [#33 — Definir requisitos para el futuro control de servos](https://github.com/luciano2-web/Luciano-Sarmiento/issues/33) — alcance de especificación; todavía no existe un controlador de servos en el firmware.
 - [#36 — Diseño del Félix físico con forma de gato](https://github.com/luciano2-web/Luciano-Sarmiento/issues/36)
 - [#37 — Integración de la app móvil, ESP32 y funcionamiento local](https://github.com/luciano2-web/Luciano-Sarmiento/issues/37)
 - [#38 — Sección de proveedores en la app móvil](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38)
+- [#39 — Cámara y visión](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39)
+- [#42 — Firmware y electrónica ESP32](https://github.com/luciano2-web/Luciano-Sarmiento/issues/42)
+- [#43 — Calidad, pruebas y documentación](https://github.com/luciano2-web/Luciano-Sarmiento/issues/43)
+- [#44 — Integración y validación del sensor táctil](https://github.com/luciano2-web/Luciano-Sarmiento/issues/44)
+
+El [PR #40](https://github.com/luciano2-web/Luciano-Sarmiento/pull/40) ya fue fusionado: sirve como antecedente del módulo táctil, no como tarea abierta.
 
 ¡Gracias por ayudar a construir Félix! 🐾
 
@@ -72,7 +79,7 @@ El proyecto organiza las tareas en cinco equipos. No hace falta unirse formalmen
 1. **Firmware y electrónica ESP32** — [Issue #42](https://github.com/luciano2-web/Luciano-Sarmiento/issues/42). Dificultad intermedia–alta.
 2. **App móvil y comunicación local** — [Issue #37](https://github.com/luciano2-web/Luciano-Sarmiento/issues/37) y [Issue #38](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38). Dificultad inicial–alta según la tarea.
 3. **Diseño mecánico y CAD** — [Issue #36](https://github.com/luciano2-web/Luciano-Sarmiento/issues/36). Dificultad intermedia–alta; el montaje físico está previsto para 2027.
-4. **Sensores y visión** — [Issue #39](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39) y [PR #40](https://github.com/luciano2-web/Luciano-Sarmiento/pull/40). Dificultad alta.
+4. **Sensores y visión** — [Issue #39](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39) y [Issue #44](https://github.com/luciano2-web/Luciano-Sarmiento/issues/44). Dificultad alta. El [PR #40](https://github.com/luciano2-web/Luciano-Sarmiento/pull/40) ya está fusionado y es un antecedente de implementación, no un issue abierto.
 5. **Calidad, pruebas y documentación** — [Issue #43](https://github.com/luciano2-web/Luciano-Sarmiento/issues/43). Dificultad intermedia.
 
 Cada issue explica su alcance, dificultad, primeros pasos y criterios de aceptación. Si una tarea te parece demasiado grande, comenta qué parte pequeña podrías abordar.
