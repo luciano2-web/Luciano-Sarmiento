@@ -92,8 +92,16 @@ Consulta la [guía de comunidades y difusión respetuosa](docs/COMMUNITY_OUTREAC
 
 ## 11. Revisión y agradecimiento
 
+feat/attract-contributors
+Consulta [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para ver los niveles, privilegios y detección automática.
+
+## 🌟 Posibles colaboradores bienvenidos
+
+Buscamos personas con interés en: Python/Kivy, MicroPython/ESP32, IA/Transformers, documentación, diseño 3D, testing. Abre un issue `good first issue` o propón una mejora.
+
 - Se acusará recibo de las propuestas cuando sea posible, sin prometer tiempos de respuesta que no podamos cumplir.
 - Las revisiones deben ser específicas, amables y centradas en el cambio, no en la persona.
 - Si un PR necesita cambios, explica qué falta y cómo comprobarlo.
 - Agradece el tiempo de cada persona, incluso si su propuesta no se puede integrar.
 - No se fusiona código solo por cortesía: primero se comprueban alcance, pruebas, seguridad y documentación.
+main
