@@ -365,7 +365,6 @@ def generate_video(prompt):
         initial_image,
         num_frames=25, # SVD-XT genera típicamente 25 frames
         decode_chunk_size=8,
-        motion_adapter_alpha=0.5, # Parámetro específico para la fuerza del movimiento en SVD-XT
     ).frames[0] # SVD devuelve frames como una lista de imágenes PIL
 
     captioned_frames = []
