@@ -294,6 +294,8 @@ def build_app():
             # 🐱 GatoGPT Félix
             Chat local estilo ChatGPT con personalidad felina.
 
+            > ⚠️ **Privacidad:** no escribas datos personales (nombres completos, direcciones, teléfonos, escuela, datos de tu familia) en el chat.
+
             **Comandos especiales:**
             - `@gatimage un gato estudiando matemáticas` → genera imagen local.
             - `@gativeo Félix caminando por una biblioteca mágica` → genera video local simple.
@@ -326,4 +328,7 @@ if __name__ == "__main__":
     print("🐱 Cargando GatoGPT Félix...")
     print(f"Dispositivo detectado: {DEVICE}")
     app = build_app()
-    app.launch(share=True, debug=True)
+    # Privacidad: no se publica enlace público (share=False) ni modo debug.
+    # Si necesitas compartirlo, activa autenticación, por ejemplo:
+    #   app.launch(share=True, auth=("usuario", "contraseña"))
+    app.launch(share=False, debug=False)

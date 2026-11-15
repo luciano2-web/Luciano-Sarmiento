@@ -1,8 +1,22 @@
 # 🎓 Arquitectura del Sistema — Félix / GatoGPT
 
-**🐱 Versión: 2.0** | **Última actualización: 2024-09-28**
+**🐱 Versión: 2.1** | **Actualizado: 2026-11-10**
 
-Este documento describe la arquitectura que existe en el repositorio: sus componentes, responsabilidades, conexiones de hardware y estructura de archivos. Las funciones indicadas como experimentales o pendientes no deben interpretarse como funciones ya integradas.
+Este documento describe la arquitectura del proyecto tal como existe en el
+repositorio de `main` (actualizado al 2026-11-09). Las funciones indicadas como
+`experimental`, `planificado` o `en desarrollo` no deben interpretarse como
+funciones ya integradas.
+
+Los cambios importantes en esta versión:
+
+- Se actualiza la fecha de la versión para reflejar el estado real del
+  repositorio.
+- Se añade un resumen ejecutivo y una tabla de estrategia.
+- Se deja explícito que la comunicación app ↔ ESP32 no está integrada.
+- Se mantiene la regla de publicación: un PR debe indicar si muestra código,
+  simulación o prueba real en hardware.
+
+---
 
 ---
 
@@ -23,7 +37,7 @@ Este documento describe la arquitectura que existe en el repositorio: sus compon
 Félix / GatoGPT reúne código para tres áreas principales:
 
 - **Hardware**: ejemplos y módulos para ESP32, pantalla OLED SSD1306, micrófono INMP441 y salida PWM de prueba.
-- **Firmware**: módulos MicroPython para pantalla, audio y un puente de mensajes basado en UART. En el repositorio no hay un `src/firmware/main.py` que integre estos módulos.
+- **Firmware**: módulos MicroPython para pantalla, audio y un puente de mensajes basado en UART. En el repositorio no hay un `src/firmware/main.py` que integre estos módulos ni un módulo de control de servos.
 - **Aplicación de escritorio/móvil**: una interfaz Kivy con modo de consola, un motor de chat y otro de generación de imágenes. El código de la app no incluye actualmente un puente Bluetooth ni un manejador de audio.
 - **IA**: el motor de chat usa Transformers cuando están disponibles; el motor de imágenes usa Diffusers. El uso de modelos depende de las dependencias, los recursos del dispositivo y la disponibilidad de los modelos.
 
@@ -85,6 +99,7 @@ flowchart TD
 | Micrófono | INMP441 | Captura de audio digital | I2S: WS GPIO 23, BCK/SCK GPIO 27, SD GPIO 25 |
 | Salida de audio | PWM de prueba | Señal de audio experimental | GPIO 26; usar amplificador adecuado |
 | Alimentación | USB de 5 V | Alimentar la placa ESP32 | USB de la placa |
+| Servos previstos | Modelo por definir | Movimiento de cabeza (`servo_head`) y cola (`servo_tail`) | Pendiente de diseño; sin pines ni alimentación definidos |
 
 **Advertencia:** no conectes directamente un parlante de 4 Ω y 3 W a un GPIO del ESP32. Usa un amplificador de audio adecuado y sigue las especificaciones de la placa y del amplificador.
 
@@ -95,8 +110,11 @@ Módulos existentes en `src/firmware/`:
 - `audio_handler.py`: inicialización de I2S para captura mono y salida PWM experimental; incluye grabación y tonos de prueba.
 - `bluetooth_bridge.py`: serializa mensajes JSON delimitados por salto de línea y los envía/recibe mediante UART. **UART no proporciona por sí solo Bluetooth SPP**; para una conexión inalámbrica se necesita un periférico o módulo Bluetooth compatible y su configuración correspondiente.
 - `display.py`: inicializa y controla una pantalla OLED SSD1306 por I2C.
+- `touch_sensor.py`: lee el TouchPad capacitivo del ESP32 clásico (GPIO 32 por defecto) y emite eventos de toque corto (`pet`), doble toque (`annoyed`) y pulsación larga (`press_to_talk`). Aún debe ser llamado desde un bucle principal; no está integrado automáticamente.
 
-No existe actualmente un archivo `src/firmware/main.py` ni un punto de entrada que inicialice y coordine estos módulos.
+La convención estándar del proyecto establece `servo_head` para la cabeza y `servo_tail` para la cola. No existe todavía un módulo `servos.py` ni código que inicialice o controle estos identificadores; la selección de servos, alimentación, controlador, pines y pruebas debe definirse antes de implementar el control.
+
+No existe actualmente un archivo `src/firmware/main.py` ni un punto de entrada que inicialice y coordine estos módulos. Tampoco hay un módulo de cámara: la visión queda pendiente de elegir una placa con memoria y conexión compatibles, y de implementar la captura.
 
 ### 3. Capa de Aplicación (Python y Kivy)
 
@@ -164,7 +182,8 @@ Los módulos de firmware ofrecen funciones de captura I2S, salida PWM experiment
 
 ### Mensajes del puente UART
 
-`src/firmware/bluetooth_bridge.py` representa mensajes como JSON y usa `\n` como delimitador. El módulo envía estos bytes por UART; no implementa por sí mismo el descubrimiento, emparejamiento ni transporte Bluetooth.
+`src/firmware/bluetooth_bridge.py` representa mensajes como JSON y usa `
+` como delimitador. El módulo envía estos bytes por UART; no implementa por sí mismo el descubrimiento, emparejamiento ni transporte Bluetooth.
 
 Ejemplo del formato JSON que el código puede serializar:
 
@@ -282,8 +301,9 @@ is_valid, issues, suggestions = validate_felix_response(
 - **Pines ESP32:** GPIO 24 no está disponible en ESP32-WROOM-32. El reloj I2S configurado en las constantes del proyecto es GPIO 27. Comprueba el modelo de placa y el cableado antes de conectar los módulos.
 - **Parlante:** la salida PWM es experimental y un GPIO no puede alimentar directamente un parlante de 4 Ω/3 W. Usa un amplificador apropiado.
 - **Bluetooth:** UART cableado no equivale a Bluetooth SPP. Hace falta hardware y firmware Bluetooth compatibles; la app móvil tampoco incluye actualmente el puente correspondiente.
-- **Firmware:** los módulos existen, pero no hay un punto de entrada `src/firmware/main.py` que los integre.
+- **Firmware:** los módulos existen, incluido el lector de tacto, pero no hay un punto de entrada `src/firmware/main.py` que los integre.
 - **Audio:** el reconocimiento y la síntesis de voz no están implementados como un flujo completo en la aplicación actual.
+- **Cámara:** no está implementada. Para visión práctica se debe seleccionar y probar una placa/cámara concreta; el ESP32-WROOM-32 documentado no se debe tratar como una solución de cámara lista para conectar.
 - **Modelos:** la ejecución local de modelos pesados depende de las capacidades del dispositivo y de las dependencias instaladas.
 
 ---

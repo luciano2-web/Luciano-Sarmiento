@@ -92,7 +92,6 @@ frames = stable_video_pipeline(
     initial_image,
     num_frames=25,
     decode_chunk_size=8,
-    motion_adapter_alpha=0.5,
 ).frames[0]
 
 # DESPUÉS
@@ -100,7 +99,6 @@ frames = stable_video_pipeline(
     initial_image,
     num_frames=8,  # ← Cambio aquí
     decode_chunk_size=8,
-    motion_adapter_alpha=0.5,
 ).frames[0]
 ```
 

@@ -2,7 +2,7 @@
 
 > Sistema de progresión por contribuciones **para personas**, no para el robot.
 > Cada nivel desbloquea privilegios reales dentro del proyecto y el sistema
-> detecta automáticamente lo que haces para subirte o bajarte de nivel.
+detecta automáticamente lo que haces para subirte o bajarte de nivel.
 
 ## Niveles
 
@@ -15,8 +15,12 @@
 | 5 | 🦊 | Fox | Contribuciones sustanciales (features, firmware, móvil) | Merge de código, crear releases, acceso a CI/Actions, botón "Approve" |
 | 6 | 🐺 | Wolfy | Liderazgo de área (hardware/firmware/app/IA) | Admin parcial: labels, milestones, moderación, gestionar projects board |
 | 7 | 🦉 | Buhny | Maintainer confirmado por Luciano | Admin full: aprobar PRs, gestionar repo, merge a main, moderación final |
-| 🐦‍🔥 | — | Félix | Nivel casi inalcanzable: visión técnica + decisión final | Define roadmap, aprueba cambios a personality.py, firma releases |
+| 🐦‍🔥 | — | Fénix | Nivel inalcanzable: visión técnica + decisión final | Define roadmap, aprueba cambios a personality.py, firma releases |
 | 🐱 | — | Kiten (Luciano) | Owner del proyecto | Control absoluto: repo, branding, licencia, decisiones finales |
+
+> El rol **Fénix** no es un nivel alcanzable por contribución: representa la
+> visión técnica y la decisión final de Luciano/Félix. No lo enumera
+> `CONTRIBUTORS.json` ni lo aplica `update_levels.py` automáticamente.
 
 ## Detección automática
 
@@ -41,6 +45,7 @@ Para que te sientas acompañado desde el primer día:
 - Un PR grande puede contar como +2 niveles si Luciano lo decide.
 - La pérdida de privilegios por mal comportamiento queda a discreción del nivel Buhny/Félix.
 - Los niveles 🐦‍🔥 y 🐱 son simbólicos y no se "alcanzan": representan la identidad del proyecto.
+- El nivel más alto alcanzable por contribución es 🦉 Buhny. Kiten y Fénix son roles simbólicos del owner y no forman parte del sistema automático.
 
 ## Reconocimiento
 - Badge visual en el README por nivel.

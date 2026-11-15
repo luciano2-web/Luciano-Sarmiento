@@ -365,7 +365,6 @@ def generate_video(prompt):
         initial_image,
         num_frames=25, # SVD-XT genera típicamente 25 frames
         decode_chunk_size=8,
-        motion_adapter_alpha=0.5, # Parámetro específico para la fuerza del movimiento en SVD-XT
     ).frames[0] # SVD devuelve frames como una lista de imágenes PIL
 
     captioned_frames = []
@@ -439,6 +438,8 @@ def build_app():
 
             Chat local estilo ChatGPT con personalidad felina.
 
+            > ⚠️ **Privacidad:** no escribas datos personales (nombres completos, direcciones, teléfonos, escuela, datos de tu familia) en el chat.
+
             **Comandos especiales:**
 
             - `@gatimage un gato estudiando matemáticas` → genera imagen local.
@@ -499,4 +500,7 @@ print("🐱 Cargando GatoGPT Félix...")
 print(f"Dispositivo detectado: {DEVICE}")
 
 app = build_app()
-app.launch(share=True, debug=True)
+# Privacidad: no se publica enlace público (share=False) ni modo debug.
+# Si necesitas compartirlo, activa autenticación, por ejemplo:
+#   app.launch(share=True, auth=("usuario", "contraseña"))
+app.launch(share=False, debug=False)
