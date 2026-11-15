@@ -14,8 +14,8 @@ detecta automáticamente lo que haces para subirte o bajarte de nivel.
 | 4 | 🦝 | Raccoon | Contribuciones recurrentes en un área | Revisión de PRs del área, etiquetar issues, acceso a canal de colaboradores |
 | 5 | 🦊 | Fox | Contribuciones sustanciales (features, firmware, móvil) | Merge de código, crear releases, acceso a CI/Actions, botón "Approve" |
 | 6 | 🐺 | Wolfy | Liderazgo de área (hardware/firmware/app/IA) | Admin parcial: labels, milestones, moderación, gestionar projects board |
-| 🐦‍🔥 | — | Fénix | Nivel inalcanzable: visión técnica + decisión final | Define roadmap, aprueba cambios a personality.py, firma releases |
 | 7 | 🦉 | Buhny | Maintainer confirmado por Luciano | Admin full: aprobar PRs, gestionar repo, merge a main, moderación final |
+| 🐦‍🔥 | — | Fénix | Nivel inalcanzable: visión técnica + decisión final | Define roadmap, aprueba cambios a personality.py, firma releases |
 | 🐱 | — | Kiten (Luciano) | Owner del proyecto | Control absoluto: repo, branding, licencia, decisiones finales |
 
 > El rol **Fénix** no es un nivel alcanzable por contribución: representa la
