@@ -154,7 +154,7 @@ source venv/bin/activate  # En Windows: venv\Scripts\activate
 pip install -r src/mobile/requirements_mobile.txt
 
 # Ejecutar la app
-python src/mobile/main.py
+python -m src.mobile.main
 ```
 
 ### 2) Android (Termux)
@@ -167,7 +167,7 @@ pkg install python git
 pip install -r src/mobile/requirements_mobile.txt
 
 # Ejecutar
-python src/mobile/main.py
+python -m src.mobile.main
 ```
 
 ### 3) Compilar APK para Android
