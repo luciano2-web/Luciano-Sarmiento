@@ -22,7 +22,7 @@
 
 > 🐱 Estoy construyendo **Félix**, un robot gato con IA conversacional y personalidad propia (ESP32 + Kivy + Python, <$50 en hardware). Busco colaboradores para firmware, app, CAD, pruebas o documentación. Proyecto honesto y en fase temprana: cada PR cuenta y se reconoce con niveles. 👉 github.com/luciano2-web/Luciano-Sarmiento
 
-### 2.2 Versión media (Reddit, foros, grupos de Telegram/Discord)
+### 2.2 Versión media (foros y comunidades aprobadas en COMMUNITY_OUTREACH.md)
 
 > **🐾 Busco colaboradores para Félix / GatoGPT — un robot gato con IA**
 >
@@ -41,17 +41,17 @@
 > - 📷 Cámara y visión (#39) / sensor táctil (#40)
 > - 🧪 Pruebas y documentación (#43)
 >
-> No necesitas experiencia avanzada: hay tareas `good first issue` con criterios de aceptación claros y un sistema de niveles que reconoce tu trabajo automáticamente.
+> No necesitas experiencia avanzada. Las tareas `good first issue` están en preparación; antes de publicar esta versión hay que confirmar que existen. Hay un sistema de niveles que reconoce tu trabajo automáticamente.
 >
 > 👉 https://github.com/luciano2-web/Luciano-Sarmiento
 >
 > Colaboración voluntaria, abierta y sin compromiso. ¡Gracias por compartir! 🐾
 
-### 2.3 Versión Discord / Telegram (servidores de makers, robótica, Python)
+### 2.3 Versión Discord (en creación: no publicar hasta que el servidor exista y tenga enlace de invitación)
 
 > ¡Hola! 👋 Comparto **Félix / GatoGPT**, un proyecto open-source de un robot gato con IA conversacional, personalidad felina y hardware ESP32 de menos de $50.
 >
-> Estamos buscando gente para: firmware ESP32, app móvil (Kivy), diseño CAD del gato, pruebas y documentación. Hay issues `good first issue` y niveles automáticos de reconocimiento (👾→🐧→🦉).
+> Estamos buscando gente para: firmware ESP32, app móvil (Kivy), diseño CAD del gato, pruebas y documentación. Hay niveles automáticos de reconocimiento (👾→🐧→🦉). Las tareas de principiante están en preparación.
 >
 > Si te llama la robótica afectiva, los gatos o construir algo con las manos y código, pásate: https://github.com/luciano2-web/Luciano-Sarmiento
 >
@@ -71,12 +71,11 @@ Adaptar al foro según sus reglas. Ejemplo para ESP32.com / MicroPython:
 
 | Semana | Canal | Acción |
 |---|---|---|
-| 1 | GitHub | Publicar la campaña en el repo (este archivo). Revisar y cerrar issues duplicados de búsqueda de colaboradores (#25, #26). Etiquetar 3-5 issues como `good first issue` si aún falta. |
+| 1 | GitHub | Publicar la campaña en el repo (este archivo). Recomendación para Luciano: revisar si los issues #25 y #26 están duplicados; la decisión de cerrarlos o etiquetar issues es suya. |
 | 1 | X / LinkedIn / Mastodon | Publicar la versión corta (2.1). |
-| 2 | Reddit | r/robotics, r/esp32, r/Python, r/opensource, r/Spanish (si aplica) — versión media (2.2). Respetar las reglas de autopromoción de cada sub. |
-| 2 | Discord / Telegram | Compartir en 3-5 servidores de makers/robótica/Python hispanohablantes y angloparlantes — versión Discord (2.3). |
+| 2 | Discord | Solo cuando el servidor exista y esté configurado; no programar hasta entonces. Versión 2.3. |
 | 3 | Foros técnicos | ESP32.com, MicroPython Discussions, Arduino Forum, FreeCAD DevTalk — versión foros (2.4), pidiendo ayuda concreta. |
-| 3 | GitHub Discussions / Issues | Comentar en los issues de candidatos (#25, #26) con enlace a las tareas concretas. |
+| 3 | GitHub Discussions / Issues | Recomendación para Luciano: comentar en #25 y #26 con enlace a tareas concretas, solo si se verificaron. |
 | 4 | Resumen | Publicar un issue o post con el balance: cuántas visitas, PRs y personas nuevas llegaron. Ajustar el mensaje. |
 
 ---
@@ -94,9 +93,9 @@ Adaptar al foro según sus reglas. Ejemplo para ESP32.com / MicroPython:
 
 ## 5. Preparación previa (imprescindible antes de promocionar)
 
-1. **Cerrar o fusionar los issues de búsqueda de colaboradores** (#25, #26) para que no queden candidatos colgados sin respuesta.
+1. **Revisar los issues de búsqueda de colaboradores** (#25, #26). Recomendación para Luciano: decidir si cerrarlos o fusionarlos; no se hace automáticamente.
 2. **Verificar el README**: enlaces, comandos y estado técnico coherentes. (Ya hay issue #45 y #46 abiertos para eso.)
-3. **Asegurar 3-5 `good first issue`** con plantilla: objetivo, archivos a tocar, cómo probar, criterios de aceptación. Candidatos: #27, #28, #29, #30, #31, #32, #33.
+3. **Verificar 3-5 `good first issue`** (pendiente de confirmar que existen) con plantilla: objetivo, archivos a tocar, cómo probar, criterios de aceptación. Candidatos: #27, #28, #29, #30, #31, #32, #33.
 4. **Tener el workflow de bienvenida funcionando** (`welcome.yml` ya existe) y el de niveles (`levels.yml`).
 5. **Preparar una demo reproducible o capturas** (pendiente, #29) para que la gente vea algo funcionando.
 
