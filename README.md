@@ -71,7 +71,7 @@ Esta tabla distingue el código que ya existe de las funciones que todavía no e
 ```mermaid
 flowchart TD
     subgraph Hardware["💻 Hardware (ESP32)"]
-        A[ESP32 DevKit] --> B[OLED 0.96" I2C]
+        A[ESP32 DevKit] --> B[OLED 0.96-inch I2C]
         A --> C[Micrófono INMP441 I2S]
         A --> D[Parlante 3W]
         A --> E[Power Bank]
