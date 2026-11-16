@@ -429,6 +429,18 @@
       .stage { min-height: 610px; }
       .component-grid { grid-template-columns: 1fr; }
     }
+  
+    .virtual-board { margin-top: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 18px; background: rgba(2,6,23,.5); }
+    .virtual-board h2 { margin-top: 0; }
+    .sim-status { display:flex; align-items:center; gap:.55rem; color:var(--muted); margin:.5rem 0 1rem; }
+    .sim-dot { width:10px; height:10px; border-radius:50%; background:#64748b; display:inline-block; }
+    .sim-dot.on { background:#86efac; box-shadow:0 0 12px #86efac; }
+    .sim-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.6rem; }
+    .sim-log { margin-top:.8rem; max-height:210px; overflow:auto; background:#020617; border:1px solid var(--line); border-radius:12px; padding:.75rem; color:#bae6fd; font: .78rem/1.5 ui-monospace,monospace; white-space:pre-wrap; }
+    .sim-note { color:var(--muted); font-size:.86rem; line-height:1.5; margin:.7rem 0 0; }
+    .sim-status strong { color:var(--text); }
+    @media(max-width:420px){ .sim-actions{grid-template-columns:1fr;} }
+
   </style>
 </head>
 <body data-mood="happy" data-talking="false" data-creating="false">
@@ -507,6 +519,30 @@
         </div>
       </div>
     </aside>
+
+      <section class="card virtual-board" aria-labelledby="virtual-title">
+        <h2 id="virtual-title">🧪 ESP32 virtual — pruebas de protocolo</h2>
+        <p class="sim-note">Este panel imita el intercambio de mensajes entre la app y Félix. No activa Bluetooth ni se conecta a una placa física.</p>
+        <div class="sim-status"><span id="simDot" class="sim-dot"></span><strong id="simConnection">Desconectado</strong><span id="simMode">· SIMULATOR</span></div>
+        <div class="sim-actions">
+          <button class="primary" id="simConnect">Conectar simulador</button>
+          <button id="simDisconnect">Desconectar</button>
+          <button id="simHello">Enviar hello</button>
+          <button id="simTouch">Simular toque corto</button>
+          <button id="simDouble">Simular doble toque</button>
+          <button id="simHold">Iniciar pulsar-para-hablar</button>
+          <button id="simRelease">Soltar y terminar voz</button>
+          <button id="simClear">Limpiar registro</button>
+        </div>
+        <div class="chat-sim">
+          <input id="simMessage" aria-label="Mensaje de prueba" placeholder="Escribe un mensaje para Félix" />
+          <button id="simSend">Enviar</button>
+        </div>
+        <h3>Registro de eventos</h3>
+        <div id="simLog" class="sim-log" role="log" aria-live="polite">Simulador listo. Pulsa «Conectar simulador» para comenzar.</div>
+        <p class="sim-note">Eventos simulados: <code>hello</code>, <code>hello_ack</code>, <code>pet</code>, <code>annoyed</code>, <code>ptt_start</code>, <code>ptt_end</code> y <code>chat_message</code>.</p>
+      </section>
+
   </main>
 
   <script>
@@ -626,6 +662,78 @@
 
     command.addEventListener('keydown', event => {
       if (event.key === 'Enter') runCommand();
+    });
+
+
+    // Virtual ESP32 transport: deterministic software simulation only.
+    const sim = { connected: false, ptt: false, sequence: 0 };
+    const simLog = document.getElementById('simLog');
+    const simDot = document.getElementById('simDot');
+    const simConnection = document.getElementById('simConnection');
+
+    function logSim(direction, type, payload = {}) {
+      sim.sequence += 1;
+      const stamp = new Date().toLocaleTimeString('es-CO');
+      const line = '[' + stamp + '] #' + sim.sequence + ' ' + direction + ' ' +
+        JSON.stringify({ type, ...payload });
+      simLog.textContent = simLog.textContent + (simLog.textContent ? '\\n' : '') + line;
+      simLog.scrollTop = simLog.scrollHeight;
+    }
+
+    function setSimConnection(connected) {
+      sim.connected = connected;
+      simDot.classList.toggle('on', connected);
+      simConnection.textContent = connected ? 'Conectado al ESP32 virtual' : 'Desconectado';
+      logSim('SYSTEM', connected ? 'simulator_connected' : 'simulator_disconnected');
+    }
+
+    function sendSim(type, payload = {}) {
+      if (!sim.connected) {
+        logSim('APP', 'error', { message: 'Conecta el simulador primero', attempted_type: type });
+        return;
+      }
+      logSim('APP → VIRTUAL_ESP32', type, payload);
+      const replies = {
+        hello: () => logSim('VIRTUAL_ESP32 → APP', 'hello_ack', { firmware: 'felix-sim-1.0', transport: 'SIMULATOR' }),
+        pet: () => { setMode('happy'); logSim('VIRTUAL_ESP32 → APP', 'event_ack', { event: 'pet' }); },
+        annoyed: () => { setMode('angry'); logSim('VIRTUAL_ESP32 → APP', 'event_ack', { event: 'annoyed' }); },
+        ptt_start: () => { sim.ptt = true; logSim('VIRTUAL_ESP32 → APP', 'event_ack', { event: 'ptt_start', recording: true }); },
+        ptt_end: () => { sim.ptt = false; logSim('VIRTUAL_ESP32 → APP', 'event_ack', { event: 'ptt_end', recording: false }); },
+        chat_message: () => { speech.textContent = 'Miau... recibí tu mensaje en el simulador.'; setMode('thinking'); logSim('VIRTUAL_ESP32 → APP', 'message_received', { accepted: true }); }
+      };
+      if (replies[type]) replies[type]();
+    }
+
+    document.getElementById('simConnect').addEventListener('click', () => {
+      if (!sim.connected) setSimConnection(true);
+    });
+    document.getElementById('simDisconnect').addEventListener('click', () => {
+      if (sim.connected) {
+        if (sim.ptt) { sim.ptt = false; logSim('SYSTEM', 'ptt_cancelled_by_disconnect'); }
+        setSimConnection(false);
+      }
+    });
+    document.getElementById('simHello').addEventListener('click', () => sendSim('hello'));
+    document.getElementById('simTouch').addEventListener('click', () => sendSim('pet', { source: 'touch_sensor', gesture: 'short' }));
+    document.getElementById('simDouble').addEventListener('click', () => sendSim('annoyed', { source: 'touch_sensor', gesture: 'double' }));
+    document.getElementById('simHold').addEventListener('click', () => {
+      if (!sim.ptt) sendSim('ptt_start', { source: 'touch_sensor' });
+    });
+    document.getElementById('simRelease').addEventListener('click', () => {
+      if (sim.ptt) sendSim('ptt_end', { source: 'touch_sensor' });
+      else logSim('SYSTEM', 'ptt_not_active');
+    });
+    document.getElementById('simSend').addEventListener('click', () => {
+      const field = document.getElementById('simMessage');
+      const message = field.value.trim();
+      if (message) { sendSim('chat_message', { text: message }); field.value = ''; }
+    });
+    document.getElementById('simMessage').addEventListener('keydown', event => {
+      if (event.key === 'Enter') document.getElementById('simSend').click();
+    });
+    document.getElementById('simClear').addEventListener('click', () => {
+      simLog.textContent = 'Registro limpiado.';
+      sim.sequence = 0;
     });
 
     updateState();
