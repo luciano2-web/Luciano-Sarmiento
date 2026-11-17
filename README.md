@@ -348,14 +348,26 @@ Luciano-Sarmiento/
 
 Las contribuciones son bienvenidas. No hace falta trabajar en todas las áreas ni tener experiencia avanzada: puedes elegir una tarea pequeña y pedir orientación.
 
+### 👉 ¿Es tu primera vez? Empieza aquí
+
+Comenta en el [issue de entrada](https://github.com/luciano2-web/Luciano-Sarmiento/issues/61) con una línea sobre qué te interesa. Ahí te indicamos la tarea más pequeña que encaje contigo.
+
 ### Tareas abiertas para nuevos colaboradores
 
-- [Equipo 1 — Firmware ESP32 (#42)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/42) — punto de entrada y coordinación de periféricos.
-- [Equipo 2 — App móvil y comunicación local (#37)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/37) y [directorio de proveedores (#38)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38).
-- [Equipo 3 — Diseño mecánico y CAD (#36)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/36) — diseño felino; construcción física aplazada hasta 2027.
-- [Equipo 4 — Sensores y visión (#39)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39) — cámara y privacidad; el tacto está propuesto en el [PR #40](https://github.com/luciano2-web/Luciano-Sarmiento/pull/40).
-- [Equipo 5 — Calidad, pruebas y documentación (#43)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/43).
-- [Ver otras tareas abiertas](https://github.com/luciano2-web/Luciano-Sarmiento/issues).
+- [Traducir el README al inglés (#9)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/9) — ideal para empezar.
+- [Diseñar el logo de Félix (#10)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/10).
+- [Capturas reales de la app (#29)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/29).
+- [Ampliar pruebas de personalidad (#28)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/28).
+- [Simulador de Félix en terminal (#8)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/8).
+
+### Áreas del proyecto
+
+- [Firmware ESP32 (#42)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/42) — punto de entrada y coordinación de periféricos.
+- [App móvil y comunicación local (#37)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/37) y [directorio de proveedores (#38)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/38).
+- [Diseño mecánico y CAD (#36)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/36) — diseño felino; construcción física aplazada hasta 2027.
+- [Sensores y visión (#44)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/44) — tacto y futura cámara.
+- [Calidad, pruebas y documentación (#43)](https://github.com/luciano2-web/Luciano-Sarmiento/issues/43).
+- [Ver todas las tareas abiertas](https://github.com/luciano2-web/Luciano-Sarmiento/issues).
 
 Si quieres ayudar, elige un issue, comenta qué parte te interesa y espera confirmación antes de empezar cambios grandes. Las tareas deben indicar qué archivos tocar, qué resultado se espera y cómo comprobarlo.
 
