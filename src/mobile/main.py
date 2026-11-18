@@ -14,6 +14,8 @@ Uso:
 """
 
 import re
+from functools import partial
+from threading import Thread
 from datetime import datetime
 from pathlib import Path
 
@@ -55,6 +57,7 @@ MODEL_CACHE_DIR.mkdir(exist_ok=True)
 # =============================================================================
 
 try:
+    from kivy.clock import Clock
     from kivy.app import App
     from kivy.uix.boxlayout import BoxLayout
     from kivy.uix.gridlayout import GridLayout
@@ -93,6 +96,9 @@ class FelixMobileApp(App):
         self.chat_engine = ChatEngine()
         self.image_engine = ImageEngine()
         self.chat_history = []
+        self._generation = 0
+        self._stopped = False
+        self._busy = False
 
     def build(self):
         """Construye interfaz móvil."""
@@ -132,7 +138,7 @@ class FelixMobileApp(App):
         )
         input_layout.add_widget(self.text_input)
         
-        send_btn = Button(
+        self.send_btn = Button(
             text="Enviar\n🐱",
             size_hint_x=0.2,
             background_color=COLORS["button"],
@@ -140,8 +146,8 @@ class FelixMobileApp(App):
             color=COLORS["background"],
             font_size='14sp'
         )
-        send_btn.bind(on_press=self.send_message)
-        input_layout.add_widget(send_btn)
+        self.send_btn.bind(on_press=self.send_message)
+        input_layout.add_widget(self.send_btn)
         
         root.add_widget(input_layout)
         
@@ -189,7 +195,7 @@ class FelixMobileApp(App):
         """Envía mensaje a Félix."""
         message = self.text_input.text.strip()
         
-        if not message:
+        if not message or self._busy:
             return
         
         # Mostrar mensaje del usuario
@@ -206,10 +212,8 @@ class FelixMobileApp(App):
         elif message.lower() == QUIT_COMMAND:
             self.stop()
         else:
-            # Chat normal
-            response = self.chat_engine.chat(message, self.chat_history)
-            self.chat_history.append((message, response))
-            self.add_chat_bubble(response, "felix")
+            history = list(self.chat_history)
+            self._start_work(message, partial(self.chat_engine.chat, message, history))
 
     def on_image_cmd(self, instance):
         """Botón para generar imagen."""
@@ -236,12 +240,47 @@ class FelixMobileApp(App):
         
         self.add_chat_bubble("🐱 Félix: Generando imagen... esto puede tardar 30-60 segundos. Paciencia 🐱", "felix")
         
+        self._start_work(message, partial(self.image_engine.generate_image, prompt), image=True)
+
+    def _start_work(self, message, operation, image=False):
+        if self._busy or self._stopped:
+            return
+        generation = self._generation
+        self._busy = True
+        self.send_btn.disabled = True
+        self.send_btn.text = "Procesando…"
+
+        def finish(result, error, dt):
+            if self._stopped:
+                return
+            self._busy = False
+            self.send_btn.disabled = False
+            self.send_btn.text = "Enviar\n🐱"
+            if generation != self._generation:
+                return
+            if error is not None:
+                self.add_chat_bubble(f"❌ Error: {error}", "error")
+                return
+            response = f"Imagen generada: {result}" if image else result
+            self.chat_history.append((message, response))
+            self.add_chat_bubble(f"✅ Imagen guardada en: {result}" if image else result, "felix")
+
+        def run():
+            try:
+                result = operation()
+            except Exception as exc:
+                callback = partial(finish, None, str(exc))
+            else:
+                callback = partial(finish, result, None)
+            Clock.schedule_once(callback, 0)
+
         try:
-            image_path = self.image_engine.generate_image(prompt)
-            self.add_chat_bubble(f"✅ Imagen guardada en: {image_path}", "felix")
-            self.chat_history.append((message, f"Imagen generada: {image_path}"))
-        except Exception as e:
-            self.add_chat_bubble(f"❌ Error: {e}", "error")
+            Thread(target=run, daemon=True).start()
+        except RuntimeError as exc:
+            finish(None, str(exc), 0)
+
+    def on_stop(self):
+        self._stopped = True
 
     def process_help_command(self):
         """Procesa comando @help."""
@@ -277,6 +316,7 @@ class FelixMobileApp(App):
 
     def clear_chat(self, instance):
         """Limpia el historial de chat."""
+        self._generation += 1
         self.chat_box.clear_widgets()
         self.chat_history = []
         self.add_chat_bubble("🐱 Félix: Nuevo chat, ¡hola Luciano!", "felix")
