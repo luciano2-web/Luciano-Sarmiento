@@ -20,51 +20,8 @@ try:
         MAX_MESSAGE_BYTES, ProtocolError, decode_message, encode_message,
     )
 except ImportError:
-    # Permite copiar este módulo al ESP32 sin instalar el paquete completo.
-    MAX_MESSAGE_BYTES = 4096
-
-    class ProtocolError(ValueError):
-        pass
-
-    def decode_message(raw):
-        import json
-        if isinstance(raw, str):
-            raw = raw.encode("utf-8")
-        if not raw or len(raw) > MAX_MESSAGE_BYTES:
-            raise ProtocolError("Tamaño de mensaje inválido")
-        try:
-            message = json.loads(raw.decode("utf-8").strip())
-        except (ValueError, UnicodeError) as exc:
-            raise ProtocolError("JSON inválido") from exc
-        allowed = (
-            "hello", "hello_ack", "ping", "pong", "touch_event",
-            "audio_start", "audio_end", "transcript", "assistant_text",
-            "tts_start", "tts_end", "emotion", "display_text", "diagnostic", "error",
-        )
-        if not isinstance(message, dict) or message.get("version") != 1:
-            raise ProtocolError("Mensaje o versión inválidos")
-        if message.get("type") not in allowed:
-            raise ProtocolError("Tipo de mensaje desconocido")
-        if not isinstance(message.get("payload", {}), dict):
-            raise ProtocolError("payload debe ser un objeto")
-        return message
-
-    def encode_message(message_type, payload=None, request_id=None):
-        import json
-        allowed = (
-            "hello", "hello_ack", "ping", "pong", "touch_event",
-            "audio_start", "audio_end", "transcript", "assistant_text",
-            "tts_start", "tts_end", "emotion", "display_text", "diagnostic", "error",
-        )
-        if message_type not in allowed:
-            raise ProtocolError("Tipo de mensaje no permitido")
-        message = {"version": 1, "type": message_type, "payload": payload or {}}
-        if request_id is not None:
-            message["request_id"] = str(request_id)
-        raw = json.dumps(message, separators=(",", ":")).encode("utf-8")
-        if len(raw) > MAX_MESSAGE_BYTES:
-            raise ProtocolError("Mensaje demasiado grande")
-        return raw + b"\\n"
+    # En despliegues planos, copiar src/core/device_protocol.py junto al puente.
+    from device_protocol import MAX_MESSAGE_BYTES, ProtocolError, decode_message, encode_message
 
 
 _UART_UUID = bluetooth.UUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E") if bluetooth else None
@@ -90,7 +47,7 @@ class BluetoothBridge:
         self.ble = None
         self.connected = False
         self._connections = set()
-        self._rx_buffer = b""
+        self._rx_buffers = {}
         self._messages = []
         self._tx_handle = None
         self._rx_handle = None
@@ -114,7 +71,7 @@ class BluetoothBridge:
             print("[BLE] No se pudo iniciar BLE: {}".format(exc))
             return False
 
-    def _queue_line(self, line):
+    def _queue_line(self, conn_handle, line):
         if not line:
             return
         if len(line) > MAX_MESSAGE_BYTES:
@@ -128,37 +85,42 @@ class BluetoothBridge:
         if len(self._messages) >= self.max_queue:
             self._messages.pop(0)
             print("[BLE] Cola llena; se descartó el mensaje más antiguo")
-        self._messages.append(message)
+        self._messages.append((conn_handle, message))
 
     def _irq(self, event, data):
         if event == 1:  # _IRQ_CENTRAL_CONNECT
             conn_handle, _, _ = data
             self._connections.add(conn_handle)
+            self._rx_buffers[conn_handle] = bytearray()
             self.connected = True
             print("[BLE] Central conectado: {}".format(conn_handle))
         elif event == 2:  # _IRQ_CENTRAL_DISCONNECT
             conn_handle, _, _ = data
             self._connections.discard(conn_handle)
             self.connected = bool(self._connections)
-            if not self._connections:
-                self._rx_buffer = b""
+            self._rx_buffers.pop(conn_handle, None)
+            self._messages = [item for item in self._messages if item[0] != conn_handle]
             print("[BLE] Central desconectado: {}".format(conn_handle))
             if self.ble is not None:
                 self.ble.gap_advertise(100000, adv_data=_advertising_payload(self.device_name))
         elif event == 3:  # _IRQ_GATTS_WRITE
-            _, value_handle = data
-            if value_handle != self._rx_handle:
+            conn_handle, value_handle = data
+            if value_handle != self._rx_handle or conn_handle not in self._connections:
                 return
-            chunk = self.ble.gatts_read(self._rx_handle)
-            for byte in chunk:
+            pending = self._rx_buffers[conn_handle]
+            for byte in self.ble.gatts_read(self._rx_handle):
                 if byte == 10:
-                    self._queue_line(self._rx_buffer)
-                    self._rx_buffer = b""
-                elif len(self._rx_buffer) < MAX_MESSAGE_BYTES:
-                    self._rx_buffer += bytes((byte,))
-                else:
-                    self._rx_buffer = b""
-                    print("[BLE] Trama descartada: supera el límite")
+                    if pending:
+                        self._queue_line(conn_handle, bytes(pending))
+                    pending = bytearray()
+                elif pending is not None:
+                    if len(pending) < MAX_MESSAGE_BYTES:
+                        pending.append(byte)
+                    else:
+                        # Ignorar el resto de esta línea hasta el delimitador.
+                        pending = None
+            self._rx_buffers[conn_handle] = pending
+
 
     def send(self, message):
         if not self.connected or self.ble is None or self._tx_handle is None:
@@ -180,7 +142,7 @@ class BluetoothBridge:
     def receive(self):
         if not self._messages:
             return None
-        return self._messages.pop(0)
+        return self._messages.pop(0)[1]
 
     def is_connected(self):
         return self.connected and bool(self._connections)
@@ -193,6 +155,6 @@ class BluetoothBridge:
                 pass
         self._connections = set()
         self.connected = False
-        self._rx_buffer = b""
+        self._rx_buffers = {}
         self._messages = []
         self.ble = None
