@@ -227,7 +227,7 @@ El video real se añadirá cuando exista un prototipo físico construido y proba
 
 Puedes explorar la idea de Félix sin hardware usando el simulador:
 
-- [Abrir simulador](assets/felix_robot_simulator.html)
+- [Simulador web de Félix — listo para abrir y explorar](https://felix-gatogpt-simulador.lucian15.chatgpt.site)
 
 ### 📷 Capturas de la aplicación
 
