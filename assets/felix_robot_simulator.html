@@ -538,6 +538,13 @@
           <input id="simMessage" aria-label="Mensaje de prueba" placeholder="Escribe un mensaje para Félix" />
           <button id="simSend">Enviar</button>
         </div>
+        <h3>Recorrido del gesto</h3>
+        <p id="touchMode"></p>
+        <ol aria-live="polite" id="touchSteps">
+          <li>Sensor virtual: pendiente</li>
+          <li>App: pendiente</li>
+          <li>Pantalla virtual: pendiente</li>
+        </ol>
         <h3>Registro de eventos</h3>
         <div id="simLog" class="sim-log" role="log" aria-live="polite">Simulador listo. Pulsa «Conectar simulador» para comenzar.</div>
         <p class="sim-note">Eventos simulados: <code>hello</code>, <code>hello_ack</code>, <code>pet</code>, <code>annoyed</code>, <code>ptt_start</code>, <code>ptt_end</code> y <code>chat_message</code>.</p>
@@ -676,15 +683,65 @@
       const stamp = new Date().toLocaleTimeString('es-CO');
       const line = '[' + stamp + '] #' + sim.sequence + ' ' + direction + ' ' +
         JSON.stringify({ type, ...payload });
-      simLog.textContent = simLog.textContent + (simLog.textContent ? '\\n' : '') + line;
+      simLog.textContent = simLog.textContent + (simLog.textContent ? '\n' : '') + line;
       simLog.scrollTop = simLog.scrollHeight;
     }
 
     function setSimConnection(connected) {
       sim.connected = connected;
+      touchSequence++;
+      if (connected) resetTouchSteps();
+      else if (touchSteps[1].textContent === 'App: pendiente') touchSteps[1].textContent = 'App: enlace desconectado';
       simDot.classList.toggle('on', connected);
       simConnection.textContent = connected ? 'Conectado al ESP32 virtual' : 'Desconectado';
       logSim('SYSTEM', connected ? 'simulator_connected' : 'simulator_disconnected');
+    }
+
+    const pythonApp = location.pathname === '/felix-local' && location.hostname === '127.0.0.1';
+    const touchSteps = document.querySelectorAll('#touchSteps li');
+    let touchSequence = 0;
+    document.getElementById('touchMode').textContent = pythonApp
+      ? 'App Python local · sensor y pantalla virtuales'
+      : 'App, sensor y pantalla simulados en este navegador';
+
+    function resetTouchSteps() {
+      ['Sensor virtual', 'App', 'Pantalla virtual'].forEach((label, i) => {
+        touchSteps[i].textContent = label + ': pendiente';
+      });
+    }
+
+    async function runTouch(gesture) {
+      const sequence = ++touchSequence;
+      resetTouchSteps();
+      touchSteps[0].textContent = 'Sensor virtual: gesto detectado';
+      if (!sim.connected) {
+        touchSteps[1].textContent = 'App: enlace desconectado';
+        return;
+      }
+      const event = {version: 1, type: 'touch_event', payload: {gesture}, request_id: String(sequence)};
+      logSim('SENSOR → APP', event.type, event);
+      try {
+        let reply;
+        if (pythonApp) {
+          const response = await fetch('/touch', {
+            method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(event)
+          });
+          if (!response.ok) throw new Error('Respuesta HTTP ' + response.status);
+          reply = await response.json();
+        } else {
+          reply = {version: 1, type: 'emotion', request_id: event.request_id,
+            payload: {name: gesture === 'pet' ? 'happy' : 'angry'}};
+        }
+        if (!sim.connected || sequence !== touchSequence) return;
+        if (reply.version !== 1 || reply.type !== 'emotion' || reply.request_id !== event.request_id ||
+            !['happy', 'angry'].includes(reply.payload?.name)) throw new Error('Respuesta incompatible');
+        touchSteps[1].textContent = 'App: gesto recibido y emoción devuelta';
+        logSim('APP → PANTALLA', reply.type, reply);
+        setMode(reply.payload.name);
+        touchSteps[2].textContent = 'Pantalla virtual: expresión aplicada';
+      } catch (error) {
+        if (sequence === touchSequence) touchSteps[1].textContent = 'App: ' + error.message;
+      }
     }
 
     function sendSim(type, payload = {}) {
@@ -695,8 +752,8 @@
       logSim('APP → VIRTUAL_ESP32', type, payload);
       const replies = {
         hello: () => logSim('VIRTUAL_ESP32 → APP', 'hello_ack', { firmware: 'felix-sim-1.0', transport: 'SIMULATOR' }),
-        pet: () => { setMode('happy'); logSim('VIRTUAL_ESP32 → APP', 'event_ack', { event: 'pet' }); },
-        annoyed: () => { setMode('angry'); logSim('VIRTUAL_ESP32 → APP', 'event_ack', { event: 'annoyed' }); },
+
+
         ptt_start: () => { sim.ptt = true; logSim('VIRTUAL_ESP32 → APP', 'event_ack', { event: 'ptt_start', recording: true }); },
         ptt_end: () => { sim.ptt = false; logSim('VIRTUAL_ESP32 → APP', 'event_ack', { event: 'ptt_end', recording: false }); },
         chat_message: () => { speech.textContent = 'Miau... recibí tu mensaje en el simulador.'; setMode('thinking'); logSim('VIRTUAL_ESP32 → APP', 'message_received', { accepted: true }); }
@@ -714,8 +771,8 @@
       }
     });
     document.getElementById('simHello').addEventListener('click', () => sendSim('hello'));
-    document.getElementById('simTouch').addEventListener('click', () => sendSim('pet', { source: 'touch_sensor', gesture: 'short' }));
-    document.getElementById('simDouble').addEventListener('click', () => sendSim('annoyed', { source: 'touch_sensor', gesture: 'double' }));
+    document.getElementById('simTouch').addEventListener('click', () => runTouch('pet'));
+    document.getElementById('simDouble').addEventListener('click', () => runTouch('annoyed'));
     document.getElementById('simHold').addEventListener('click', () => {
       if (!sim.ptt) sendSim('ptt_start', { source: 'touch_sensor' });
     });
