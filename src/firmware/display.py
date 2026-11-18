@@ -109,6 +109,7 @@ class DisplayController:
             
             # Inicializar I2C
             self.i2c = I2C(
+                0,
                 scl=scl_pin,
                 sda=sda_pin,
                 freq=ESP32_I2C_FREQ,
@@ -375,7 +376,7 @@ class DisplayController:
             self.oled.line(center_x + 30, center_y - 20, center_x + 20, center_y - 10, 1)
             
             # Cabeza
-            self.oled.circle(center_x, center_y - 5, 20, 1)
+            self.oled.ellipse(center_x, center_y - 5, 20, 20, 1)
             
             # Ojos
             if emotion == "happy":
@@ -384,20 +385,16 @@ class DisplayController:
                 self.oled.line(center_x + 5, center_y - 5, center_x + 10, center_y - 5, 1)
             elif emotion == "surprised":
                 # Ojos grandes
-                self.oled.circle(center_x - 8, center_y - 5, 3, 1)
-                self.oled.circle(center_x + 8, center_y - 5, 3, 1)
+                self.oled.ellipse(center_x - 8, center_y - 5, 3, 3, 1)
+                self.oled.ellipse(center_x + 8, center_y - 5, 3, 3, 1)
             else:
                 # Ojos normales
-                self.oled.circle(center_x - 8, center_y - 5, 2, 1)
-                self.oled.circle(center_x + 8, center_y - 5, 2, 1)
+                self.oled.ellipse(center_x - 8, center_y - 5, 2, 2, 1)
+                self.oled.ellipse(center_x + 8, center_y - 5, 2, 2, 1)
             
             # Nariz
-            self.oled.fill_triangle(
-                [center_x, center_y + 5],
-                [center_x - 3, center_y + 8],
-                [center_x + 3, center_y + 8],
-                1
-            )
+            for offset in range(4):
+                self.oled.hline(center_x - offset, center_y + 5 + offset, 2 * offset + 1, 1)
             
             # Boca
             if emotion == "happy":

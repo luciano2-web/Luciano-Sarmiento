@@ -486,8 +486,8 @@
           <button onclick="setMode('thinking')">🤔 Pensando</button>
           <button onclick="speak()" class="primary">🔊 Hablar</button>
           <button onclick="setMode('angry')">😾 Enojado</button>
-          <button onclick="createThing('imagen')">🎨 Crear imagen</button>
-          <button onclick="createThing('video')">🎬 Crear video</button>
+          <button onclick="createThing('imagen')">🎨 Simular creación de imagen</button>
+          <button onclick="createThing('video')">🎬 Simular creación de video</button>
           <button onclick="setMode('sleep')">💤 Dormir</button>
           <button onclick="discoverBody()">🐾 Descubrir cuerpo</button>
         </div>
@@ -614,17 +614,17 @@
     function createThing(kind) {
       document.body.dataset.mood = 'thinking';
       document.body.dataset.creating = 'true';
-      bodyState.mood = `creando ${kind}`;
+      bodyState.mood = `simulando ${kind}`;
       bodyState.movimientoActual = 'pantalla escaneando + cuerpo quieto';
-      speech.textContent = `Mrrr... recibí la orden de crear un ${kind}. Mi cerebro en la tablet trabaja y el ESP32 muestra que estoy procesando.`;
+      speech.textContent = `Mrrr... estoy simulando la creación de un ${kind}. Esta página no genera archivos reales.`;
       updateState();
 
       setTimeout(() => {
         document.body.dataset.creating = 'false';
         document.body.dataset.mood = 'happy';
         bodyState.mood = 'feliz';
-        bodyState.movimientoActual = `${kind} terminado`;
-        speech.textContent = `Listo, miau. Terminé de simular la creación de ${kind}. En el robot real lo mostraría en pantalla o avisaría por voz.`;
+        bodyState.movimientoActual = `simulación de ${kind} terminada`;
+        speech.textContent = `Terminó la demostración visual de ${kind}; no se creó ningún archivo.`;
         updateState();
       }, 3600);
     }
@@ -648,9 +648,9 @@
       const text = command.value.trim().toLowerCase();
       if (!text) return;
 
-      if (text.includes('crea una imagen') || text.includes('crear una imagen')) {
+      if (text.includes('crea una imagen') || text.includes('crear una imagen') || text.includes('simular creación de imagen')) {
         createThing('imagen');
-      } else if (text.includes('crea un video') || text.includes('crear un video')) {
+      } else if (text.includes('crea un video') || text.includes('crear un video') || text.includes('simular creación de video')) {
         createThing('video');
       } else if (text.includes('felix') || text.includes('félix')) {
         speak();
