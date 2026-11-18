@@ -6,6 +6,27 @@ Esta guía te explicará cómo **cargar el firmware** en tu ESP32 para que Féli
 
 ---
 
+## Primer arranque: una caricia enciende la sonrisa
+
+Esta demo local usa un ESP32 clásico WROOM-32 con MicroPython, un electrodo en GPIO32 y una OLED SSD1306 I2C de 128×64 en la dirección 0x3C. Con la placa desconectada, conecta GND a GND, VCC de una pantalla compatible con 3,3 V a 3V3, SCL a GPIO21 y SDA a GPIO22. Estos pines coinciden con el controlador de Félix.
+
+1. Instala [MicroPython para ESP32 clásico](https://micropython.org/download/ESP32_GENERIC/) si tu placa todavía no lo tiene. Si ya contiene un programa, guarda una copia de su `main.py` antes de reemplazarlo.
+2. Desde la raíz del repositorio, con la placa conectada por USB y la consola serie de Thonny cerrada, ejecuta:
+
+   ```sh
+   python -m pip install mpremote
+   mpremote connect auto mip install ssd1306
+   mpremote connect auto fs cp src/firmware/display.py :display.py
+   mpremote connect auto fs cp src/firmware/touch_sensor.py :touch_sensor.py
+   mpremote connect auto fs cp src/firmware/main.py :main.py
+   mpremote connect auto reset
+   ```
+
+3. Deja libre el electrodo durante el arranque. Espera la cara neutral y la calibración. Un toque corto seguido de una liberación cambia la cara a feliz. Dos toques rápidos muestran sorpresa.
+4. Para ver los mensajes de arranque, abre `mpremote connect auto repl` y pulsa Ctrl-D con el electrodo libre. Ctrl-C detiene el bucle para inspeccionar la placa.
+
+La demo coordina tacto y pantalla localmente. La respuesta desde la app por Bluetooth y la grabación de voz corresponden a etapas posteriores. Falta validar el comportamiento y el umbral de tacto en una placa física. Las siguientes secciones incluyen alternativas para otros proyectos de firmware; los archivos requeridos por esta demo son los tres indicados arriba y el controlador SSD1306.
+
 ## 🌍 Tabla de Contenidos
 1. [Preparación](#-preparación)
 2. [Opción 1: Usando Arduino IDE](#1-opción-1-usando-arduino-ide)
