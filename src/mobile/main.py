@@ -20,6 +20,10 @@ from datetime import datetime
 from pathlib import Path
 
 # Importar módulos
+from itertools import count
+
+from src.core.device_protocol import decode_message, encode_message
+from src.core.touch import touch_reply
 from src.mobile.chat_engine import ChatEngine
 from src.mobile.image_engine import ImageEngine
 
@@ -117,6 +121,16 @@ class FelixMobileApp(App):
             color=COLORS["primary"]
         )
         root.add_widget(title)
+
+        self.touch_ids = count(1)
+        self.touch_face = Label(text="Félix · listo para una caricia", color=COLORS["primary"], size_hint_y=0.08)
+        root.add_widget(self.touch_face)
+        gestures = BoxLayout(size_hint_y=0.08, spacing=5)
+        for caption, gesture in (("Acariciar", "pet"), ("Simular doble toque", "annoyed")):
+            button = Button(text=caption)
+            button.bind(on_release=lambda _, value=gesture: self.show_touch(value))
+            gestures.add_widget(button)
+        root.add_widget(gestures)
         
         # Área de chat (scroll)
         self.chat_scroll = ScrollView(size_hint_y=0.7, background_color=COLORS["background"])
@@ -190,6 +204,14 @@ class FelixMobileApp(App):
         self.add_chat_bubble(FELIX_WELCOME_MESSAGE, "felix")
         
         return root
+
+    def show_touch(self, gesture):
+        request_id = str(next(self.touch_ids))
+        event = encode_message("touch_event", {"gesture": gesture}, request_id)
+        reply = decode_message(touch_reply(event))
+        if reply["request_id"] == request_id and reply["type"] == "emotion":
+            faces = {"happy": "^_^   Feliz", "angry": ">_<   Enojado"}
+            self.touch_face.text = faces[reply["payload"]["name"]]
 
     def send_message(self, instance):
         """Envía mensaje a Félix."""

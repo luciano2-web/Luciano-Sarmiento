@@ -2,21 +2,11 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
-from src.core.device_protocol import MAX_MESSAGE_BYTES, ProtocolError, decode_message, encode_message
+from src.core.device_protocol import MAX_MESSAGE_BYTES
+from src.core.touch import touch_reply
 
 
 PAGE = Path(__file__).resolve().parents[1] / "assets" / "felix_robot_simulator.html"
-MOODS = {"pet": "happy", "annoyed": "angry"}
-
-
-def touch_reply(raw):
-    event = decode_message(raw)
-    gesture = event["payload"].get("gesture") if "payload" in event else None
-    if event["type"] != "touch_event" or not isinstance(gesture, str) or gesture not in MOODS:
-        raise ProtocolError("Gesto desconocido")
-    return encode_message("emotion", {"name": MOODS[gesture]}, event.get("request_id"))
-
-
 class TouchDemo(BaseHTTPRequestHandler):
     def reply(self, body, media_type):
         self.send_response(200)
