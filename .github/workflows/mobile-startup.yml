@@ -1,0 +1,21 @@
+name: Mobile startup regression
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  startup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test console without Kivy or model downloads
+        run: python -m unittest discover -s tests -p test_mobile_startup.py -v
