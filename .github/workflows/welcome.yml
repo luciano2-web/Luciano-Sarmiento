@@ -21,13 +21,18 @@ jobs:
             const isPR = context.eventName === 'pull_request_target';
             const num = isPR ? context.payload.pull_request.number : context.payload.issue.number;
             const author = isPR ? context.payload.pull_request.user.login : context.payload.issue.user.login;
+            const isOwner = author.trim().toLowerCase() === 'luciano2-web';
+            const levelMessage = isOwner
+              ? '🐱 Tu nivel es **Kitten**, permanente y exclusivo de Luciano.'
+              : 'Consulta tu nivel actual en [CONTRIBUTORS.md](https://github.com/luciano2-web/Luciano-Sarmiento/blob/main/CONTRIBUTORS.md). Félix registra tus aportaciones y avisa de los cambios de nivel.';
             const body = [
               '¡Miau! ¡Hola, @' + author + '! 🐱 Soy **Félix**, el gato programador del proyecto.',
               '',
               'Gracias por tu ' + (isPR ? 'pull request' : 'issue') + '. Para que todo fluya:',
               '',
               '- 📘 Guía de contribución: [CONTRIBUTING.md](https://github.com/luciano2-web/Luciano-Sarmiento/blob/main/CONTRIBUTING.md)',
-              '- 🏆 Sistema de niveles: [CONTRIBUTOR_LEVELS.md](https://github.com/luciano2-web/Luciano-Sarmiento/blob/main/CONTRIBUTOR_LEVELS.md) — tu primer PR merged te hace 👾 Pixel',
+              '- 🏆 Sistema de niveles: [CONTRIBUTOR_LEVELS.md](https://github.com/luciano2-web/Luciano-Sarmiento/blob/main/CONTRIBUTOR_LEVELS.md)',
+              '- ' + levelMessage,
               '- 📜 Código de conducta: [CODE_OF_CONDUCT.md](https://github.com/luciano2-web/Luciano-Sarmiento/blob/main/CODE_OF_CONDUCT.md)',
               '',
               'Un mantenedor te responderá según su disponibilidad (sin promesa de 48h).',
