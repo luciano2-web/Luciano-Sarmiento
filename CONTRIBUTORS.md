@@ -8,6 +8,6 @@ Gracias a todas las personas que han contribuido a este proyecto.
 
 | Usuario | Contribuciones | Nivel |
 |---|---|---|
-| 🐱 **Luciano Sarmiento (Kiten)** | Owner — creador del proyecto | 🐱 Kiten |
+| 🐱 **Luciano Sarmiento (Kitten)** | Owner — creador del proyecto | 🐱 Kitten |
 
 → Ver [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para las reglas de progresión.

@@ -56,7 +56,15 @@
       "last_contribution": null,
       "joined": "2026-11-08",
       "manual": true,
-      "note": "Kiten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones."
+      "note": "Kitten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones.",
+      "rank": "Kitten"
     }
-  ]
+  ],
+  "reserved_roles": {
+    "fenix": {
+      "assigned_to": null,
+      "requires": "Instrucción expresa de luciano2-web"
+    }
+  },
+  "processed_events": []
 }

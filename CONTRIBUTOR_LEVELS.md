@@ -1,53 +1,30 @@
 # 🏆 Niveles de colaboradores — Félix / GatoGPT
 
-> Sistema de progresión por contribuciones **para personas**, no para el robot.
-> Cada nivel desbloquea privilegios reales dentro del proyecto y el sistema
-detecta automáticamente lo que haces para subirte o bajarte de nivel.
+Félix guarda memoria pública de cada colaborador en `CONTRIBUTORS.json`: aportaciones, última actividad e historial de niveles y motivos. README y CONTRIBUTORS muestran el nivel actual.
 
-## Niveles
+| Nivel | Nombre | Regla |
+|---|---|---|
+| 1 | 👾 Pixel | 1 PR integrado |
+| 2 | 🐝 Flyer | 3 PR integrados |
+| 3 | 🐧 Penguin | 5 PR integrados |
+| 4 | 🦝 Raccoon | Asignación manual del mantenedor |
+| 5 | 🦊 Fox | Asignación manual del mantenedor |
+| 6 | 🐺 Wolfy | Asignación manual del mantenedor |
+| 7 | 🦉 Buhny | Asignación manual confirmada por Luciano |
+| Especial | 🐱 Kitten | Exclusivo y permanente para `luciano2-web` |
+| Reservado | 🐦‍🔥 Fénix | **Nadie lo tiene. Solo Luciano puede autorizar su concesión expresamente.** |
 
-| # | Emoji | Nombre | Cómo se alcanza | Privilegios |
-|---|-------|--------|-----------------|-------------|
-| 1 | 👾 | Pixel | Primer PR merged (docs, typo, fix menor) | Badge en README, mención en CONTRIBUTORS, rol "Pixel" en Discord |
-| 2 | 🐝 | Flyer | 3+ PRs merged o triage activo de issues | Reviewer de docs, puede etiquetar issues, acceso a canal de colaboradores |
-| 3 | 🐧 | Penguin | 5+ PRs merged con código o tests | Merge de PRs de docs/tests, acceso a Discussions, invitación a syncs |
-| 4 | 🦝 | Raccoon | Contribuciones recurrentes en un área | Revisión de PRs del área, etiquetar issues, acceso a canal de colaboradores |
-| 5 | 🦊 | Fox | Contribuciones sustanciales (features, firmware, móvil) | Merge de código, crear releases, acceso a CI/Actions, botón "Approve" |
-| 6 | 🐺 | Wolfy | Liderazgo de área (hardware/firmware/app/IA) | Admin parcial: labels, milestones, moderación, gestionar projects board |
-| 7 | 🦉 | Buhny | Maintainer confirmado por Luciano | Admin full: aprobar PRs, gestionar repo, merge a main, moderación final |
-| 🐦‍🔥 | — | Fénix | Nivel inalcanzable: visión técnica + decisión final | Define roadmap, aprueba cambios a personality.py, firma releases |
-| 🐱 | — | Kiten (Luciano) | Owner del proyecto | Control absoluto: repo, branding, licencia, decisiones finales |
+## Memoria y avisos
 
-> El rol **Fénix** no es un nivel alcanzable por contribución: representa la
-> visión técnica y la decisión final de Luciano/Félix. No lo enumera
-> `CONTRIBUTORS.json` ni lo aplica `update_levels.py` automáticamente.
+- Cada PR integrado o issue cerrado como completado cuenta una sola vez, identificado por su número. Reabrirlo/cerrarlo o repetir Actions no suma otra contribución.
+- Los issues cuentan como actividad; únicamente los PR integrados permiten ascensos automáticos. Las revisiones todavía no se cuentan.
+- Al registrar una aportación, Félix comenta el nivel actual en ese PR/issue. Las bajadas se anuncian en la última aportación registrada y en el resumen de Actions.
+- El historial persistente permite reintentar avisos que fallaron; un marcador evita repetir comentarios ya publicados.
+- Tras 90 días sin actividad baja un nivel, como máximo una vez por cada nuevo período de 90 días. El cron lo comprueba semanalmente.
+- Un nuevo PR puede recuperar el nivel que corresponde al total histórico de PR integrados.
+- Las asignaciones manuales quedan fuera de los ajustes automáticos; deben usar `manual: true`.
+- Luciano siempre aparece como Kitten, incluso sin actividad. Fénix permanece sin asignar; no hay comando ni umbral que lo conceda. Su habilitación requerirá un cambio explícitamente autorizado por Luciano.
+- Los niveles son reconocimientos: **no conceden permisos de GitHub ni roles de Discord**.
+- La memoria comienza con los eventos procesados desde esta versión; no reconstruye contribuciones anteriores automáticamente.
 
-## Detección automática
-
-El sistema (GitHub Actions + bot) revisa tus contribuciones y ajusta tu nivel:
-
-- **Sube de nivel** cuando: PRs merged, issues cerrados, reviews realizados, documentación mejorada.
-- **Baja de nivel** cuando: inactividad prolongada (>90 días sin contribución), PRs rechazados repetidamente, violación del código de conducta.
-- El nivel se recalculará y notificará cuando el sistema esté implementado (planificado).
-
-## Acompañamiento al colaborador
-
-Para que te sientas acompañado desde el primer día:
-
-- **Onboarding**: guía paso a paso en `CONTRIBUTING.md` + mensaje de bienvenida automático.
-- **Mentoría**: planificada cuando haya suficientes colaboradores activos.
-- **Feedback**: revisión con comentarios constructivos según disponibilidad del mantenedor (sin promesa de 48h).
-- **Canal privado**: acceso a Discord de colaboradores a partir de 🐧 (planificado; Discord aún no disponible).
-- **Reconocimiento**: badge visual en README, mención en releases, invitación a syncs.
-
-## Reglas
-- Los niveles no se saltan: se sube uno a la vez.
-- Un PR grande puede contar como +2 niveles si Luciano lo decide.
-- La pérdida de privilegios por mal comportamiento queda a discreción del nivel Buhny/Félix.
-- Los niveles 🐦‍🔥 y 🐱 son simbólicos y no se "alcanzan": representan la identidad del proyecto.
-- El nivel más alto alcanzable por contribución es 🦉 Buhny. Kiten y Fénix son roles simbólicos del owner y no forman parte del sistema automático.
-
-## Reconocimiento
-- Badge visual en el README por nivel.
-- Mención en releases.
-- Acceso a canal privado de colaboradores a partir de 🐧.
+Las pruebas del bot se ejecutan en `.github/workflows/test-levels.yml`.
