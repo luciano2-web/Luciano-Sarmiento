@@ -21,29 +21,83 @@ La **raíz del proyecto** es la carpeta que contiene `README.md`, `src` y `tests
 
 Usa Python 3.11 como referencia: es la versión configurada en las pruebas de GitHub Actions. No se garantiza compatibilidad de todas las dependencias con versiones posteriores.
 
-## 2. Crear un entorno aislado
+## 2. Instalación en computadora: elige tu sistema
 
-No instales todavía el conjunto de dependencias de IA.
+Los tres sistemas tienen instrucciones propias. Sigue solo la sección de tu computadora y después continúa con el paso 3. No instales todavía las dependencias de IA.
 
-### Windows — PowerShell
+### Windows
+
+1. Necesitas Python 3.11 instalado. Abre **PowerShell** en la carpeta extraída del proyecto (la que contiene `README.md` y `src`).
+2. Comprueba Python y crea el entorno:
 
 ```powershell
+py -3.11 --version
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python --version
 ```
 
-Si PowerShell bloquea la activación, no hace falta cambiar su política: usa `.\.venv\Scripts\python.exe` en lugar de `python` en los comandos siguientes. Si `py` no existe, comprueba tu instalación de Python; puedes usar `python -m venv .venv` cuando `python --version` muestre 3.11.
+3. Desde esa misma carpeta, inicia la prueba de consola:
 
-### macOS / Linux — terminal
+```powershell
+python -m src.mobile.main
+```
+
+Si PowerShell bloquea la activación, no necesitas cambiar su política. Ejecuta directamente:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.mobile.main
+```
+
+En ese caso, sustituye también `python` por `..venvScriptspython.exe` en los pasos posteriores. Si `py` no existe, comprueba tu instalación de Python; puedes usar `python -m venv .venv` cuando `python --version` muestre 3.11.
+
+**Alternativa con CMD:** activa el entorno con `.venv\Scripts\activate.bat` en lugar del comando de PowerShell.
+
+### Linux
+
+1. Necesitas Python 3.11 y su componente `venv`. Abre una **terminal** dentro de la carpeta extraída del proyecto.
+2. Comprueba Python y crea el entorno:
 
 ```bash
+python3.11 --version
 python3.11 -m venv .venv
 source .venv/bin/activate
 python --version
 ```
 
-Si no existe `python3.11`, instala Python 3.11 para tu sistema o comprueba la versión de `python3` antes de sustituir el comando. En distribuciones que separan `venv` en otro paquete, instala el componente correspondiente a esa versión de Python.
+3. Desde esa misma carpeta, inicia la prueba de consola:
+
+```bash
+python -m src.mobile.main
+```
+
+Si no existe `python3.11`, comprueba `python3 --version`: puedes sustituir el comando por `python3` si corresponde a Python 3.11. En caso contrario, prepara esa versión para tu distribución antes de continuar.
+
+Si la creación del entorno falla por falta de `venv` o `ensurepip`, instala el componente de entornos virtuales correspondiente a tu versión de Python mediante el gestor de paquetes de tu distribución. No hay un único comando de instalación del sistema que sirva para todas las distribuciones Linux.
+
+### macOS (computadoras Mac)
+
+1. Necesitas Python 3.11 instalado. Abre la aplicación **Terminal** y entra en la carpeta extraída del proyecto.
+2. Comprueba Python y crea el entorno:
+
+```bash
+python3.11 --version
+python3.11 -m venv .venv
+source .venv/bin/activate
+python --version
+```
+
+3. Desde esa misma carpeta, inicia la prueba de consola:
+
+```bash
+python -m src.mobile.main
+```
+
+Si no existe `python3.11`, comprueba `python3 --version`: puedes sustituir el comando por `python3` si corresponde a Python 3.11. Si no, instala esa versión antes de continuar. No uses comandos de PowerShell ni rutas `Scripts\` en Terminal.
+
+Estas instrucciones describen la preparación del entorno en Mac; no certifican compatibilidad de las dependencias de IA con todos los Mac Intel o Apple Silicon.
+
+**Para los tres sistemas:** mantén la terminal en la raíz del proyecto. Si la cierras, vuelve a esa carpeta y activa otra vez el entorno antes de usar los comandos de los pasos siguientes.
 
 ## 3. Primera prueba sin modelos
 
