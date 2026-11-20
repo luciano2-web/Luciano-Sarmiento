@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-20T10:49:15Z",
+  "updated_at": "2026-11-20T11:12:22Z",
   "rules": {
     "auto_levels": {
       "1": {
@@ -50,14 +50,26 @@
       "emoji": "🐱",
       "role": "owner",
       "level": 0,
-      "prs_merged": 0,
+      "prs_merged": 1,
       "issues_closed": 0,
       "reviews": 0,
-      "last_contribution": null,
+      "last_contribution": "2026-11-20",
       "joined": "2026-11-08",
       "manual": true,
       "note": "Kitten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones.",
-      "rank": "Kitten"
+      "rank": "Kitten",
+      "last_issue_number": 74,
+      "history": [
+        {
+          "date": "2026-11-20",
+          "from": 0,
+          "to": 0,
+          "reason": "Contribución registrada: pr:74.",
+          "message": "@luciano2-web: 🐱 Kitten (nivel 0). Contribución registrada: pr:74.",
+          "issue_number": 74,
+          "id": "luciano2-web-1"
+        }
+      ]
     }
   ],
   "reserved_roles": {
@@ -66,5 +78,7 @@
       "requires": "Instrucción expresa de luciano2-web"
     }
   },
-  "processed_events": []
+  "processed_events": [
+    "pr:74"
+  ]
 }
