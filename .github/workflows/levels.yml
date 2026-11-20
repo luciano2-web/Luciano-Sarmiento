@@ -13,6 +13,11 @@ permissions:
   contents: write
   issues: write
 
+# Evita que dos ejecuciones del bot publiquen cambios simultáneamente.
+concurrency:
+  group: update-levels-${{ github.repository }}
+  cancel-in-progress: false
+
 jobs:
   update-levels:
     runs-on: ubuntu-latest
@@ -43,5 +48,15 @@ jobs:
             echo "Sin cambios que publicar."
           else
             git commit -m "🤖 niveles: actualiza contribuciones, niveles y badges"
-            git push
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "No se pudo publicar tras tres intentos seguros." >&2
+                exit 1
+              fi
+              git fetch origin main
+              git rebase origin/main
+            done
           fi
