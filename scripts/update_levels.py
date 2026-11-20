@@ -15,8 +15,8 @@ Reglas automáticas (hasta nivel 3):
   Nivel 3 🐧 Penguin: >= 5 PRs merged
   Nivel 4+ son manuales (Raccoon, Fox, Wolfy, Buhny)
 
-Kiten y Fénix son roles simbólicos del owner y no forman parte de la progresión
-automática ni pueden alcanzarse por contribuciones.
+Kitten pertenece exclusivamente a Luciano. Fénix está reservado y sin asignar;
+solo una instrucción expresa de Luciano permitirá implementar su concesión.
 """
 import json
 import os
@@ -75,7 +75,7 @@ def get_contributor(data, login):
                 c["role"] = "owner"
                 c["level"] = 0
                 c["manual"] = True
-                c["note"] = "Kiten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones."
+                c["note"] = "Kitten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones."
                 return c
 
         contributor = {
@@ -90,7 +90,7 @@ def get_contributor(data, login):
             "last_contribution": None,
             "joined": now().strftime("%Y-%m-%d"),
             "manual": True,
-            "note": "Kiten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones.",
+            "note": "Kitten — Owner del proyecto. Nivel simbólico, no se alcanza por contribuciones.",
         }
         data["contributors"].insert(0, contributor)
         return contributor
@@ -126,63 +126,81 @@ def auto_level(prs_merged):
     return level
 
 
+def record_change(contributor, old, reason):
+    level = contributor["level"]
+    emoji, name = ("🐱", "Kitten") if normalize_login(contributor["login"]) == OWNER_LOGIN else LEVEL_NAMES.get(level, ("", "Sin nivel"))
+    entry = {
+        "date": now().strftime("%Y-%m-%d"),
+        "from": old, "to": level, "reason": reason,
+        "message": f"@{contributor['login']}: {emoji} {name} (nivel {level}). {reason}",
+        "issue_number": contributor.get("last_issue_number"),
+    }
+    history = contributor.setdefault("history", [])
+    entry["id"] = f"{normalize_login(contributor['login'])}-{len(history) + 1}"
+    history.append(entry)
+    return entry["message"]
+
+
+def enforce_reserved_roles(data):
+    owner = get_contributor(data, OWNER_LOGIN)
+    owner["rank"] = "Kitten"
+    data["reserved_roles"] = {"fenix": {"assigned_to": None, "requires": "Instrucción expresa de luciano2-web"}}
+    for c in data["contributors"]:
+        if normalize_login(c["login"]) != OWNER_LOGIN:
+            c["role"] = "contributor"
+            c.pop("rank", None)
+            c["level"] = max(0, min(7, int(c.get("level", 0))))
+
+
 def process_event(data):
-    """Aplica el evento actual y devuelve una lista de cambios."""
+    """Recuerda cada PR/issue una sola vez, incluso al repetir el workflow."""
     event = os.environ.get("EVENT_NAME", "manual")
-    changes = []
-    login = None
-
-    if event == "pull_request_target":
-        if os.environ.get("PR_MERGED", "false") == "true":
-            login = os.environ.get("PR_AUTHOR", "")
-    elif event == "issues":
-        login = os.environ.get("ISSUE_AUTHOR", "")
-
-    if not login:
-        return changes
-
-    normalized = normalize_login(login)
-    if normalized == OWNER_LOGIN:
-        return changes
-
-    contributor = get_contributor(data, login)
-    if contributor.get("manual"):
-        return changes
-
-    if event == "pull_request_target":
-        contributor["prs_merged"] = int(contributor.get("prs_merged", 0)) + 1
-    elif event == "issues":
-        contributor["issues_closed"] = int(contributor.get("issues_closed", 0)) + 1
-
-    contributor["last_contribution"] = now().strftime("%Y-%m-%d")
-    old = int(contributor.get("level", 0) or 0)
-    new = max(old, auto_level(int(contributor.get("prs_merged", 0))))
-    if new > old:
-        contributor["level"] = new
-        emoji, name = LEVEL_NAMES[new]
-        changes.append(f"{login} sube a nivel {new} {emoji} {name}")
-    return changes
+    if event == "pull_request_target" and os.environ.get("PR_MERGED") == "true":
+        login, number, kind = os.environ.get("PR_AUTHOR"), os.environ.get("PR_NUMBER"), "pr"
+    elif event == "issues" and os.environ.get("ISSUE_REASON") == "completed":
+        login, number, kind = os.environ.get("ISSUE_AUTHOR"), os.environ.get("ISSUE_NUMBER"), "issue"
+    else:
+        return []
+    if not login or not number or not number.isdigit():
+        return []
+    key = f"{kind}:{number}"
+    events = data.setdefault("processed_events", [])
+    if key in events:
+        return []
+    c = get_contributor(data, login)
+    events.append(key)
+    field = "prs_merged" if kind == "pr" else "issues_closed"
+    c[field] = int(c.get(field, 0)) + 1
+    c["last_contribution"] = now().strftime("%Y-%m-%d")
+    c["last_issue_number"] = int(number)
+    old = int(c.get("level", 0))
+    if not c.get("manual") and normalize_login(login) != OWNER_LOGIN and kind == "pr":
+        c["level"] = max(old, auto_level(c["prs_merged"]))
+    # Cada aportación deja constancia del nivel actual, aunque no cambie.
+    return [record_change(c, old, f"Contribución registrada: {key}.")]
 
 
 def demote_inactive(data):
-    """Baja un nivel a contribuidores inactivos > 90 días (solo automáticos)."""
+    """Como máximo una bajada por cada nuevo período de 90 días."""
     changes = []
-    limit = now() - timedelta(days=INACTIVITY_DAYS)
-    for contributor in data["contributors"]:
-        if normalize_login(contributor.get("login", "")) == OWNER_LOGIN:
+    today = now().date()
+    for c in data["contributors"]:
+        if normalize_login(c.get("login")) == OWNER_LOGIN or c.get("manual") or c.get("level", 0) <= 0:
             continue
-        if contributor.get("manual") or contributor.get("level", 0) <= 0 or not contributor.get("last_contribution"):
+        dates = [c.get("last_contribution"), c.get("last_demotion")]
+        dates = [datetime.strptime(d, "%Y-%m-%d").date() for d in dates if d]
+        if not dates or (today - max(dates)).days < INACTIVITY_DAYS:
             continue
-        last = datetime.strptime(contributor["last_contribution"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
-        if last < limit:
-            contributor["level"] -= 1
-            changes.append(f"{contributor['login']} baja a nivel {contributor['level']} por inactividad")
+        old = c["level"]
+        c["level"] -= 1
+        c["last_demotion"] = today.isoformat()
+        changes.append(record_change(c, old, "Baja por 90 días de inactividad."))
     return changes
 
 
 def badge_line(contributor):
-    if contributor.get("role") == "owner":
-        return f"| 🐱 **{contributor['name']} (Kiten)** | Owner — creador del proyecto | 🐱 Kiten |"
+    if normalize_login(contributor.get("login")) == OWNER_LOGIN:
+        return f"| 🐱 **{contributor['name']} (Kitten)** | Owner — creador del proyecto | 🐱 Kitten |"
 
     level = int(contributor.get("level", 0) or 0)
     if level <= 0:
@@ -221,8 +239,13 @@ def regenerate_docs(data):
 def main():
     data = load()
     original = json.dumps(data, sort_keys=True, ensure_ascii=False)
+    enforce_reserved_roles(data)
     changes = process_event(data)
     changes += demote_inactive(data)
+    summary = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summary:
+        with open(summary, "a", encoding="utf-8") as f:
+            f.write("## 🐱 Félix: niveles de colaboradores\\n\\n" + "\\n".join(changes or ["Sin cambios de nivel."]) + "\\n")
     updated = json.dumps(data, sort_keys=True, ensure_ascii=False)
 
     if updated == original:
