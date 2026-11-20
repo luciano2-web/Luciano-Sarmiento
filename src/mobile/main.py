@@ -25,7 +25,6 @@ from itertools import count
 from src.core.device_protocol import decode_message, encode_message
 from src.core.touch import touch_reply
 from src.mobile.chat_engine import ChatEngine
-from src.mobile.image_engine import ImageEngine
 
 # Importar constantes
 try:
@@ -98,7 +97,7 @@ class FelixMobileApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.chat_engine = ChatEngine()
-        self.image_engine = ImageEngine()
+        self.image_engine = None
         self.chat_history = []
         self._generation = 0
         self._stopped = False
@@ -262,7 +261,15 @@ class FelixMobileApp(App):
         
         self.add_chat_bubble("🐱 Félix: Generando imagen... esto puede tardar 30-60 segundos. Paciencia 🐱", "felix")
         
-        self._start_work(message, partial(self.image_engine.generate_image, prompt), image=True)
+        def generate_image():
+            if self.image_engine is None:
+                # El chat no necesita las dependencias pesadas de imágenes.
+                from src.mobile.image_engine import ImageEngine
+
+                self.image_engine = ImageEngine()
+            return self.image_engine.generate_image(prompt)
+
+        self._start_work(message, generate_image, image=True)
 
     def _start_work(self, message, operation, image=False):
         if self._busy or self._stopped:
@@ -353,7 +360,7 @@ class FelixConsole:
 
     def __init__(self):
         self.chat_engine = ChatEngine()
-        self.image_engine = ImageEngine()
+        self.image_engine = None
         self.chat_history = []
 
     def run(self):
@@ -428,6 +435,10 @@ class FelixConsole:
         print("(esto puede tardar 30-60 segundos)")
         
         try:
+            if self.image_engine is None:
+                from src.mobile.image_engine import ImageEngine
+
+                self.image_engine = ImageEngine()
             image_path = self.image_engine.generate_image(prompt)
             print(f"✅ Imagen guardada en: {image_path}")
         except Exception as e:
