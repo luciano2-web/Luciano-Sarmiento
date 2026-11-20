@@ -91,10 +91,12 @@ COLORS = {
 }
 
 
-class FelixMobileApp(App):
+class FelixMobileApp(App if KIVY_AVAILABLE else object):
     """Aplicación Kivy para GatoGPT Félix en móvil."""
 
     def __init__(self, **kwargs):
+        if not KIVY_AVAILABLE:
+            raise RuntimeError("Kivy no está disponible; utiliza FelixConsole.")
         super().__init__(**kwargs)
         self.chat_engine = ChatEngine()
         self.image_engine = None
