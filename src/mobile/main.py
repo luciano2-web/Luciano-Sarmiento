@@ -25,6 +25,7 @@ from itertools import count
 from src.core.device_protocol import decode_message, encode_message
 from src.core.touch import touch_reply
 from src.mobile.chat_engine import ChatEngine
+from src.mobile.chat_history import PersistentChatHistory
 
 # Importar constantes
 try:
@@ -91,14 +92,16 @@ COLORS = {
 }
 
 
-class FelixMobileApp(App):
+class FelixMobileApp(PersistentChatHistory, App if KIVY_AVAILABLE else object):
     """Aplicación Kivy para GatoGPT Félix en móvil."""
 
     def __init__(self, **kwargs):
+        if not KIVY_AVAILABLE:
+            raise RuntimeError("Kivy no está disponible; usa FelixConsole para el modo consola.")
         super().__init__(**kwargs)
         self.chat_engine = ChatEngine()
         self.image_engine = None
-        self.chat_history = []
+        self.init_history(Path(self.user_data_dir) / "chat_history.json")
         self._generation = 0
         self._stopped = False
         self._busy = False
@@ -120,6 +123,8 @@ class FelixMobileApp(App):
             color=COLORS["primary"]
         )
         root.add_widget(title)
+        from src.mobile.ble_panel import install_ble_panel
+        self.device_link = install_ble_panel(self, root)
 
         self.touch_ids = count(1)
         self.touch_face = Label(text="Félix · listo para una caricia", color=COLORS["primary"], size_hint_y=0.08)
@@ -132,7 +137,7 @@ class FelixMobileApp(App):
         root.add_widget(gestures)
         
         # Área de chat (scroll)
-        self.chat_scroll = ScrollView(size_hint_y=0.7, background_color=COLORS["background"])
+        self.chat_scroll = ScrollView(size_hint_y=0.7)
         self.chat_box = GridLayout(cols=1, spacing=5, size_hint_y=None)
         self.chat_box.bind(minimum_height=self.chat_box.setter('height'))
         self.chat_scroll.add_widget(self.chat_box)
@@ -201,6 +206,11 @@ class FelixMobileApp(App):
         
         # Mensaje de bienvenida
         self.add_chat_bubble(FELIX_WELCOME_MESSAGE, "felix")
+        for message, response in self.chat_history:
+            self.add_chat_bubble(message, "user")
+            self.add_chat_bubble(response, "felix")
+        if self.history_error:
+            self.add_chat_bubble(self.history_error, "error")
         
         return root
 
@@ -291,7 +301,9 @@ class FelixMobileApp(App):
                 self.add_chat_bubble(f"❌ Error: {error}", "error")
                 return
             response = f"Imagen generada: {result}" if image else result
-            self.chat_history.append((message, response))
+            self.remember_turn(message, response)
+            if self.history_error:
+                self.add_chat_bubble(self.history_error, "error")
             self.add_chat_bubble(f"✅ Imagen guardada en: {result}" if image else result, "felix")
 
         def run():
@@ -310,6 +322,8 @@ class FelixMobileApp(App):
 
     def on_stop(self):
         self._stopped = True
+        if hasattr(self, "device_link"):
+            self.device_link.close()
 
     def process_help_command(self):
         """Procesa comando @help."""
@@ -347,21 +361,23 @@ class FelixMobileApp(App):
         """Limpia el historial de chat."""
         self._generation += 1
         self.chat_box.clear_widgets()
-        self.chat_history = []
+        self.forget_history()
         self.add_chat_bubble("🐱 Félix: Nuevo chat, ¡hola Luciano!", "felix")
+        if self.history_error:
+            self.add_chat_bubble(self.history_error, "error")
 
 
 # =============================================================================
 # INTERFAZ CONSOLA (Fallback)
 # =============================================================================
 
-class FelixConsole:
+class FelixConsole(PersistentChatHistory):
     """Interfaz por consola para testing sin Kivy."""
 
     def __init__(self):
         self.chat_engine = ChatEngine()
         self.image_engine = None
-        self.chat_history = []
+        self.init_history()
 
     def run(self):
         """Loop principal de consola."""
@@ -378,6 +394,10 @@ class FelixConsole:
         
         # Mensaje de bienvenida
         print(f"🐱 {FELIX_WELCOME_MESSAGE}\n")
+        for message, response in self.chat_history:
+            print(f"Tú: {message}\nFélix: {response}\n")
+        if self.history_error:
+            print(self.history_error)
 
         while True:
             try:
@@ -391,8 +411,8 @@ class FelixConsole:
                     break
                 
                 if user_input.lower() == CLEAR_COMMAND:
-                    self.chat_history = []
-                    print("\n✨ Chat limpiado.\n")
+                    self.forget_history()
+                    print(self.history_error or "\n✨ Chat limpiado.\n")
                     continue
                 
                 if user_input.lower() == HELP_COMMAND:
@@ -404,7 +424,9 @@ class FelixConsole:
                     continue
                 
                 response = self.chat_engine.chat(user_input, self.chat_history)
-                self.chat_history.append((user_input, response))
+                self.remember_turn(user_input, response)
+                if self.history_error:
+                    print(self.history_error)
                 print(f"\n{response}\n")
             
             except KeyboardInterrupt:
@@ -440,6 +462,9 @@ class FelixConsole:
 
                 self.image_engine = ImageEngine()
             image_path = self.image_engine.generate_image(prompt)
+            self.remember_turn(message, f"Imagen generada: {image_path}")
+            if self.history_error:
+                print(self.history_error)
             print(f"✅ Imagen guardada en: {image_path}")
         except Exception as e:
             print(f"❌ Error generando imagen: {e}")
@@ -461,3 +486,4 @@ if __name__ == "__main__":
     else:
         # Modo consola
         FelixConsole().run()
+

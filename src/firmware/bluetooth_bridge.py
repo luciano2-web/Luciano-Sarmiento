@@ -3,7 +3,7 @@
 
 Expone un servicio tipo Nordic UART Service (NUS). Esto es BLE, no Bluetooth
 Classic SPP. El estado conectado solo cambia tras eventos reales de la radio.
-La app cliente todavía debe descubrir el servicio y sus características.
+La app cliente descubre el servicio y sus características antes del handshake.
 """
 try:
     import bluetooth
@@ -130,7 +130,8 @@ class BluetoothBridge:
             if len(data) > 180:
                 raise ProtocolError("Mensaje supera el límite conservador de 180 bytes")
             for conn_handle in tuple(self._connections):
-                self.ble.gatts_notify(conn_handle, self._tx_handle, data)
+                for offset in range(0, len(data), 20):
+                    self.ble.gatts_notify(conn_handle, self._tx_handle, data[offset:offset + 20])
             return True
         except (AttributeError, ProtocolError, ValueError) as exc:
             print("[BLE] Mensaje de salida inválido: {}".format(exc))
