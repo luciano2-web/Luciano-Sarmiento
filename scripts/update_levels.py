@@ -220,14 +220,21 @@ def regenerate_docs(data):
 
 def main():
     data = load()
+    original = json.dumps(data, sort_keys=True, ensure_ascii=False)
     changes = process_event(data)
     changes += demote_inactive(data)
+    updated = json.dumps(data, sort_keys=True, ensure_ascii=False)
+
+    if updated == original:
+        print("Sin cambios de contribución; no se actualizan marcas de tiempo.")
+        return
+
     regenerate_docs(data)
     save(data)
     for ch in changes:
         print(f"LEVEL-CHANGE: {ch}")
     if not changes:
-        print("No hay cambios de nivel en este evento.")
+        print("Se guardaron cambios de contribución sin cambio de nivel.")
 
 
 if __name__ == "__main__":
