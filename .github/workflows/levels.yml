@@ -75,6 +75,7 @@ jobs:
               for (const h of c.history || []) {
                 if (!h.issue_number) continue;
                 const marker = '<!-- felix-level:' + h.id + ' -->';
+                try {
                 const comments = await github.paginate(github.rest.issues.listComments, {
                   ...context.repo, issue_number: h.issue_number, per_page: 100
                 });
@@ -83,5 +84,12 @@ jobs:
                   ...context.repo, issue_number: h.issue_number,
                   body: marker + '\n🐱 **Félix — memoria de colaboradores**\n\n' + h.message
                 });
+                } catch (error) {
+                  if (error.status === 404 || error.status === 410) {
+                    core.warning('Destino no disponible para ' + h.id + '; continúa con los demás avisos.');
+                  } else {
+                    core.setFailed('No se pudo notificar ' + h.id + ': ' + error.message);
+                  }
+                }
               }
             }
