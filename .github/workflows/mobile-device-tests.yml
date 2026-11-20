@@ -1,0 +1,18 @@
+name: Mobile and BLE regression tests
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  mobile-device:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test startup, persistence and BLE without model downloads
+        run: python -m unittest tests.test_mobile_startup tests.test_chat_history tests.test_device_link -v
