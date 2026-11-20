@@ -267,7 +267,7 @@ Consulta [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para conocer el sistema 
 <!-- BADGES-START -->
 | Usuario | Contribuciones | Nivel |
 |---|---|---|
-| 🐱 **Luciano Sarmiento (Kiten)** | Owner — creador del proyecto | 🐱 Kiten |
+| 🐱 **Luciano Sarmiento (Kitten)** | Owner — creador del proyecto | 🐱 Kitten |
 <!-- BADGES-END -->
 
  > Esta tabla identifica el reconocimiento actual del proyecto; cualquier actualización debe reflejar contribuciones verificadas.
