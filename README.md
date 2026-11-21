@@ -184,9 +184,11 @@ El video real se añadirá cuando exista un prototipo físico construido y proba
 
 ### 🧪 Simulador web
 
-Puedes explorar la idea de Félix sin hardware usando el simulador:
+[**Abrir el banco de pruebas de Félix 🐾**](https://felix-gatogpt-simulador.lucian15.chatgpt.site)
 
-- [Simulador web de Félix — listo para abrir y explorar](https://felix-gatogpt-simulador.lucian15.chatgpt.site)
+Toca el electrodo virtual y observa los ojos en la OLED. Después desconecta la alimentación y comprueba qué ocurre con la placa y la conversación.
+
+En **Hablar con Félix** puedes elegir TinyLlama en el navegador, Qwen3‑1.7B mediante MNN Chat en Android o una API compatible con Chat Completions. Consulta [cómo conectar el modelo](docs/mobile/setup.md#hablar-con-félix-en-el-simulador).
 
 ### 📷 Capturas de la aplicación
 
