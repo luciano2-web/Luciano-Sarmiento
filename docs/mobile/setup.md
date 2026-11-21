@@ -6,7 +6,7 @@ Esta guía corresponde a la app modular de `src/mobile`. El proyecto sigue en de
 
 | Objetivo | Ruta | Qué comprueba |
 |---|---|---|
-| Explorar desde una tablet o teléfono | [Simulador web](https://felix-gatogpt-simulador.lucian15.chatgpt.site) | Representación del robot; no instala la app |
+| Explorar desde una tablet o teléfono | [Simulador web](https://felix-gatogpt-simulador.lucian15.chatgpt.site) | Circuito virtual, gestos y conversación con el modelo elegido |
 | Probar sin descargar modelos | Consola con Python, pasos 1–3 | Arranque, ayuda e historial |
 | Abrir la interfaz de escritorio | Paso 4 | Interfaz Kivy, sujeta al entorno gráfico |
 | Experimentar con IA local | Paso 5 | Requiere dependencias y recursos compatibles |
@@ -182,7 +182,15 @@ Consola y Kivy pueden usar historiales distintos. Cada uno conserva hasta 200 tu
 
 ## Android e iOS
 
-Para explorar en una Redmi Pad SE u otro dispositivo móvil, el simulador web evita instalar las dependencias de escritorio. No equivale a una APK.
+### Hablar con Félix en el simulador
+
+Abre el [simulador web de Félix](https://felix-gatogpt-simulador.lucian15.chatgpt.site) y elige un modelo de conversación.
+
+- **Qwen en Android.** En [MNN Chat](https://github.com/alibaba/MNN/tree/master/apps/Android/MnnLlmChat), descarga y selecciona [Qwen3‑1.7B‑MNN](https://huggingface.co/taobao-mnn/Qwen3-1.7B-MNN). Activa el servicio API de la app. En el simulador, selecciona Qwen y comprueba que el puerto de `127.0.0.1` coincide con el que indica MNN Chat. Pulsa **Usar modelo** y envía un mensaje desde la misma tableta. La conexión requiere que el navegador y el servicio permitan la solicitud local. La prueba en una Redmi Pad SE física sigue pendiente.
+- **API personalizada.** Introduce la dirección base, el identificador del modelo y la clave si el proveedor la exige. Al enviar, el navegador comparte los turnos recientes con esa dirección. El servicio debe admitir Chat Completions y permitir solicitudes desde el sitio. Introduce la clave solo en el campo del simulador.
+- **TinyLlama en el navegador.** Selecciona TinyLlama y pulsa **Cargar TinyLlama**. La primera descarga ocupa unos 910 MB.
+
+Para probar la conversación, pregunta «Félix, ¿qué pasa si toco dos veces tu sensor?» y compara su respuesta con lo que ves en la OLED virtual.
 
 **Termux:** no hay una instalación completa validada del conjunto Kivy/Torch/BitsAndBytes del proyecto. No se ofrece `pip install -r ...` como una receta garantizada para Android.
 
