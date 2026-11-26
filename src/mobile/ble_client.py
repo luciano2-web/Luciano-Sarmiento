@@ -96,17 +96,24 @@ class DeviceLink:
 
             await write(encode_message('hello', {}, 'hello-1'))
             # Connected means a real protocol handshake, not merely a GATT link.
+            pending = []
             deadline = loop.time() + 5
             while True:
                 message = await asyncio.wait_for(inbox.get(), max(0.01, deadline-loop.time()))
                 if message['type'] == 'hello_ack' and message.get('request_id') == 'hello-1':
                     break
+                if message['type'] == 'touch_event':
+                    if len(pending) >= 32:
+                        raise RuntimeError('Demasiados eventos antes de confirmar el protocolo')
+                    pending.append(message)
+                if self.stop_event.is_set():
+                    return
                 if loop.time() >= deadline:
                     raise TimeoutError('La placa no confirmó el protocolo')
             self.on_status('Conectado a Félix')
             while client.is_connected and not self.stop_event.is_set():
                 try:
-                    message = await asyncio.wait_for(inbox.get(), 0.2)
+                    message = pending.pop(0) if pending else await asyncio.wait_for(inbox.get(), 0.2)
                 except asyncio.TimeoutError:
                     continue
                 if message['type'] == 'touch_event':
@@ -116,3 +123,4 @@ class DeviceLink:
                         continue
                     await write(reply)
                 self.on_message(message)
+

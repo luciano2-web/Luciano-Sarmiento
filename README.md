@@ -55,10 +55,10 @@ Esta tabla distingue el código que ya existe de las funciones que todavía no e
 | App móvil Kivy | <strong>Implementado parcialmente</strong> | Hay estructura y módulos de aplicación; falta demostrar el flujo completo con el robot. |
 | Firmware de pantalla/audio/comunicación | <strong>Implementado parcialmente</strong> | Hay módulos separados; falta integrarlos y probarlos juntos en una placa concreta. |
 | Simulador web | <strong>Disponible</strong> | Permite explorar una representación de Félix; no equivale a hardware real. |
-| Sensor táctil | <strong>Prototipo de software</strong> | El módulo y sus pruebas de lógica están incorporados tras el PR #40; aún falta integración con el flujo principal y validación física. |
+| Sensor táctil | <strong>Prototipo de software</strong> | Hay módulo táctil, punto de entrada del firmware y comunicación BLE; falta validar el conjunto físicamente. |
 | Servos y movimiento | <strong>Planeado</strong> | Los modelos, alimentación, conexiones y control todavía deben definirse. |
 | Cámara y visión | <strong>Planeado</strong> | Primero se debe seleccionar una placa y cámara compatibles; no hay captura integrada. |
-| Comunicación móvil ↔ ESP32 sin nube | <strong>En desarrollo de diseño</strong> | El protocolo, la reconexión y el modo local siguen pendientes. |
+| Comunicación móvil ↔ ESP32 sin nube | <strong>Implementado parcialmente</strong> | Hay protocolo JSONL y cliente/servidor BLE con pruebas simuladas; APK, reconexión y validación física pendientes. |
 | Proveedores en la app | <strong>Planeado</strong> | El directorio y sus filtros todavía deben construirse. |
 | Prototipo físico | <strong>Planeado para 2027</strong> | La construcción espera a disponer de materiales y revisar el diseño. |
 
@@ -81,14 +81,14 @@ flowchart TD
         F[Kivy UI] --> G[Chat Engine]
         G --> H[Modelos de IA]
         F --> I[Audio Handler]
-        F --> J[Serial Bridge UART]
+        F --> J[Cliente BLE NUS]
     end
     
     subgraph Cloud["☁️ Opcional: Nube"]
         K[(Hugging Face)] --> H
     end
     
-    J <-->|UART: integración pendiente; Bluetooth no validado| A
+    J <-->|BLE NUS: prueba física pendiente| A
     H -->|Respuestas| F
     I -->|Voz| D
     C -->|Audio| A
@@ -116,7 +116,7 @@ flowchart TD
 | **Sensor táctil** | TouchPad capacitivo GPIO 32 (ESP32 clásico) | Incluido en el chip + electrodo | Detectar gestos táctiles (requiere validar placa y montaje) |
 | **Cámara** | Placa ESP32-S3 con PSRAM + cámara compatible (por seleccionar) | Por definir | Capturar imágenes para visión; pendiente de integración |
 
-**Nota sobre el tacto:** el módulo `src/firmware/touch_sensor.py`, incorporado mediante el PR #40, implementa la lógica para traducir un toque corto en `pet`, dos toques rápidos en `annoyed` y una pulsación larga en eventos de inicio/fin de pulsar-para-hablar. Sus pruebas de software no sustituyen una prueba en placa: todavía falta integrarlo al flujo principal y al audio de la app.
+**Nota sobre el tacto:** el módulo `src/firmware/touch_sensor.py`, incorporado mediante el PR #40, implementa la lógica para traducir un toque corto en `pet`, dos toques rápidos en `annoyed` y una pulsación larga en eventos de inicio/fin de pulsar-para-hablar. Sus pruebas de software no sustituyen una prueba en placa: ya está conectado al flujo del firmware; el audio y la validación física siguen pendientes.
 
 **Nota sobre la cámara:** no está lista para conectar al ESP32-WROOM-32 actual. La placa y el sensor deben seleccionarse antes de escribir el controlador. Consulta el [Issue #39](https://github.com/luciano2-web/Luciano-Sarmiento/issues/39).
 
@@ -137,62 +137,21 @@ flowchart TD
 
 ---
 
-## ⚡ Empezar en 5 minutos
+## 🚀 Instalación y primera prueba
 
-1. `git clone https://github.com/luciano2-web/Luciano-Sarmiento.git && cd Luciano-Sarmiento`
-2. `python -m venv venv && source venv/bin/activate`
-3. `pip install -r src/mobile/requirements_mobile.txt`
-4. `python src/mobile/main.py`
+- **Explorar sin instalar:** abre el [simulador web de Félix](https://felix-gatogpt-simulador.lucian15.chatgpt.site).
+- **Probar el código:** sigue la [guía de instalación paso a paso](docs/mobile/setup.md), con entorno virtual para Windows, macOS y Linux.
+- **Android/iOS:** la instalación completa y la compilación APK todavía no están validadas; consulta las limitaciones en la guía.
+
+Desde la raíz del proyecto, la entrada de la app modular es:
+
+```bash
+python -m src.mobile.main
+```
+
+La guía empieza con una prueba de consola sin modelos y explica por separado la interfaz Kivy, la IA local y BLE. El aviso de IA no disponible distingue un fallo técnico de una respuesta generada.
 
 ¿Primera contribución? Mira los issues etiquetados `good first issue`.
-
-## 🚀 Inicio rápido
-
-### 1) Computadora local
-
-```bash
-# Clonar repositorio
-git clone https://github.com/luciano2-web/Luciano-Sarmiento.git
-cd Luciano-Sarmiento
-
-# Crear entorno virtual
-python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
-
-# Instalar dependencias
-pip install -r src/mobile/requirements_mobile.txt
-
-# Ejecutar la app
-python -m src.mobile.main
-```
-
-### 2) Android (Termux)
-
-```bash
-# 1. Instalar Termux desde F-Droid
-# 2. Dentro de Termux:
-pkg update && pkg upgrade
-pkg install python git
-pip install -r src/mobile/requirements_mobile.txt
-
-# Ejecutar
-python -m src.mobile.main
-```
-
-### 3) Compilar APK para Android
-
-```bash
-# Instalar Buildozer
-pip install buildozer cython
-
-# Compilar
-cd src/mobile
-buildozer android debug
-
-# Instalar el APK generado en la carpeta bin/
-```
-
-→ [Ver guía completa de configuración](docs/mobile/setup.md)
 
 ---
 
@@ -201,7 +160,6 @@ buildozer android debug
 | Comando | Descripción | Ejemplo |
 |---------|-------------|---------|
 | `@gatimage` | Generar imagen | `@gatimage un gato estudiando matemáticas` |
-| `@gativeo` | Generar video (experimental) | `@gativeo un gato bailando` |
 | `@help` | Mostrar ayuda | `@help` |
 | `clear` | Limpiar el chat | `clear` |
 | `quit` | Salir de la aplicación | `quit` |
@@ -225,9 +183,11 @@ El video real se añadirá cuando exista un prototipo físico construido y proba
 
 ### 🧪 Simulador web
 
-Puedes explorar la idea de Félix sin hardware usando el simulador:
+[**Abrir el banco de pruebas de Félix 🐾**](https://felix-gatogpt-simulador.lucian15.chatgpt.site)
 
-- [Simulador web de Félix — listo para abrir y explorar](https://felix-gatogpt-simulador.lucian15.chatgpt.site)
+Toca el electrodo virtual y observa los ojos en la OLED. Después desconecta la alimentación y comprueba qué ocurre con la placa y la conversación.
+
+En **Hablar con Félix** puedes elegir TinyLlama en el navegador, Qwen3‑1.7B mediante MNN Chat en Android o una API compatible con Chat Completions. Consulta [cómo conectar el modelo](docs/mobile/setup.md#hablar-con-félix-en-el-simulador).
 
 ### 📷 Capturas de la aplicación
 
@@ -434,3 +394,4 @@ Consulta la guía de contribución aquí:
 *Hecho con ❤️ para Luciano y todos los amantes de los gatos y la IA.*
 
 </div>
+

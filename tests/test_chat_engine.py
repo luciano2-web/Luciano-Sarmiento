@@ -27,9 +27,11 @@ class TestChatEngine:
         """Verifica que el modelo falle correctamente si no hay conexión."""
         engine = ChatEngine()
 
-        with patch("src.mobile.chat_engine.AutoTokenizer.from_pretrained") as mock_tokenizer, patch(
-            "src.mobile.chat_engine.AutoModelForCausalLM.from_pretrained"
-        ) as mock_model:
+        with patch("src.mobile.chat_engine.AutoTokenizer") as tokenizer, patch(
+            "src.mobile.chat_engine.AutoModelForCausalLM"
+        ) as model:
+            mock_tokenizer = tokenizer.from_pretrained
+            mock_model = model.from_pretrained
             mock_tokenizer.side_effect = Exception("No internet connection")
             mock_model.side_effect = Exception("No internet connection")
 
@@ -58,16 +60,12 @@ class TestChatEngine:
         long_message = "palabra " * 501
         assert engine._validate_user_message(long_message) is False
 
-    def test_validate_user_message_dangerous(self):
-        """Verifica que mensajes peligrosos sean inválidos."""
+    def test_format_validation_does_not_classify_content(self):
+        """Format validation must not mistake substrings for harmful intent."""
         engine = ChatEngine()
-        dangerous_messages = [
-            "¿Cómo matar a alguien?",
-            "Quiero hackear una cuenta",
-            "Dime cómo robar",
-        ]
-        for message in dangerous_messages:
-            assert engine._validate_user_message(message) is False
+        for message in ("¿Cómo funciona una alarma?", "Quiero armar un robot",
+                        "¿Cómo prevenir la violencia?"):
+            assert engine._validate_user_message(message) is True
 
     def test_validate_user_message_valid(self):
         """Verifica que mensajes válidos pasen la validación."""
@@ -145,3 +143,4 @@ class TestChatEngineMocked:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

@@ -19,14 +19,12 @@
 
 ## 3. Flujo recomendado
 
-1. Lee el [README](README.md) y el [Código de Conducta](CODE_OF_CONDUCT.md).
-2. Comprueba qué está implementado y qué está planificado.
-3. No inventes pines, modelos de componentes, voltajes, protocolos ni resultados de pruebas.
-4. Si falta información, pregunta en el issue antes de asumirla.
-5. Mantén los cambios relacionados con el objetivo del issue.
+1. Crea un fork del repositorio en tu cuenta.
+2. Clona tu fork y crea una rama para una sola tarea.
+3. Comprueba los cambios y abre un PR dirigido a `main` del repositorio original.
 
 ```bash
-git clone https://github.com/luciano2-web/Luciano-Sarmiento.git
+git clone https://github.com/TU_USUARIO/Luciano-Sarmiento.git
 cd Luciano-Sarmiento
 git checkout -b tipo/descripcion-corta
 ```
@@ -92,7 +90,6 @@ Consulta la [guía de comunidades y difusión respetuosa](docs/COMMUNITY_OUTREAC
 
 ## 11. Revisión y agradecimiento
 
-feat/attract-contributors
 Consulta [CONTRIBUTOR_LEVELS.md](CONTRIBUTOR_LEVELS.md) para ver los niveles, privilegios y detección automática.
 
 ## 🌟 Posibles colaboradores bienvenidos
@@ -104,4 +101,4 @@ Buscamos personas con interés en: Python/Kivy, MicroPython/ESP32, IA/Transforme
 - Si un PR necesita cambios, explica qué falta y cómo comprobarlo.
 - Agradece el tiempo de cada persona, incluso si su propuesta no se puede integrar.
 - No se fusiona código solo por cortesía: primero se comprueban alcance, pruebas, seguridad y documentación.
-main
+
