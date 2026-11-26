@@ -137,62 +137,21 @@ flowchart TD
 
 ---
 
-## ⚡ Empezar en 5 minutos
+## 🚀 Instalación y primera prueba
 
-1. `git clone https://github.com/luciano2-web/Luciano-Sarmiento.git && cd Luciano-Sarmiento`
-2. `python -m venv venv && source venv/bin/activate`
-3. `pip install -r src/mobile/requirements_mobile.txt`
-4. `python src/mobile/main.py`
+- **Explorar sin instalar:** abre el [simulador web de Félix](https://felix-gatogpt-simulador.lucian15.chatgpt.site).
+- **Probar el código:** sigue la [guía de instalación paso a paso](docs/mobile/setup.md), con entorno virtual para Windows, macOS y Linux.
+- **Android/iOS:** la instalación completa y la compilación APK todavía no están validadas; consulta las limitaciones en la guía.
+
+Desde la raíz del proyecto, la entrada de la app modular es:
+
+```bash
+python -m src.mobile.main
+```
+
+La guía empieza con una prueba de consola sin modelos y explica por separado la interfaz Kivy, la IA local y BLE. Las respuestas preprogramadas no demuestran que el modelo esté funcionando.
 
 ¿Primera contribución? Mira los issues etiquetados `good first issue`.
-
-## 🚀 Inicio rápido
-
-### 1) Computadora local
-
-```bash
-# Clonar repositorio
-git clone https://github.com/luciano2-web/Luciano-Sarmiento.git
-cd Luciano-Sarmiento
-
-# Crear entorno virtual
-python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
-
-# Instalar dependencias
-pip install -r src/mobile/requirements_mobile.txt
-
-# Ejecutar la app
-python -m src.mobile.main
-```
-
-### 2) Android (Termux)
-
-```bash
-# 1. Instalar Termux desde F-Droid
-# 2. Dentro de Termux:
-pkg update && pkg upgrade
-pkg install python git
-pip install -r src/mobile/requirements_mobile.txt
-
-# Ejecutar
-python -m src.mobile.main
-```
-
-### 3) Compilar APK para Android
-
-```bash
-# Instalar Buildozer
-pip install buildozer cython
-
-# Compilar
-cd src/mobile
-buildozer android debug
-
-# Instalar el APK generado en la carpeta bin/
-```
-
-→ [Ver guía completa de configuración](docs/mobile/setup.md)
 
 ---
 
@@ -225,9 +184,11 @@ El video real se añadirá cuando exista un prototipo físico construido y proba
 
 ### 🧪 Simulador web
 
-Puedes explorar la idea de Félix sin hardware usando el simulador:
+[**Abrir el banco de pruebas de Félix 🐾**](https://felix-gatogpt-simulador.lucian15.chatgpt.site)
 
-- [Simulador web de Félix — listo para abrir y explorar](https://felix-gatogpt-simulador.lucian15.chatgpt.site)
+Toca el electrodo virtual y observa los ojos en la OLED. Después desconecta la alimentación y comprueba qué ocurre con la placa y la conversación.
+
+En **Hablar con Félix** puedes elegir TinyLlama en el navegador, Qwen3‑1.7B mediante MNN Chat en Android o una API compatible con Chat Completions. Consulta [cómo conectar el modelo](docs/mobile/setup.md#hablar-con-félix-en-el-simulador).
 
 ### 📷 Capturas de la aplicación
 
