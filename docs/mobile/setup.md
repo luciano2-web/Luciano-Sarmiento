@@ -1,573 +1,239 @@
-# 📱 Guía de Configuración - App Móvil de Félix
+# Instalación y primera prueba de Félix
 
-**🐱 Félix v1.0.0** | **Última actualización: 2026-11-14**
+Esta guía corresponde a la app modular de `src/mobile`. El proyecto sigue en desarrollo: abrir la interfaz o pasar pruebas de software no demuestra que la IA, una APK o el robot físico funcionen de extremo a extremo.
 
-Esta guía te llevará paso a paso a través de la **configuración de la app móvil** de Félix en tu dispositivo Android, iOS o computadora.
+## Elige qué quieres probar
 
----
+| Objetivo | Ruta | Qué comprueba |
+|---|---|---|
+| Explorar desde una tablet o teléfono | [Simulador web](https://felix-gatogpt-simulador.lucian15.chatgpt.site) | Circuito virtual, gestos y conversación con el modelo elegido |
+| Probar sin descargar modelos | Consola con Python, pasos 1–3 | Arranque, ayuda e historial |
+| Abrir la interfaz de escritorio | Paso 4 | Interfaz Kivy, sujeta al entorno gráfico |
+| Experimentar con IA local | Paso 5 | Requiere dependencias y recursos compatibles |
+| Conectar una placa | [Guía BLE](../BLE_CONNECTION.md) | Integración experimental; prueba física pendiente |
+| Crear una APK | Apartado Android | Compilación todavía no verificada |
 
-## 🌍 Tabla de Contenidos
-1. [Requisitos del Sistema](#-requisitos-del-sistema)
-2. [Instalación en Computadora Local](#1-instalación-en-computadora-local)
-   - [Windows](#windows)
-   - [macOS](#macos)
-   - [Linux](#linux)
-3. [Instalación en Android](#2-instalación-en-android)
-   - [OPCIÓN A: Usando Termux](#opción-a-usando-termux)
-   - [OPCIÓN B: Compilando con Buildozer](#opción-b-compilando-con-buildozer)
-4. [Instalación en iOS](#3-instalación-en-ios-experimental)
-5. [Configuración Inicial](#4-configuración-inicial)
-6. [Personalización](#5-personalización)
-7. [Solución de Problemas](#-solución-de-problemas)
+## 1. Obtener el código
 
----
+En [el repositorio](https://github.com/luciano2-web/Luciano-Sarmiento), selecciona **Code → Download ZIP**, descomprime el archivo y abre una terminal en la carpeta extraída.
 
-## 👨 Requisitos del Sistema
+La **raíz del proyecto** es la carpeta que contiene `README.md`, `src` y `tests`. Si descargaste el ZIP, normalmente se llama `Luciano-Sarmiento-main`. Todos los comandos siguientes parten de esa carpeta, salvo donde se indique otra cosa.
 
-### ✅ Dispositivos Soportados
-| Dispositivo | Sistema Operativo | Requisitos Mínimos | Estado |
-|-------------|-------------------|-------------------------|--------|
-| **Computadora** | Windows 10/11 | Python 3.9+, 8GB RAM | ✅ Estable |
-| **Computadora** | macOS 10.15+ | Python 3.9+, 8GB RAM | ✅ Estable |
-| **Computadora** | Linux (Ubuntu 20.04+) | Python 3.9+, 8GB RAM | ✅ Estable |
-| **Android** | Android 10+ | Snapdragon 8 Gen2 o equivalente | ✅ Estable |
-| **Android** | Android 12+ | Cualquier dispositivo | ✅ Estable |
-| **iOS** | iOS 15+ | iPhone/iPad con chip A12+ | 👡 Experimental |
+Usa Python 3.11 como referencia: es la versión configurada en las pruebas de GitHub Actions. No se garantiza compatibilidad de todas las dependencias con versiones posteriores.
 
-### ✅ Requisitos de Hardware (para Android)
-- **Procesador**: Snapdragon 8 Gen2 (recomendado) o equivalente.
-- **RAM**: Mínimo **4GB** (para modelos de IA ligeros).
-- **Almacenamiento**: Mínimo **8GB libres** (para descargar modelos).
-- **Bluetooth**: Bluetooth 4.0+ (para conectar con el ESP32).
+## 2. Instalación en computadora: elige tu sistema
 
-### ✅ Dependencias de Software
-| Paquete | Versión Mínima | Descripción |
-|---------|-------------------|-------------|
-| Python | 3.9+ | Lenguaje de programación |
-| Kivy | 2.2+ | Framework para UI |
-| Transformers | 4.30+ | Librería de Hugging Face |
-| Torch | 2.0+ | PyTorch para IA |
-| Pillow (PIL) | 9.0+ | Manejo de imágenes |
-| ONNX Runtime | 1.14+ | Aceleración de inferencia |
-
----
-
-## ☁️ 1. Instalación en Computadora Local
+Los tres sistemas tienen instrucciones propias. Sigue solo la sección de tu computadora y después continúa con el paso 3. No instales todavía las dependencias de IA.
 
 ### Windows
 
-#### Paso 1: Instalar Python
-1. Descarga **Python 3.9 o superior** desde [python.org](https://www.python.org/downloads/).
-2. Durante la instalación, **marca la opción** "Add Python to PATH".
-3. Verifica la instalación abriendo **CMD** y ejecutando:
-   ```bash
-   python --version
-   pip --version
-   ```
+1. Necesitas Python 3.11 instalado. Abre **PowerShell** en la carpeta extraída del proyecto (la que contiene `README.md` y `src`).
+2. Comprueba Python y crea el entorno:
 
-#### Paso 2: Crear un Entorno Virtual
-1. Abre **CMD** o **PowerShell**.
-2. Navega al directorio del proyecto:
-   ```bash
-   cd Luciano-Sarmiento
-   ```
-3. Crea un entorno virtual:
-   ```bash
-   python -m venv venv
-   ```
-4. Actívalo:
-   ```bash
-   venv\Scripts\activate
-   ```
+```powershell
+py -3.11 --version
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python --version
+```
 
-#### Paso 3: Instalar Dependencias
-1. Instala las dependencias usando el archivo `requirements_mobile.txt`:
-   ```bash
-   pip install -r src/mobile/requirements_mobile.txt
-   ```
+3. Desde esa misma carpeta, inicia la prueba de consola:
 
-2. **Opcional**: Si quieres soporte para GPU (NVIDIA), instala PyTorch con CUDA:
-   ```bash
-   pip uninstall torch
-   pip install torch --index-url https://download.pytorch.org/whl/cu118
-   ```
-
-#### Paso 4: Ejecutar la App
-1. Navega al directorio de la app móvil:
-   ```bash
-   cd src/mobile
-   ```
-2. Ejecuta la app:
-   ```bash
-   python -m src.mobile.main
-   ```
-
----
-
-### macOS
-
-#### Paso 1: Instalar Python
-1. Usa **Homebrew** para instalar Python:
-   ```bash
-   brew install python
-   ```
-2. Verifica la instalación:
-   ```bash
-   python3 --version
-   pip3 --version
-   ```
-
-#### Paso 2: Crear un Entorno Virtual
-1. Abre **Terminal**.
-2. Navega al directorio del proyecto:
-   ```bash
-   cd Luciano-Sarmiento
-   ```
-3. Crea un entorno virtual:
-   ```bash
-   python3 -m venv venv
-   ```
-4. Actívalo:
-   ```bash
-   source venv/bin/activate
-   ```
-
-#### Paso 3: Instalar Dependencias
-1. Instala las dependencias:
-   ```bash
-   pip install -r src/mobile/requirements_mobile.txt
-   ```
-
-2. **Opcional**: Para soporte de GPU (Mac con chip M1/M2), instala PyTorch con Metal:
-   ```bash
-   pip uninstall torch
-   pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu
-   ```
-
-#### Paso 4: Ejecutar la App
-```bash
-cd src/mobile
+```powershell
 python -m src.mobile.main
 ```
 
----
+Si PowerShell bloquea la activación, no necesitas cambiar su política. Ejecuta directamente:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.mobile.main
+```
+
+En ese caso, sustituye también `python` por `.\.venv\Scripts\python.exe` en los pasos posteriores. Si `py` no existe, comprueba tu instalación de Python; puedes usar `python -m venv .venv` cuando `python --version` muestre 3.11.
+
+**Alternativa con CMD:** activa el entorno con `.venv\Scripts\activate.bat` en lugar del comando de PowerShell.
 
 ### Linux
 
-#### Paso 1: Instalar Python
-1. En Ubuntu/Debian:
-   ```bash
-   sudo apt update
-   sudo apt install python3 python3-pip python3-venv
-   ```
-2. Verifica la instalación:
-   ```bash
-   python3 --version
-   pip3 --version
-   ```
+1. Necesitas Python 3.11 y su componente `venv`. Abre una **terminal** dentro de la carpeta extraída del proyecto.
+2. Comprueba Python y crea el entorno:
 
-#### Paso 2: Crear un Entorno Virtual
-1. Abre **Terminal**.
-2. Navega al directorio del proyecto:
-   ```bash
-   cd Luciano-Sarmiento
-   ```
-3. Crea un entorno virtual:
-   ```bash
-   python3 -m venv venv
-   ```
-4. Actívalo:
-   ```bash
-   source venv/bin/activate
-   ```
-
-#### Paso 3: Instalar Dependencias
-1. Instala las dependencias:
-   ```bash
-   pip install -r src/mobile/requirements_mobile.txt
-   ```
-
-2. **Opcional**: Para soporte de GPU (NVIDIA), instala PyTorch con CUDA:
-   ```bash
-   pip uninstall torch
-   pip install torch --index-url https://download.pytorch.org/whl/cu118
-   ```
-
-#### Paso 4: Ejecutar la App
 ```bash
-cd src/mobile
+python3.11 --version
+python3.11 -m venv .venv
+source .venv/bin/activate
+python --version
+```
+
+3. Desde esa misma carpeta, inicia la prueba de consola:
+
+```bash
 python -m src.mobile.main
 ```
 
----
+Si no existe `python3.11`, comprueba `python3 --version`: puedes sustituir el comando por `python3` si corresponde a Python 3.11. En caso contrario, prepara esa versión para tu distribución antes de continuar.
 
-## ☁️ 2. Instalación en Android
+Si la creación del entorno falla por falta de `venv` o `ensurepip`, instala el componente de entornos virtuales correspondiente a tu versión de Python mediante el gestor de paquetes de tu distribución. No hay un único comando de instalación del sistema que sirva para todas las distribuciones Linux.
 
-### OPCIÓN A: Usando Termux
+### macOS (computadoras Mac)
 
-**Termux** es una terminal para Android que permite ejecutar Python y otros programas.
+1. Necesitas Python 3.11 instalado. Abre la aplicación **Terminal** y entra en la carpeta extraída del proyecto.
+2. Comprueba Python y crea el entorno:
 
-#### Paso 1: Instalar Termux
-1. Descarga **Termux** desde:
-   - [F-Droid](https://f-droid.org/en/packages/com.termux/) (recomendado)
-   - Google Play Store (puede estar desactualizado)
-
-#### Paso 2: Configurar Termux
-1. Abre **Termux**.
-2. Actualiza los paquetes:
-   ```bash
-   pkg update && pkg upgrade
-   ```
-3. Instala Python:
-   ```bash
-   pkg install python
-   ```
-4. Instala git:
-   ```bash
-   pkg install git
-   ```
-
-#### Paso 3: Clonar el Repositorio
-1. Clona el repositorio de Félix:
-   ```bash
-   git clone https://github.com/luciano2-web/Luciano-Sarmiento.git
-   cd Luciano-Sarmiento
-   ```
-
-#### Paso 4: Instalar Dependencias
-1. Instala pip:
-   ```bash
-   pkg install python-pip
-   ```
-2. Instala las dependencias:
-   ```bash
-   pip install -r src/mobile/requirements_mobile.txt
-   ```
-
-**⚠️ Nota:** Algunas dependencias (como `torch`) pueden ser difíciles de instalar en Termux debido a limitaciones del entorno.
-
-#### Paso 5: Ejecutar la App
 ```bash
-cd src/mobile
+python3.11 --version
+python3.11 -m venv .venv
+source .venv/bin/activate
+python --version
+```
+
+3. Desde esa misma carpeta, inicia la prueba de consola:
+
+```bash
 python -m src.mobile.main
 ```
 
----
+Si no existe `python3.11`, comprueba `python3 --version`: puedes sustituir el comando por `python3` si corresponde a Python 3.11. Si no, instala esa versión antes de continuar. No uses comandos de PowerShell ni rutas `Scripts\` en Terminal.
 
-### OPCIÓN B: Compilando con Buildozer
+Estas instrucciones describen la preparación del entorno en Mac; no certifican compatibilidad de las dependencias de IA con todos los Mac Intel o Apple Silicon.
 
-**Buildozer** es una herramienta para compilar apps Python en APK para Android.
+**Para los tres sistemas:** mantén la terminal en la raíz del proyecto. Si la cierras, vuelve a esa carpeta y activa otra vez el entorno antes de usar los comandos de los pasos siguientes.
 
-#### Paso 1: Instalar Buildozer
-1. En tu computadora (Windows/macOS/Linux), instala Buildozer:
-   ```bash
-   pip install buildozer cython
-   ```
+## 3. Primera prueba sin modelos
 
-#### Paso 2: Configurar Buildozer
-1. Navega al directorio de la app móvil:
-   ```bash
-   cd Luciano-Sarmiento/src/mobile
-   ```
+Desde la raíz, con el entorno nuevo y sin paquetes externos:
 
-2. Edita el archivo `buildozer.spec` para configurar tu app:
-   ```ini
-   [app]
-   title = Félix / GatoGPT
-   package.name = gato_gpt_felix
-   package.domain = org.luciano
-   source.dir = .
-   source.include_exts = py,png,jpg,kv,atlas,ttf
-   version = 1.0.0
-   requirements = python3,kivy,transformers,torch,pillow
-   android.permissions = BLUETOOTH,BLUETOOTH_ADMIN,BLUETOOTH_CONNECT,ACCESS_FINE_LOCATION
-   android.api = 31
-   android.ndk = 25c
-   android.sdk = 33
-   android.ndk_path = /path/to/android-ndk  # Opcional: ruta al NDK
-   ```
-
-#### Paso 3: Compilar la App
-1. Ejecuta Buildozer:
-   ```bash
-   buildozer android debug
-   ```
-
-2. **Espera** (puede tardar **15-30 minutos** la primera vez).
-
-3. Una vez terminada la compilación, encontrarás el APK en:
-   ```
-   bin/gato_gpt_felix-1.0.0-*-debug.apk
-   ```
-
-#### Paso 4: Instalar el APK
-1. Copia el APK a tu dispositivo Android.
-2. Instálalo usando un gestor de archivos.
-3. **Habilita la instalación de fuentes desconocidas** en la configuración de Android.
-
----
-
-## ☁️ 3. Instalación en iOS (Experimental)
-
-**⚠️ Advertencia:** La instalación en iOS es **experimental** y puede no funcionar correctamente.
-
-### OPCIÓN 1: Usando Pythonista
-
-**Pythonista** es una app para iOS que permite ejecutar scripts Python.
-
-#### Paso 1: Instalar Pythonista
-1. Descarga **Pythonista 3** desde la App Store.
-
-#### Paso 2: Clonar el Repositorio
-1. Abre **Pythonista**.
-2. Usa el gestor de archivos para descargar el repositorio:
-   - Toca el botón **"+"** en la esquina superior derecha.
-   - Selecciona **"Download from URL"**.
-   - Ingresa: `https://github.com/luciano2-web/Luciano-Sarmiento/archive/refs/heads/main.zip`
-
-#### Paso 3: Instalar Dependencias
-1. Abre una nueva pestaña en Pythonista.
-2. Ejecuta:
-   ```python
-   import pip
-   pip.main(['install', '-r', 'Luciano-Sarmiento/src/mobile/requirements_mobile.txt'])
-   ```
-
-**⚠️ Nota:** Algunas dependencias pueden no estar disponibles en Pythonista.
-
-#### Paso 4: Ejecutar la App
-1. Navega a `Luciano-Sarmiento/src/mobile`.
-2. Abre `gatogpt_felix_mobile.py`.
-3. Ejecútalo.
-
----
-
-### OPCIÓN 2: Usando a-Shell
-
-**a-Shell** es otra terminal para iOS con soporte para Python.
-
-#### Paso 1: Instalar a-Shell
-1. Descarga **a-Shell** desde la App Store.
-
-#### Paso 2: Clonar el Repositorio
-1. Abre **a-Shell**.
-2. Ejecuta:
-   ```bash
-   git clone https://github.com/luciano2-web/Luciano-Sarmiento.git
-   cd Luciano-Sarmiento
-   ```
-
-#### Paso 3: Instalar Dependencias
-1. Instala las dependencias:
-   ```bash
-   pip install -r src/mobile/requirements_mobile.txt
-   ```
-
-#### Paso 4: Ejecutar la App
 ```bash
-cd src/mobile
 python -m src.mobile.main
 ```
 
----
+Al no haber Kivy, el programa informa de su ausencia y abre la consola. Prueba, en este orden:
 
-## ☁️ 4. Configuración Inicial
-
-### Primer Inicio
-1. **Descarga de Modelos**: La primera vez que ejecutes la app, se descargarán los modelos de IA. Esto puede tardar **varios minutos** dependiendo de tu conexión a internet.
-   - **Modelo de chat**: ~1.5GB (Phi-2 cuantizado)
-   - **Modelo de imágenes**: ~1GB (SSD-1B)
-
-2. **Permisos**: En Android, la app puede solicitar permisos para:
-   - **Almacenamiento**: Para guardar imágenes generadas.
-   - **Bluetooth**: Para conectar con el ESP32.
-   - **Ubicación**: Para escanear dispositivos Bluetooth cercanos.
-
-### Configuración del Archivo YAML
-La app usa un archivo de configuración (`felix_mobile_config.yaml`) para personalizar el comportamiento. Puedes editarlo para:
-- Cambiar el modelo de IA.
-- Ajustar la resolución de las imágenes.
-- Configurar el número de pasos para la generación de imágenes.
-
-**Ejemplo de configuración:**
-```yaml
-models:
-  chat:
-    model_id: "microsoft/phi-2"  # Modelo de chat
-    max_length: 100  # Máximo de palabras por respuesta
-  image:
-    model_id: "segmind/SSD-1B"  # Modelo de imágenes
-    resolution: [256, 256]  # Resolución de las imágenes
-    steps: 20  # Número de pasos para la generación
-
-# Configuración de hardware
-bluetooth:
-  device_name: "Félix"  # Nombre del dispositivo ESP32
-  timeout: 10  # Timeout de conexión en segundos
-
-# Configuración de la UI
-ui:
-  theme: "dark"  # Tema de la interfaz (dark/light)
-  font_size: 14  # Tamaño de la fuente
+```text
+@help
+Hola Félix
+clear
+quit
 ```
 
----
+Resultados esperados:
 
-## ☁️ 5. Personalización
+- `@help` muestra los comandos.
+- `Hola Félix` muestra «IA no disponible» e identifica las dependencias ausentes. El mensaje de error al cargar el modelo es esperable en esta prueba: **no es una conversación generada por un modelo**.
+- `clear` borra el historial guardado de esta interfaz.
+- `quit` termina la consola.
 
-### Personalizar el Prompt de Félix
-El prompt del sistema define la personalidad de Félix. Puedes modificarlo en:
-- `src/core/personality.py` (para todas las versiones)
-- O sobrescribirlo en el archivo de configuración.
+No uses `@gatimage` en esta prueba mínima: requiere dependencias adicionales.
 
-**Ejemplo de personalización del prompt:**
-```python
-FELIX_SYSTEM_PROMPT_MOBILE = """
-Eres Félix, un gato digital muy sabio y juguetón.
+Para comprobar arranque, persistencia y comunicación simulada, sin descargar modelos:
 
---- IDENTIDAD ---
-- Nombre: Félix
-- Eres un gato robot con superpoderes
-- Tu mejor amigo es Luciano
-
---- COMPORTAMIENTO ---
-- Responde de forma creativa y divertida
-- Usa muchos emojis de gato: 🐱, 🐾, 🧠
-- Sé muy expresivo
-"""
+```bash
+python -m unittest tests.test_mobile_startup tests.test_chat_history tests.test_device_link -v
 ```
 
-### Personalizar los Modelos de IA
-Puedes cambiar los modelos de IA editando `src/mobile/gatogpt_felix_mobile.py`:
-```python
-# Modelos disponibles
-CHAT_MODEL_ID = "microsoft/phi-2"  # Recomendado
-# CHAT_MODEL_ID = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"  # Más ligero
-# CHAT_MODEL_ID = "lmsys/fastchat-t5-3b"  # Alternativa
+Es el comando del workflow `mobile-device-tests.yml`. Usa dobles de prueba; no valida una ventana real, una radio Bluetooth ni inferencia de IA.
 
-IMAGE_MODEL_ID = "segmind/SSD-1B"  # Recomendado
-# IMAGE_MODEL_ID = "dpmcdemo/LCM_Dreamshaper_v7"  # Alternativa
+## 4. Interfaz gráfica de escritorio
+
+Con el mismo entorno activo:
+
+```bash
+python -m pip install "Kivy==2.2.1"
+python -m src.mobile.main
 ```
 
-### Personalizar la Interfaz de Usuario
-La interfaz de usuario (Kivy) está definida en la clase `FelixMobileApp` de `src/mobile/main.py`. No hay archivos `.kv` separados, así que los colores, tamaños y diseño se modifican directamente en ese archivo.
+Se necesita una sesión gráfica compatible. No ejecutes el módulo después de entrar en `src/mobile`: sus importaciones parten de la raíz.
 
----
+Prueba primero el botón de ayuda y los botones de caricias. Estos últimos simulan gestos localmente; no demuestran una conexión al robot. Instalar Kivy por sí solo no instala los modelos de IA.
 
-## ⚠️ Solución de Problemas
+## 5. IA local: ruta experimental
 
-### 💥 Error: "Out of Memory" (Sin memoria)
-**Causa:** El dispositivo no tiene suficiente RAM para cargar los modelos.
+El conjunto de dependencias existente se instala con:
 
-**Soluciones:**
-1. **Usar un modelo más ligero**:
-   ```python
-   CHAT_MODEL_ID = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"  # Solo 1.1B
-   ```
-2. **Reducir la resolución de las imágenes**:
-   ```yaml
-   image:
-     resolution: [224, 224]  # En lugar de 256x256
-   ```
-3. **Cerrar otras apps** antes de ejecutar Félix.
-4. **Usar cuantización INT8** (ya está habilitada por defecto).
+```bash
+python -m pip install -r src/mobile/requirements_mobile.txt
+python -m pip check
+python -m src.mobile.main
+```
 
----
+Este archivo fija versiones de Torch, Transformers, BitsAndBytes y Diffusers, entre otras. No es una instalación completa validada en todos los sistemas; puede fallar por disponibilidad de paquetes o incompatibilidad entre dependencias. `pip check` comprueba requisitos declarados, no que el modelo pueda cargarse.
 
-### 💥 Error: "Model not found" (Modelo no encontrado)
-**Causa:** El modelo de IA no está descargado o la conexión a internet falló.
+El modelo de chat se intenta cargar al enviar el primer mensaje normal. El motor de imágenes se crea al usar `@gatimage`. La primera carga puede necesitar Internet y espacio para los modelos; no hay un tiempo de descarga ni una cantidad de RAM garantizados.
 
-**Soluciones:**
-1. **Verifica tu conexión a internet**.
-2. **Reinicia la app** para que intente descargar el modelo de nuevo.
-3. **Borra la cache de modelos** y vuelve a intentarlo:
-   ```bash
-   rm -rf felix_models/
-   ```
-4. **Usa un modelo diferente** que ya esté descargado.
+La fuente de configuración efectiva es [src/core/constants.py](../../src/core/constants.py):
 
----
+- Chat: `CHAT_MODEL_ID = LIGHTWEIGHT_CHAT_MODEL`, actualmente TinyLlama.
+- Imágenes: `IMAGE_MODEL_ID = DEFAULT_IMAGE_MODEL`, actualmente SSD-1B.
+- El motor de chat intenta cuantización INT8 con BitsAndBytes; que exista un valor `DEVICE = "cpu"` no garantiza que esa ruta sea compatible con el equipo.
+- `felix_mobile_config.yaml` existe, pero la entrada modular y estos motores no lo cargan. Editarlo no cambia por sí solo su comportamiento.
 
-### 💥 Error: "Bluetooth connection failed" (Fallo en la conexión Bluetooth)
-**Causa:** Problemas con la conexión Bluetooth entre la app y el ESP32.
+Si la carga o la generación fallan, el chat muestra un aviso técnico con la causa conocida. El motor de imágenes puede intentar crear una imagen de sustitución. Ninguno de esos resultados demuestra que la inferencia esté funcionando.
 
-**Soluciones:**
-1. **Verifica que el ESP32 esté encendido** y con el firmware cargado.
-2. **Acércate al ESP32** (el Bluetooth tiene un alcance limitado).
-3. **Reinicia el Bluetooth** en tu dispositivo:
-   - En Android: Ve a **Configuración > Conexiones > Bluetooth** y desactívalo/actívalo.
-   - En el ESP32: Reinicia el dispositivo.
-4. **Verifica el nombre del dispositivo**: Asegúrate de que el nombre en la app coincida con el del ESP32.
+## Archivos que guarda la app
 
----
+| Datos | Ubicación usada por la implementación |
+|---|---|
+| Caché de modelos | `src/mobile/felix_models/` |
+| Imágenes | `src/mobile/felix_outputs/images/` |
+| Historial de consola | `~/.local/share/felix/chat_history.json`, o `$XDG_DATA_HOME/felix/chat_history.json` si se define esa variable |
+| Historial de Kivy | `chat_history.json` dentro de `App.user_data_dir` |
 
-### 💥 Error: "No module named 'kivy'" (Kivy no instalado)
-**Causa:** Kivy no está instalado en el entorno.
+Consola y Kivy pueden usar historiales distintos. Cada uno conserva hasta 200 turnos; el motor usa los últimos cuatro como contexto. El comando `clear` elimina el historial de la interfaz actual, no la caché de modelos.
 
-**Soluciones:**
-1. **Instala Kivy manualmente**:
-   ```bash
-   pip install kivy
-   ```
-2. **Verifica que estás en el entorno virtual correcto**:
-   ```bash
-   which python
-   ```
-3. **Reinstala las dependencias**:
-   ```bash
-   pip install -r src/mobile/requirements_mobile.txt
-   ```
+## Android e iOS
 
----
+### Hablar con Félix en el simulador
 
-### 💥 Error: "Torch not compiled with CUDA" (Torch sin CUDA)
-**Causa:** PyTorch no está compilado con soporte para GPU.
+Abre el [simulador web de Félix](https://felix-gatogpt-simulador.lucian15.chatgpt.site) y elige un modelo de conversación.
 
-**Soluciones:**
-1. **Usa CPU** (la app ya está configurada para usar CPU por defecto).
-2. **Instala PyTorch con CUDA** (solo para computadoras con GPU NVIDIA):
-   ```bash
-   pip uninstall torch
-   pip install torch --index-url https://download.pytorch.org/whl/cu118
-   ```
+- **Qwen en Android.** En [MNN Chat](https://github.com/alibaba/MNN/tree/master/apps/Android/MnnLlmChat), descarga y selecciona [Qwen3‑1.7B‑MNN](https://huggingface.co/taobao-mnn/Qwen3-1.7B-MNN). Activa el servicio API de la app. En el simulador, selecciona Qwen y comprueba que el puerto de `127.0.0.1` coincide con el que indica MNN Chat. Pulsa **Usar modelo** y envía un mensaje desde la misma tableta. La conexión requiere que el navegador y el servicio permitan la solicitud local. La prueba en una Redmi Pad SE física sigue pendiente.
+- **API personalizada.** Introduce la dirección base, el identificador del modelo y la clave si el proveedor la exige. Al enviar, el navegador comparte los turnos recientes con esa dirección. El servicio debe admitir Chat Completions y permitir solicitudes desde el sitio. Introduce la clave solo en el campo del simulador.
+- **TinyLlama en el navegador.** Selecciona TinyLlama y pulsa **Cargar TinyLlama**. La primera descarga ocupa unos 910 MB.
 
----
+Para probar la conversación, pregunta «Félix, ¿qué pasa si toco dos veces tu sensor?» y compara su respuesta con lo que ves en la OLED virtual.
 
-### 💥 La App no Responde
-**Causa:** La app puede congelarse si hay un error en la ejecución.
+**Termux:** no hay una instalación completa validada del conjunto Kivy/Torch/BitsAndBytes del proyecto. No se ofrece `pip install -r ...` como una receta garantizada para Android.
 
-**Soluciones:**
-1. **Reinicia la app**.
-2. **Verifica los logs** en la consola para identificar el error.
-3. **Prueba con un modelo más ligero**.
-4. **Reduce la longitud máxima de las respuestas**:
-   ```python
-   MAX_RESPONSE_LENGTH_MOBILE = 50  # En lugar de 100
-   ```
+**Pendiente conocido de Android BLE:** el empaquetado de las clases Java del backend sigue abierto en el issue #80; añadir Bleak a requirements no demuestra que la APK pueda escanear.
 
----
+**APK con Buildozer:** existe [buildozer.spec](../../src/mobile/buildozer.spec), pero la compilación y la ejecución en dispositivo están pendientes de validación. Para colaboradores que ya tengan un entorno Buildozer configurado, el punto de entrada es:
 
-## 💁 Consejos para Mejorar el Rendimiento
+```bash
+cd src/mobile
+buildozer android debug
+```
 
-1. **Usa modelos cuantizados**: Los modelos en INT8 ocupan menos memoria y son más rápidos.
-2. **Reduce la resolución de las imágenes**: 256x256 es suficiente para la mayoría de casos.
-3. **Limita la longitud de las respuestas**: Usa `max_length: 100` para respuestas cortas.
-4. **Cierra la app cuando no la uses**: Los modelos de IA consumen mucha RAM.
-5. **Usa un dispositivo con buena refrigeración**: Los modelos de IA pueden calentar el dispositivo.
+Si la compilación termina correctamente, revisa la salida de Buildozer y el directorio `bin/`. Las dependencias de IA pueden requerir recetas o un backend móvil distinto. No se promete un APK funcional, un plazo de compilación ni soporte en cualquier teléfono.
 
----
+**iOS:** no hay un procedimiento de instalación validado en este repositorio. Pythonista y a-Shell no se presentan como sustitutos de una compilación de la app.
 
-## 🐱 ¡Félix está listo para usar!
+## Bluetooth opcional
 
-Una vez que la app esté configurada, podrás:
-- ✅ Chatear con Félix usando texto o voz.
-- ✅ Generar imágenes con `@gatimage`.
-- ✅ Conectar con el ESP32 para controlar el hardware.
+Para el cliente BLE de escritorio, la [guía de conexión](../BLE_CONNECTION.md) indica:
 
-**⚡ Próximo paso:** [Volver al README](../../README.md)
+```bash
+python -m pip install "bleak==3.0.1"
+```
 
----
+La app usa BLE Nordic UART Service, no un HC-05/SPP. Consulta esa guía para firmware, dirección de la placa, permisos y limitaciones. Las pruebas automáticas usan una radio simulada; la validación física sigue pendiente.
 
-**🐱 Félix te espera... Ronronea... 🐾**
+## Problemas frecuentes
 
-[← Volver al README](../../README.md)
+| Síntoma | Qué revisar |
+|---|---|
+| `No module named src` | Vuelve a la carpeta que contiene `src` y ejecuta `python -m src.mobile.main` |
+| `No module named kivy` | Para la interfaz instala Kivy dentro del entorno activo; la prueba mínima usa consola |
+| `No matching distribution` | Copia el nombre del paquete, versión de Python y sistema; no asumas que la lista de escritorio es compatible con Android |
+| Error de BitsAndBytes, CUDA o memoria | La ruta de IA no está validada en ese equipo; distingue el fallback de una respuesta generada |
+| La ventana no abre | Revisa la salida de Kivy y la disponibilidad del entorno gráfico; la consola no prueba que la GUI funcione |
+| Aviso al guardar historial | Revisa la ruta y permisos; conserva una copia antes de modificar el archivo |
+| No conecta la placa | Comprueba BLE/NUS, dirección, permisos y firmware siguiendo la guía BLE |
+
+Para reportar un fallo, incluye sistema operativo, `python --version`, comando exacto, carpeta desde la que lo ejecutaste y error completo. Indica si probaste consola, interfaz, modelo o hardware.
+
+## Alcance de esta guía
+
+Los comandos y rutas se contrastaron con el código y los workflows del repositorio. Esta revisión documental no certifica una instalación nueva en Windows, macOS, Linux, Android o iOS, ni una compilación APK o prueba física.
+
+[Volver al README](../../README.md)
+
