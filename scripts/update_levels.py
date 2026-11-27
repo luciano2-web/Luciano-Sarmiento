@@ -70,7 +70,7 @@ def get_contributor(data, login):
         for c in data["contributors"]:
             if normalize_login(c.get("login", "")) == OWNER_LOGIN:
                 c["login"] = "luciano2-web"
-                c["name"] = "Luciano Sarmiento"
+                c["name"] = "luciano2-web"
                 c["emoji"] = "🐱"
                 c["role"] = "owner"
                 c["level"] = 0
