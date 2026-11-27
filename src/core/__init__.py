@@ -12,5 +12,5 @@ Uso:
 """
 
 __version__ = "2.0.0"
-__author__ = "Luciano Sarmiento"
+__author__ = "luciano2-web"
 __description__ = "Módulo central de Félix / GatoGPT"
