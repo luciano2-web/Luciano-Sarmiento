@@ -80,7 +80,7 @@ def get_contributor(data, login):
 
         contributor = {
             "login": "luciano2-web",
-            "name": "Luciano Sarmiento",
+            "name": "luciano2-web",
             "emoji": "🐱",
             "role": "owner",
             "level": 0,
