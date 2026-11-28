@@ -103,6 +103,7 @@ class ChatEngine:
         self.model = None
         self.tokenizer = None
         self.is_loaded = False
+        self.last_error = None
 
         # Directorios (HF_HOME ya se fijó antes de importar transformers)
         self.APP_DIR = _APP_DIR
@@ -119,9 +120,12 @@ class ChatEngine:
         if self.is_loaded:
             return True
 
-        print("🐱 Cargando modelo de chat (esto tardará ~30-60s la primera vez)...")
+        self.last_error = None
+        print("🐱 Cargando modelo de chat; el tiempo depende del equipo y la descarga...")
 
         try:
+            if AutoTokenizer is None or AutoModelForCausalLM is None or torch is None:
+                raise RuntimeError("Faltan dependencias de IA: torch y transformers")
             # Usar cuantización INT8 para móvil
             from transformers import BitsAndBytesConfig
 
@@ -154,8 +158,9 @@ class ChatEngine:
             return True
 
         except Exception as e:
+            self.last_error = f"{type(e).__name__}: {e}"
             print(f"❌ Error cargando modelo: {e}")
-            print("Usando modo fallback (respuestas pre-programadas)...")
+            print("Mostrando diagnóstico: no se generó una respuesta de IA.")
             self.is_loaded = False
             return False
 
@@ -247,6 +252,7 @@ class ChatEngine:
             return response
 
         except Exception as e:
+            self.last_error = f"{type(e).__name__}: {e}"
             print(f"❌ Error en chat: {e}")
             return self._generate_fallback_response()
 
@@ -274,15 +280,6 @@ class ChatEngine:
         if len(message.split()) > 500:  # Límite de palabras
             return False
 
-        # Detección de contenido peligroso (español)
-        dangerous_keywords = [
-            "matar", "asesinar", "hackear", "robar", "violencia",
-            "suicid", "explosivo", "arma",
-        ]
-        low = message.lower()
-        if any(kw in low for kw in dangerous_keywords):
-            return False
-
         return True
 
     def _get_safety_response(self) -> str:
@@ -305,13 +302,12 @@ class ChatEngine:
         Returns:
             str: Respuesta de fallback.
         """
-        responses = [
-            "🐱 Miau... mi cerebro felino necesita más RAM. ¿Intentas de nuevo?",
-            "🐱 Prrr... estoy pensando, dame un momento más.",
-            "🐱 ¡Miau! Eso es muy complicado para mi móvil. Pregúntame algo más simple.",
-            "🐱 Ronroneo suavemente... ¿En qué más puedo ayudarte?",
-        ]
-        return random.choice(responses)
+        detail = self.last_error or "No hay un modelo disponible en esta sesión."
+        return (
+            "🐱 IA no disponible. Este es un aviso técnico, "
+            "no una respuesta generada. " + detail +
+            " Revisa las dependencias y la configuración del modelo."
+        )
 
     def _fix_response(self, response: str, issues: list, suggestions: list) -> str:
         """
@@ -388,3 +384,4 @@ class ChatEngine:
             except Exception:
                 pass
         return rules
+

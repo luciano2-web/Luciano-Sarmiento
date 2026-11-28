@@ -99,6 +99,42 @@ class LinkTests(unittest.TestCase):
         self.assertTrue(Client.closed)
         self.assertTrue(all(len(chunk)<=20 for chunk in writes))
 
+    def test_touch_before_handshake_is_delivered_and_answered(self):
+        statuses, messages, replies = [], [], []
+        link = DeviceLink(statuses.append, messages.append)
+        receiver = LineReceiver()
+        class Scanner:
+            @staticmethod
+            async def find_device_by_address(address, timeout): return address
+        class Service:
+            def get_characteristic(self, uuid): return uuid
+        class Services:
+            def get_service(self, uuid): return Service()
+        class Client:
+            services = Services()
+            is_connected = True
+            closed = False
+            def __init__(self, device): pass
+            async def __aenter__(self): return self
+            async def __aexit__(self, *args): Client.closed = True
+            async def start_notify(self, uuid, callback): self.callback = callback
+            async def write_gatt_char(self, uuid, data, response):
+                for message in receiver.feed(data):
+                    if message['type'] == 'hello':
+                        self.callback(None, encode_message('touch_event', {'gesture': 'pet'}, 'early'))
+                        self.callback(None, encode_message('hello_ack', {}, 'hello-1'))
+                    elif message['type'] == 'emotion':
+                        replies.append(message)
+                        link.close()
+        async def run():
+            await asyncio.wait_for(link._session('test', Client, Scanner), 1)
+        asyncio.run(run())
+        self.assertEqual([m['request_id'] for m in messages], ['early'])
+        self.assertEqual(replies[0]['request_id'], 'early')
+        self.assertEqual(replies[0]['payload']['name'], 'happy')
+        self.assertIn('Conectado a Félix', statuses)
+        self.assertTrue(Client.closed)
+
     def test_unknown_device_never_reports_connected(self):
         statuses = []
         link = DeviceLink(statuses.append, lambda _: None)
@@ -110,3 +146,4 @@ class LinkTests(unittest.TestCase):
         self.assertNotIn('Conectado a Félix', statuses)
 
 if __name__ == '__main__': unittest.main()
+
