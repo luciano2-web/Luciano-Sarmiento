@@ -15,4 +15,4 @@ jobs:
         with:
           python-version: '3.11'
       - name: Test startup, persistence and BLE without model downloads
-        run: python -m unittest tests.test_mobile_startup tests.test_chat_history tests.test_device_link -v
+        run: python -m unittest tests.test_mobile_startup tests.test_chat_history tests.test_device_link tests.test_device_protocol -v

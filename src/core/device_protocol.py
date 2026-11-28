@@ -40,6 +40,8 @@ def encode_message(message_type, payload=None, request_id=None):
 def decode_message(raw):
     if isinstance(raw, str):
         raw = raw.encode("utf-8")
+    if raw.endswith(b"\n"):
+        raw = raw[:-1]
     if not raw or len(raw) > MAX_MESSAGE_BYTES:
         raise ProtocolError("Tamaño de mensaje inválido")
     try:

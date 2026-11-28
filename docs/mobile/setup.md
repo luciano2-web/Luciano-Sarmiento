@@ -49,7 +49,7 @@ Si PowerShell bloquea la activación, no necesitas cambiar su política. Ejecuta
 .\.venv\Scripts\python.exe -m src.mobile.main
 ```
 
-En ese caso, sustituye también `python` por `..venvScriptspython.exe` en los pasos posteriores. Si `py` no existe, comprueba tu instalación de Python; puedes usar `python -m venv .venv` cuando `python --version` muestre 3.11.
+En ese caso, sustituye también `python` por `.\.venv\Scripts\python.exe` en los pasos posteriores. Si `py` no existe, comprueba tu instalación de Python; puedes usar `python -m venv .venv` cuando `python --version` muestre 3.11.
 
 **Alternativa con CMD:** activa el entorno con `.venv\Scripts\activate.bat` en lugar del comando de PowerShell.
 
